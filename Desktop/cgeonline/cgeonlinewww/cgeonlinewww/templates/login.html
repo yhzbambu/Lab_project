@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+{% block title %} 登入 {% endblock %} {% block content %}
+<form name='my_login' action='/#login/' method='POST'>
+    {% csrf_token %} 選擇登入者：
+    </br>
+    {% for users in user_all %}
+    <input type='radio' name='username' value='{{ users.username }}'>{{ users.username }} {% endfor %}
+    </br>
+    </br>
+    密碼：</br>
+    <label for='password'>密碼</label>
+    <input id='password' type='text' name='password'></br>
+    </br>
+    <input type='submit' value='登入'>
+    <input type='reset' value='清除重填'>
+</form>
+{% endblock %}

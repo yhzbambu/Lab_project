@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block title %} 首頁 {% endblock %} {% block content %}
+<style>
+    header.masthead {
+        padding-top: 10rem;
+        padding-bottom: calc(10rem - 4.5rem);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-size: cover;
+    }
+</style>
+<header class="masthead">
+
+    <h1 style="font-size: 100px; text-align: center; margin-top: 200px;">共同教育學院</h1>
+    <hr class="divider my-4 " />
+    <p style="font-size: 40px; text-align: center; margin-top: 30px;">請先登入</p>
+    <center><a class="btn btn-primary btn-xl js-scroll-trigger" href="#login ">登入</a></center>
+
+</header>
+{% endblock %}

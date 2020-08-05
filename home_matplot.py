@@ -29,8 +29,8 @@ import pymysql
 # 'host':'localhost',
 # 'port':3306,
 # 'user':'root',
-# 'password':'C107110143',
-# 'db':'topiclogin',
+# 'password':'passwd',
+# 'db':'database',
 # }
 # db = pymysql.connect(**config)
 # cursor = db.cursor()

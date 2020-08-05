@@ -25,7 +25,7 @@ import numpy as np
 from matplotlib.widgets import Cursor
 import pymysql
 
-db = pymysql.connect("localhost","root","showyun0330","topiclogin" )
+db = pymysql.connect("localhost","root","C107110143","topiclogin" )
 cursor = db.cursor()
 cursor.execute("SELECT * FROM logininfo")
 datas = cursor.fetchall()

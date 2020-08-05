@@ -25,10 +25,17 @@ import numpy as np
 from matplotlib.widgets import Cursor
 import pymysql
 
-db = pymysql.connect("localhost","root","C107110143","topiclogin" )
-cursor = db.cursor()
-cursor.execute("SELECT * FROM logininfo")
-datas = cursor.fetchall()
+# config = {
+# 'host':'localhost',
+# 'port':3306,
+# 'user':'root',
+# 'password':'C107110143',
+# 'db':'topiclogin',
+# }
+# db = pymysql.connect(**config)
+# cursor = db.cursor()
+# cursor.execute("SELECT * FROM logininfo")
+# datas = cursor.fetchall()
 
 #以下class為登入的部分
 class LoginMainWindow(QMainWindow, Ui_Dialog):
@@ -38,13 +45,13 @@ class LoginMainWindow(QMainWindow, Ui_Dialog):
         self.pushButton.clicked.connect(lambda:self.loginclick(self.pushButton))
 
     def loginclick(self,btn):
-        for data in datas:
-            if (self.lineEdit.text() == data[1]):
-                if (self.lineEdit_2.text() == data[2]):
-                    self.hide()
-                    HwWin.show()
-            else:
-                self.label.setText("帳號/密碼 輸入錯誤")
+        # for data in datas:
+        #     if (self.lineEdit.text() == data[1]):
+        #         if (self.lineEdit_2.text() == data[2]):
+        self.hide()
+        HwWin.show()
+            # else:
+            #     self.label.setText("帳號/密碼 輸入錯誤")
 
 #以下class為首頁的部分
 class HomeMainWindow(QMainWindow, Ui_MainWindow):

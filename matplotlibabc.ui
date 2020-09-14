@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1474</width>
-    <height>766</height>
+    <height>847</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>140</y>
+     <x>150</x>
+     <y>220</y>
      <width>1211</width>
      <height>581</height>
     </rect>
@@ -27,8 +27,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>740</y>
+     <x>220</x>
+     <y>820</y>
      <width>101</width>
      <height>23</height>
     </rect>
@@ -40,8 +40,8 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>1200</x>
-     <y>740</y>
+     <x>1210</x>
+     <y>820</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -53,8 +53,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>10</y>
+     <x>190</x>
+     <y>90</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -79,8 +79,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>30</y>
+     <x>580</x>
+     <y>110</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -105,8 +105,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_3">
    <property name="geometry">
     <rect>
-     <x>890</x>
-     <y>60</y>
+     <x>900</x>
+     <y>140</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -131,8 +131,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_4">
    <property name="geometry">
     <rect>
-     <x>1190</x>
-     <y>30</y>
+     <x>1200</x>
+     <y>110</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -157,8 +157,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_5">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>50</y>
+     <x>190</x>
+     <y>130</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -183,8 +183,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_6">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>90</y>
+     <x>190</x>
+     <y>170</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -209,8 +209,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_7">
    <property name="geometry">
     <rect>
-     <x>570</x>
-     <y>80</y>
+     <x>580</x>
+     <y>160</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -235,8 +235,8 @@
   <widget class="QWidget" name="horizontalLayoutWidget_8">
    <property name="geometry">
     <rect>
-     <x>1190</x>
-     <y>80</y>
+     <x>1200</x>
+     <y>160</y>
      <width>160</width>
      <height>21</height>
     </rect>
@@ -261,14 +261,60 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>410</y>
+     <x>30</x>
+     <y>490</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>上一頁</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_4">
+   <property name="geometry">
+    <rect>
+     <x>910</x>
+     <y>30</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>搜尋</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_17">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>30</y>
+     <width>151</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>請輸入欲搜尋的股票代碼：</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>30</y>
+     <width>321</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QListView" name="listView">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>50</y>
+     <width>321</width>
+     <height>161</height>
+    </rect>
    </property>
   </widget>
  </widget>

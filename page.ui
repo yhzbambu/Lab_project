@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>顯示matplotlib</string>
+     <string>個股搜尋</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_2">

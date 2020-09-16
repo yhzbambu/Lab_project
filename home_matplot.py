@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 #引入UI檔
-from matplotlibabc import *
+from matplotlibpage import *
 from page import *
 from uilogin import *
 #引入其他輔助模組
@@ -39,48 +39,49 @@ import re
 # datas = cursor.fetchall()
 
 #以下class為登入的部分
-class LoginMainWindow(QMainWindow, Ui_Dialog):
-    def __init__(self, parent=None):    
-        super(LoginMainWindow, self).__init__(parent)
-        self.setupUi(self)
-        self.pushButton.clicked.connect(lambda:self.loginclick(self.pushButton))
+# class LoginMainWindow(QMainWindow, Ui_Dialog):
+#     def __init__(self, parent=None):    
+#         super(LoginMainWindow, self).__init__(parent)
+#         self.setupUi(self)
+#         self.pushButton.clicked.connect(lambda:self.loginclick(self.pushButton))
 
-    def loginclick(self,btn):
+    #def loginclick(self,btn):
         # for data in datas:
         #     if (self.lineEdit.text() == data[1]):
         #         if (self.lineEdit_2.text() == data[2]):
-        self.hide()
-        HwWin.show()
+        # self.hide()
+        # HwWin.show()
             # else:
             #     self.label.setText("帳號/密碼 輸入錯誤")
 
 #以下class為首頁的部分
-class HomeMainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self, parent=None):    
-        super(HomeMainWindow, self).__init__(parent)
-        self.setupUi(self)
+# class HomeMainWindow(QMainWindow, Ui_MainWindow):
+#     def __init__(self, parent=None):    
+#         super(HomeMainWindow, self).__init__(parent)
+#         self.setupUi(self)
 
-        self.pushButton.clicked.connect(lambda:self.btclick(self.pushButton)) #點擊"顯示matplotlib"會跑出如下class的圖
+    #     self.pushButton.clicked.connect(lambda:self.btclick(self.pushButton)) #點擊"顯示matplotlib"會跑出如下class的圖
 
-    def btclick(self,btn): #將主頁隱藏，顯示圖形
-        self.hide() 
-        MtWin.show()
+    # def btclick(self,btn): #將主頁隱藏，顯示圖形
+    #     self.hide() 
+    #     MtWin.show()
 
 #以下class為matplotlib的部分
-class MatPlotMainWindow(QMainWindow, Ui_FormHello):
+class MatPlotMainWindow(QMainWindow, Ui_Matplot):
     
     def __init__(self, parent=None):    
         super(MatPlotMainWindow, self).__init__(parent)
         self.setupUi(self)
         self.figure = plt.figure() #設定matplotlib的畫布
         self.canvas = FigureCanvas(self.figure) #此行為在QT上建立畫布
-        self.pushButton_4.clicked.connect(lambda:self.plot_(self.pushButton_4)) #點擊"顯示matplotlib"會跑出plot_函式的圖
+        self.pushButton.clicked.connect(lambda:self.plot_(self.pushButton)) #點擊"顯示matplotlib"會跑出plot_函式的圖
         self.verticalLayout.addWidget(self.canvas) #將畫布添加到verticalLayout
+        #self.tabWidget
         self.pushButton_3.clicked.connect(lambda:self.backpage(self.pushButton_3)) #點擊"上一頁"會跳到backpage函式，回到上一頁
         self.lineEdit.textChanged.connect(self.searchitem)
         self.listView.clicked.connect(self.inputtext)
         self.qlist = list()
-        self.pushButton_4.clicked.connect(self.searchdisappear)
+        self.pushButton.clicked.connect(self.searchdisappear)
         self.stock_number_name = pd.read_csv("./stock_number_name.csv",index_col="名稱",encoding='utf8') #讀取stock_number_name.csv
 
     def plot_(self,btn):
@@ -154,10 +155,13 @@ class MatPlotMainWindow(QMainWindow, Ui_FormHello):
         join_four_years = str(int(split_four_years[0])-1911) + '/' + str(split_four_years[1]) + '/' + str(split_four_years[2])
         dick_two = dick[join_four_years:join_last_date] #依照條件取出dataframe的要求
 
-        ax = self.figure.add_subplot(4, 1, 1)
-        ax2 = self.figure.add_subplot(4, 1, 2)
-        ax3 = self.figure.add_subplot(4, 1, 3)
-        ax4 = self.figure.add_subplot(4, 1, 4)
+        ax = self.figure.add_axes([0.05,0.6,0.9,0.35])
+        ax2 = self.figure.add_axes([0.05,0.45,0.9,0.15], sharex=ax)
+        ax3 = self.figure.add_axes([0.05,0.25,0.9,0.2], sharex=ax)
+        ax4 = self.figure.add_axes([0.05,0.05,0.9,0.2], sharex=ax)
+        plt.setp(ax.get_xticklabels(), visible=False)
+        plt.setp(ax2.get_xticklabels(), visible=False)
+        plt.setp(ax3.get_xticklabels(), visible=False)
         plt.xlabel("Day")
         plt.ylabel("Price")
 
@@ -175,7 +179,7 @@ class MatPlotMainWindow(QMainWindow, Ui_FormHello):
                 try:
                     temp = form[int(np.round(event.xdata))] #根據對應的x值把y值提出來
                     if formname == 'sma_60':
-                        self.label.setText(str(temp))
+                        self.label_11.setText(str(temp))
                     if formname == 'sma_120':
                         self.label_3.setText(str(temp))
                     if formname == 'sma_240':
@@ -185,9 +189,9 @@ class MatPlotMainWindow(QMainWindow, Ui_FormHello):
                     if formname == 'dick_two["Dvalue"]':
                         self.label_9.setText(str(temp))
                     if formname == 'dick_two["RSI"]':
-                        self.label_11.setText(str(temp))    
+                        self.label_17.setText(str(temp))    
                     if formname == 'dick_two["MACD"]':
-                        self.label_13.setText(str(temp))                   
+                        self.label_15.setText(str(temp))                   
                     for i in range(len_y):
                         _y[i] = temp #將圖上得到的y值放入陣列裡
  
@@ -210,18 +214,18 @@ class MatPlotMainWindow(QMainWindow, Ui_FormHello):
         line(sma_240,ax,'purple','sma_240')
         line(dick_two["Kvalue"],ax2,'blue','dick_two["Kvalue"]')
         line(dick_two["Dvalue"],ax2,'red','dick_two["Dvalue"]')
-        line(dick_two["RSI"],ax3,'blue','dick_two["RSI"]')
-        line(dick_two["MACD"],ax4,'skyblue','dick_two["MACD"]')
+        line(dick_two["RSI"],ax4,'blue','dick_two["RSI"]')
+        line(dick_two["MACD"],ax3,'skyblue','dick_two["MACD"]')
 
         ax.plot(sma_60,label='MA_60',color='lightgreen')
         ax.plot(sma_120,label='MA_120',color='crimson')
         ax.plot(sma_240,label='MA_240',color='purple')
         ax2.plot(dick_two["Kvalue"],label='Kvalue',color='blue')
         ax2.plot(dick_two["Dvalue"],label='Dvalue',color='red')
-        ax3.plot(dick_two["RSI"],label='RSI',color='blue')
-        ax4.plot(dick_two["DIF"],label='DIF')
+        ax4.plot(dick_two["RSI"],label='RSI',color='blue')
+        ax3.plot(dick_two["DIF"],label='DIF')
 
-        dick_two["MACD"].plot(ax=ax4, color='r', kind='bar', legend=True)
+        dick_two["MACD"].plot(ax=ax3, color='r', kind='bar', legend=True)
 
         ax.set_xticks(range(0, len(bitch_two.index), int(len(bitch_two.index)/8)))
         ax.set_xticklabels(bitch_two.index[::int(len(bitch_two.index)/8)])
@@ -247,9 +251,9 @@ class MatPlotMainWindow(QMainWindow, Ui_FormHello):
         #plt.savefig("fuck.png")
 
         self.canvas.draw()  
-    def backpage(self,btn3): #隱藏matplotlib，顯示主頁
-        self.hide()
-        HwWin.show()
+    # def backpage(self,btn3): #隱藏matplotlib，顯示主頁
+    #     self.hide()
+    #     HwWin.show()
 
     def searchitem(self,text):
         self.qlist.clear()
@@ -278,9 +282,10 @@ class MatPlotMainWindow(QMainWindow, Ui_FormHello):
         self.listView.hide()
 if __name__=="__main__":  
     app = QApplication(sys.argv)  
-    HwWin = HomeMainWindow() #首頁
+    #HwWin = HomeMainWindow() #首頁
     MtWin = MatPlotMainWindow() #matplotlib
-    LgWin = LoginMainWindow() #Login
-    LgWin.show() #顯示主頁
+    MtWin.show()
+    #LgWin = LoginMainWindow() #Login
+    #LgWin.show() #顯示主頁
     sys.exit(app.exec_())     
 db.close()      

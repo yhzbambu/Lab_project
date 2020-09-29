@@ -105,12 +105,13 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         #bitch取四年的值
         stock_date = str(bitch.index[-1]).split('/')
         stock_last_date = date(int(stock_date[0])+1911,int(stock_date[1]),int(stock_date[2]))
-        stock_four_years = stock_last_date + relativedelta(years=-2) #最後一筆資料減四年
+        stock_four_years = stock_last_date + relativedelta(years=-1) #最後一筆資料減四年
         split_stock_date = str(stock_last_date).split('-') #將得到的日期做切片
         split_four_stock = str(stock_four_years).split('-')
         join_stock_date = str(int(split_stock_date[0])-1911) + '/' + str(split_stock_date[1]) + '/' + str(split_stock_date[2]) #將日期組回index的樣式
         join_four_stock = str(int(split_four_stock[0])-1911) + '/' + str(split_four_stock[1]) + '/' + str(split_four_stock[2])
-        bitch_two = bitch[join_four_stock:join_stock_date]
+        bitch_two = bitch[join_four_stock:]
+        print(bitch_two)
         count = 0
         for bitch_high in bitch_two['high']:
             if bitch_high == '--':
@@ -148,7 +149,7 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         #dick取四年的值
         split_date = list(dick.index)[-1].split('/')
         last_date = date(int(split_date[0])+1911,int(split_date[1]),int(split_date[2]))
-        four_years = last_date + relativedelta(years=-2)
+        four_years = last_date + relativedelta(months=-6)
         split_last_date = str(last_date).split('-')
         split_four_years = str(four_years).split('-')
         join_last_date = str(int(split_last_date[0])-1911) + '/' + str(split_last_date[1]) + '/' + str(split_last_date[2])
@@ -162,8 +163,6 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         plt.setp(ax.get_xticklabels(), visible=False)
         plt.setp(ax2.get_xticklabels(), visible=False)
         plt.setp(ax3.get_xticklabels(), visible=False)
-        plt.xlabel("Day")
-        plt.ylabel("Price")
 
         mpf.candlestick2_ochl(ax, bitch_two['open'], bitch_two['close'], bitch_two['high'], bitch_two['low'], width=0.6, colorup='r', colordown='g', alpha=0.75); 
 
@@ -173,30 +172,59 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
             _y = [list(form)[0]]*len_y #產生一個(len_y)長度的陣列
             line_x = Ax.plot(x, _y, color=color)[0] #畫水平線
             line_y = Ax.axvline(x=len_y-1, color='black',linestyle='--') #畫垂直線
+            
+            ax_text = ax.text(len_y-1,form[-1],str(''),fontsize = 10)
+            ax2_text = ax2.text(len_y-1,form[-1],str(''),fontsize = 10)
+            ax3_text = ax3.text(len_y-1,form[-1],str(''),fontsize = 10)
+            ax4_text = ax4.text(len_y-1,form[-1],str(''),fontsize = 10)
 
+            ax_text_x = ax.text(len_y-1,form[-1],str(''),fontsize = 10)
+            ax2_text_x = ax2.text(len_y-1,form[-1],str(''),fontsize = 10)
+            ax3_text_x = ax3.text(len_y-1,form[-1],str(''),fontsize = 10)
+            ax4_text_x = ax4.text(len_y-1,form[-1],str(''),fontsize = 10)
 
             def motion(event):
                 try:
                     temp = form[int(np.round(event.xdata))] #根據對應的x值把y值提出來
-                    if formname == 'sma_60':
-                        self.label_11.setText(str(temp))
-                    if formname == 'sma_120':
-                        self.label_3.setText(str(temp))
-                    if formname == 'sma_240':
-                        self.label_5.setText(str(temp))
-                    if formname == 'dick_two["Kvalue"]':
-                        self.label_7.setText(str(temp))
-                    if formname == 'dick_two["Dvalue"]':
-                        self.label_9.setText(str(temp))
-                    if formname == 'dick_two["RSI"]':
-                        self.label_17.setText(str(temp))    
-                    if formname == 'dick_two["MACD"]':
-                        self.label_15.setText(str(temp))                   
+                    temp_x = form.index[list(form.values).index(temp)]
+                    temp = temp.astype('float16')
+
                     for i in range(len_y):
                         _y[i] = temp #將圖上得到的y值放入陣列裡
- 
                     line_x.set_ydata(_y)
                     line_y.set_xdata(event.xdata)
+
+                    if formname == 'sma_60':
+                        ax_text.set_position((-10, temp))
+                        ax_text.set_text(str(temp))
+
+                    if formname == 'sma_10':
+                        ax_text.set_position((-10, temp))
+                        ax_text.set_text(str(temp))
+ 
+                        
+                    if formname == 'sma_20':
+                        ax_text.set_position((-10, temp))
+                        ax_text.set_text(str(temp))
+
+                    if formname == 'dick_two["Kvalue"]':
+                        ax2_text.set_position((-10, temp))
+                        ax2_text.set_text(str(temp))
+
+
+                    if formname == 'dick_two["Dvalue"]':
+                        ax2_text.set_position((-10, temp))
+                        ax2_text.set_text(str(temp))
+
+
+                    if formname == 'dick_two["RSI"]':
+                        ax4_text.set_position((-10, temp))
+                        ax4_text.set_text(str(temp))
+
+
+                    if formname == 'dick_two["MACD"]':
+                        ax3_text.set_position((-10, temp))
+                        ax3_text.set_text(str(temp))
                     #print("X：",event.xdata)
                     ######
 
@@ -205,21 +233,27 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
                     pass
             self.figure.canvas.mpl_connect('motion_notify_event', motion)
 
+        sma_10 = talib.SMA(bitch_two['low'], 10)
+        sma_20 = talib.SMA(bitch_two['low'], 20)
         sma_60 = talib.SMA(bitch_two['low'], 60)
-        sma_120 = talib.SMA(bitch_two['low'], 120)
-        sma_240 = talib.SMA(bitch_two['low'], 240)
+        #sma_120 = talib.SMA(bitch_two['low'], 120)
+        #sma_240 = talib.SMA(bitch_two['low'], 240)
 
+        line(sma_10,ax,'purple','sma_10')
+        line(sma_20,ax,'crimson','sma_20')
         line(sma_60,ax,'lightgreen','sma_60')
-        line(sma_120,ax,'crimson','sma_120')
-        line(sma_240,ax,'purple','sma_240')
+        #line(sma_120,ax,'crimson','sma_120')
+        #line(sma_240,ax,'purple','sma_240')
         line(dick_two["Kvalue"],ax2,'blue','dick_two["Kvalue"]')
         line(dick_two["Dvalue"],ax2,'red','dick_two["Dvalue"]')
         line(dick_two["RSI"],ax4,'blue','dick_two["RSI"]')
         line(dick_two["MACD"],ax3,'skyblue','dick_two["MACD"]')
 
+        ax.plot(sma_10,label='MA_10',color='crimson')
+        ax.plot(sma_20,label='MA_20',color='purple')
         ax.plot(sma_60,label='MA_60',color='lightgreen')
-        ax.plot(sma_120,label='MA_120',color='crimson')
-        ax.plot(sma_240,label='MA_240',color='purple')
+        #ax.plot(sma_120,label='MA_120',color='crimson')
+        #ax.plot(sma_240,label='MA_240',color='purple')
         ax2.plot(dick_two["Kvalue"],label='Kvalue',color='blue')
         ax2.plot(dick_two["Dvalue"],label='Dvalue',color='red')
         ax4.plot(dick_two["RSI"],label='RSI',color='blue')
@@ -230,14 +264,14 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         ax.set_xticks(range(0, len(bitch_two.index), int(len(bitch_two.index)/8)))
         ax.set_xticklabels(bitch_two.index[::int(len(bitch_two.index)/8)])
         print(low_value,high_value)
-        if (high_value > 200):
-            ax.set_yticks(range(low_value,high_value,40))
-        elif (high_value > 100):
-            ax.set_yticks(range(low_value,high_value,30))
-        elif (high_value < 30):
-            ax.set_yticks(range(low_value,high_value))
-        else:
-            ax.set_yticks(range(low_value,high_value,10))
+        # if (high_value > 200):
+        #     ax.set_yticks(range(low_value,high_value,40))
+        # elif (high_value > 100):
+        #     ax.set_yticks(range(low_value,high_value,30))
+        # elif (high_value < 30):
+        #     ax.set_yticks(range(low_value,high_value))
+        # else:
+        #     ax.set_yticks(range(low_value,high_value,10))
         ax2.set_xticks(range(0, len(dick_two.index), int(len(dick_two.index)/8)))
         ax2.set_xticklabels(dick_two.index[::int(len(dick_two.index)/8)])
         ax3.set_xticks(range(0, len(dick_two.index), int(len(dick_two.index)/8)))

@@ -160,6 +160,10 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         ax2 = self.figure.add_axes([0.05,0.45,0.9,0.15], sharex=ax)
         ax3 = self.figure.add_axes([0.05,0.25,0.9,0.2], sharex=ax)
         ax4 = self.figure.add_axes([0.05,0.05,0.9,0.2], sharex=ax)
+        # ax = self.figure.add_subplot(4, 1, 1)
+        # ax2 = self.figure.add_subplot(4, 1, 2)
+        # ax3 = self.figure.add_subplot(4, 1, 3)
+        # ax4 = self.figure.add_subplot(4, 1, 4)
         plt.setp(ax.get_xticklabels(), visible=False)
         plt.setp(ax2.get_xticklabels(), visible=False)
         plt.setp(ax3.get_xticklabels(), visible=False)
@@ -172,66 +176,24 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
             _y = [list(form)[0]]*len_y #產生一個(len_y)長度的陣列
             line_x = Ax.plot(x, _y, color=color)[0] #畫水平線
             line_y = Ax.axvline(x=len_y-1, color='black',linestyle='--') #畫垂直線
-            
-            ax_text = ax.text(len_y-1,form[-1],str(''),fontsize = 10)
-            ax2_text = ax2.text(len_y-1,form[-1],str(''),fontsize = 10)
-            ax3_text = ax3.text(len_y-1,form[-1],str(''),fontsize = 10)
-            ax4_text = ax4.text(len_y-1,form[-1],str(''),fontsize = 10)
-
-            ax_text_x = ax.text(len_y-1,form[-1],str(''),fontsize = 10)
-            ax2_text_x = ax2.text(len_y-1,form[-1],str(''),fontsize = 10)
-            ax3_text_x = ax3.text(len_y-1,form[-1],str(''),fontsize = 10)
-            ax4_text_x = ax4.text(len_y-1,form[-1],str(''),fontsize = 10)
 
             def motion(event):
                 try:
                     temp = form[int(np.round(event.xdata))] #根據對應的x值把y值提出來
                     temp_x = form.index[list(form.values).index(temp)]
-                    temp = temp.astype('float16')
 
                     for i in range(len_y):
                         _y[i] = temp #將圖上得到的y值放入陣列裡
                     line_x.set_ydata(_y)
                     line_y.set_xdata(event.xdata)
-
-                    if formname == 'sma_60':
-                        ax_text.set_position((-10, temp))
-                        ax_text.set_text(str(temp))
-
-                    if formname == 'sma_10':
-                        ax_text.set_position((-10, temp))
-                        ax_text.set_text(str(temp))
- 
-                        
-                    if formname == 'sma_20':
-                        ax_text.set_position((-10, temp))
-                        ax_text.set_text(str(temp))
-
-                    if formname == 'dick_two["Kvalue"]':
-                        ax2_text.set_position((-10, temp))
-                        ax2_text.set_text(str(temp))
-
-
-                    if formname == 'dick_two["Dvalue"]':
-                        ax2_text.set_position((-10, temp))
-                        ax2_text.set_text(str(temp))
-
-
-                    if formname == 'dick_two["RSI"]':
-                        ax4_text.set_position((-10, temp))
-                        ax4_text.set_text(str(temp))
-
-
-                    if formname == 'dick_two["MACD"]':
-                        ax3_text.set_position((-10, temp))
-                        ax3_text.set_text(str(temp))
                     #print("X：",event.xdata)
                     ######
-
+                    ax.text(20,45,'hi',fontsize=10)
                     self.figure.canvas.draw_idle() # 绘图动作实时反映在图像上
                 except:
                     pass
             self.figure.canvas.mpl_connect('motion_notify_event', motion)
+
 
         sma_10 = talib.SMA(bitch_two['low'], 10)
         sma_20 = talib.SMA(bitch_two['low'], 20)
@@ -259,7 +221,7 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         ax4.plot(dick_two["RSI"],label='RSI',color='blue')
         ax3.plot(dick_two["DIF"],label='DIF')
 
-        dick_two["MACD"].plot(ax=ax3, color='r', kind='bar', legend=True)
+        dick_two["MACD"].plot(ax=ax3, color='r', kind='bar')
 
         ax.set_xticks(range(0, len(bitch_two.index), int(len(bitch_two.index)/8)))
         ax.set_xticklabels(bitch_two.index[::int(len(bitch_two.index)/8)])
@@ -278,10 +240,10 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         ax3.set_xticklabels(dick_two.index[::int(len(dick_two.index)/8)])
         ax4.set_xticks(range(0, len(dick_two.index), int(len(dick_two.index)/8)))
         ax4.set_xticklabels(dick_two.index[::int(len(dick_two.index)/8)])
-        ax.legend(loc=2)
-        ax2.legend(loc=2)
-        ax3.legend(loc=2)
-        ax4.legend(loc=2)
+        # ax.legend(loc=2)
+        # ax2.legend(loc=2)
+        # ax3.legend(loc=2)
+        # ax4.legend(loc=2)
         #plt.savefig("fuck.png")
 
         self.canvas.draw()  

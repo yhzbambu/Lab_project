@@ -76,13 +76,50 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         self.canvas = FigureCanvas(self.figure) #此行為在QT上建立畫布
         self.pushButton.clicked.connect(lambda:self.plot_(3)) #點擊搜尋會跑出plot_函式的圖
         self.verticalLayout.addWidget(self.canvas) #將畫布添加到verticalLayout
-        self.pushButton_3.clicked.connect(lambda:self.backpage(self.pushButton_3)) #點擊"上一頁"會跳到backpage函式，回到上一頁
-        self.lineEdit.textChanged.connect(self.searchitem) #當lineEdit(文字框)發生文字變化時觸發self.searchitem
-        self.listView.clicked.connect(self.inputtext) #當listView(選單)裡的物件被點擊時觸發self.inputtext
-        self.qlist = list() #儲存listview的值
-        self.pushButton.clicked.connect(self.searchdisappear) #當pushButton(搜尋)被點擊時觸發self.searchdisappear
+        #self.pushButton_3.clicked.connect(lambda:self.backpage(self.pushButton_3)) #點擊"上一頁"會跳到backpage函式，回到上一頁
+        #self.lineEdit.textChanged.connect(self.searchitem) #當lineEdit(文字框)發生文字變化時觸發self.searchitem
+        #self.listView.clicked.connect(self.inputtext) #當listView(選單)裡的物件被點擊時觸發self.inputtext
+        #self.qlist = list() #儲存listview的值
+        #self.pushButton.clicked.connect(self.searchdisappear) #當pushButton(搜尋)被點擊時觸發self.searchdisappear
         self.stock_number_name = pd.read_csv("./stock_number_name.csv",index_col="名稱",encoding='utf8') #讀取stock_number_name.csv
         self.tabWidget.currentChanged['int'].connect(self.onChange) #當tab被切換時觸發self.onChange
+        self.noax2 = True
+        self.noax3 = True
+        self.noax4 = True
+
+    def contextMenuEvent(self, event):
+        menu = QMenu(self)
+        delAction = menu.addAction("Delete")
+        newAction = menu.addMenu("New")
+        newAction.addAction("KD")
+        newAction.addAction("RSI")
+        newAction.addAction("MACD")
+        delAction.triggered.connect(self.delete_ax)
+        newAction.triggered[QAction].connect(self.new_ax)
+        menu.exec_(event.globalPos())
+    
+    def on_press(self,event):
+        self.inaxes = event.inaxes
+
+    def delete_ax(self):
+        if self.inaxes == self.ax2:
+            self.noax2 = False
+        elif self.inaxes == self.ax3:
+            self.noax3 = False
+        elif self.inaxes == self.ax4:
+            self.noax4 = False
+        print(self.noax2,self.noax3,self.noax4)
+        self.plot_(3)
+        
+    def new_ax(self,action):
+        if action.text() == "KD":
+            self.noax2 = True
+        elif action.text() == "MACD":
+            self.noax3 = True
+        elif action.text() == "RSI":
+            self.noax4 = True    
+        print(self.noax2,self.noax3,self.noax4)
+        self.plot_(3)
 
     #此函式為繪畫Matplotlib，month_number為控制tab的月份
     def plot_(self,month_number):
@@ -168,17 +205,55 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         #####################################
 
         #以下為四張圖的設定
-        ax = self.figure.add_axes([0.05,0.65,0.9,0.30])
-        ax2 = self.figure.add_axes([0.05,0.45,0.9,0.15], sharex=ax)
-        ax3 = self.figure.add_axes([0.05,0.25,0.9,0.15], sharex=ax)
-        ax4 = self.figure.add_axes([0.05,0.05,0.9,0.15], sharex=ax)
+        def set_axes(xstick,ystick,width,height):
+            self.ax = self.figure.add_axes([xstick,ystick,width,height])
+        def set_axes2(xstick,ystick,width,height):
+            self.ax2 = self.figure.add_axes([xstick,ystick,width,height], sharex=self.ax)
+        def set_axes3(xstick,ystick,width,height):
+            self.ax3 = self.figure.add_axes([xstick,ystick,width,height], sharex=self.ax)
+        def set_axes4(xstick,ystick,width,height):
+            self.ax4 = self.figure.add_axes([xstick,ystick,width,height], sharex=self.ax)
+
+        if self.noax2 == False and self.noax3 == True and self.noax4 == True:
+            set_axes(0.05,0.55,0.9,0.4)
+            set_axes3(0.05,0.3,0.9,0.2)
+            set_axes4(0.05,0.05,0.9,0.2)
+        elif self.noax3 == False and self.noax2 == True and self.noax4 == True:
+            set_axes(0.05,0.55,0.9,0.4)
+            set_axes2(0.05,0.3,0.9,0.2)
+            set_axes4(0.05,0.05,0.9,0.2)
+        elif self.noax4 == False and self.noax3 == True and self.noax2 == True:
+            set_axes(0.05,0.55,0.9,0.4)
+            set_axes2(0.05,0.3,0.9,0.2)
+            set_axes3(0.05,0.05,0.9,0.2)
+        elif self.noax2 == False and self.noax3 == False and self.noax4 == True:
+            set_axes(0.05,0.4,0.9,0.55)
+            set_axes4(0.05,0.05,0.9,0.3)
+        elif self.noax2 == False and self.noax4 == False and self.noax3 == True:
+            set_axes(0.05,0.4,0.9,0.55)
+            set_axes3(0.05,0.05,0.9,0.3)
+        elif self.noax3 == False and self.noax4 == False and self.noax2 == True:
+            set_axes(0.05,0.4,0.9,0.55)
+            set_axes2(0.05,0.05,0.9,0.3)
+        elif self.noax2 == False and self.noax3 == False and self.noax4 == False:
+            set_axes(0.05,0.05,0.9,0.9)
+        else:
+            set_axes(0.05,0.65,0.9,0.3)
+            set_axes2(0.05,0.45,0.9,0.15)
+            set_axes3(0.05,0.25,0.9,0.15)
+            set_axes4(0.05,0.05,0.9,0.15)                
+
+        self.figure.canvas.mpl_connect('button_press_event', self.on_press)
         #以下為設定個圖的X軸不顯示
-        plt.setp(ax.get_xticklabels(), visible=False)
-        plt.setp(ax2.get_xticklabels(), visible=False)
-        plt.setp(ax3.get_xticklabels(), visible=False)
+        self.ax.set_xlim(xmin=0,xmax=len(original_stock_two["MACD"]))
+        self.ax2.set_xlim(xmin=0,xmax=len(original_stock_two["MACD"]))
+        self.ax4.set_xlim(xmin=0,xmax=len(original_stock_two["MACD"]))
+        plt.setp(self.ax.get_xticklabels(), visible=False)
+        plt.setp(self.ax2.get_xticklabels(), visible=False)
+        plt.setp(self.ax3.get_xticklabels(), visible=False)
         ###############################
 
-        mpf.candlestick2_ochl(ax, count_stock_two['open'], count_stock_two['close'], count_stock_two['high'], count_stock_two['low'], width=0.6, colorup='r', colordown='g', alpha=0.75); #生成蠟燭圖
+        mpf.candlestick2_ochl(self.ax, count_stock_two['open'], count_stock_two['close'], count_stock_two['high'], count_stock_two['low'], width=0.6, colorup='r', colordown='g', alpha=0.75); #生成蠟燭圖
 
         #繪出十字線與設置文本等...
         def line(form,Ax,color,formname):
@@ -191,36 +266,36 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
             if high_value > 200:
                 high_200 = ((high_value/0.9)-(low_value*0.9)) / 30
                 target = int((low_value*0.9)+(30*int(high_200)))+0.5
-                ax_text = ax.text(5,target," ",fontsize=12)
+                ax_text = self.ax.text(5,target," ",fontsize=12)
             elif 100 < high_value < 200:
                 high_100 = ((high_value/0.9)-(low_value*0.9)) / 10
                 target = int((low_value*0.9)+(10*int(high_100)))+0.5
-                ax_text = ax.text(5,target," ",fontsize=12)
+                ax_text = self.ax.text(5,target," ",fontsize=12)
             elif  30 < high_value <= 100:
                 high_30 = ((high_value/0.9)-(low_value*0.9)) / 5
                 target = int((low_value*0.9)+(5*int(high_30)))+0.5
-                ax_text = ax.text(5,target," ",fontsize=12)
+                ax_text = self.ax.text(5,target," ",fontsize=12)
             else:
                 high_other = ((high_value+3)-(low_value-2)) / 3
                 target = int(low_value-2)+(int(high_other)*3)+0.5
-                ax_text = ax.text(5,target," ",fontsize=12)
-            ax2_text = ax2.text(5,100.5," ",fontsize=12)
+                ax_text = self.ax.text(5,target," ",fontsize=12)
+            ax2_text = self.ax2.text(5,100.5," ",fontsize=12)
             if high_macd_value > 9:
                 macd_target = high_macd_value+int(high_macd_value/2.5)
-                ax3_text = ax3.text(5,macd_target," ",fontsize=12)
+                ax3_text = self.ax3.text(5,macd_target," ",fontsize=12)
             elif  5 < high_macd_value <= 9:
                 macd_target = high_macd_value+int(high_macd_value/2.5)
-                ax3_text = ax3.text(5,macd_target," ",fontsize=12)
+                ax3_text = self.ax3.text(5,macd_target," ",fontsize=12)
             elif 3 < high_macd_value <= 5:
                 macd_target = high_macd_value+0.5
-                ax3_text = ax3.text(5,macd_target," ",fontsize=12)
+                ax3_text = self.ax3.text(5,macd_target," ",fontsize=12)
             elif 1 < high_macd_value <= 3:
                 macd_target = high_macd_value+0.55
-                ax3_text = ax3.text(5,macd_target," ",fontsize=12)
+                ax3_text = self.ax3.text(5,macd_target," ",fontsize=12)
             elif 0 < high_macd_value <= 1:
                 macd_target = high_macd_value+0.2
-                ax3_text = ax3.text(5,macd_target," ",fontsize=12)
-            ax4_text = ax4.text(5,101," ",fontsize=12)
+                ax3_text = self.ax3.text(5,macd_target," ",fontsize=12)
+            ax4_text = self.ax4.text(5,101," ",fontsize=12)
             ##############################################
 
             #設置文本內容
@@ -272,52 +347,52 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
         #sma_240 = talib.SMA(count_stock_two['low'], 240) #製作MA240
         H_line,M_line,L_line=talib.BBANDS(count_stock_two['close'], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)#製作布林通道
 
-        line(H_line,ax,'purple','sma_10')
-        line(M_line,ax,'crimson','sma_20')
-        line(L_line,ax,'lightgreen','sma_60')
+        line(H_line,self.ax,'purple','sma_10')
+        line(M_line,self.ax,'crimson','sma_20')
+        line(L_line,self.ax,'lightgreen','sma_60')
         #line(sma_10,ax,'crimson','sma_120')
         #line(sma_20,ax,'crimson','sma_120')
         #line(sma_60,ax,'crimson','sma_120')
         #line(sma_120,ax,'crimson','sma_120')
         #line(sma_240,ax,'purple','sma_240')
-        line(original_stock_two["Kvalue"],ax2,'blue','original_stock_two["Kvalue"]')
-        line(original_stock_two["Dvalue"],ax2,'red','original_stock_two["Dvalue"]')
-        line(original_stock_two["RSI"],ax4,'blue','original_stock_two["RSI"]')
-        line(original_stock_two["DIF"],ax3,'skyblue','original_stock_two["DIF"]')
+        line(original_stock_two["Kvalue"],self.ax2,'blue','original_stock_two["Kvalue"]')
+        line(original_stock_two["Dvalue"],self.ax2,'red','original_stock_two["Dvalue"]')
+        line(original_stock_two["RSI"],self.ax4,'blue','original_stock_two["RSI"]')
+        line(original_stock_two["DIF"],self.ax3,'skyblue','original_stock_two["DIF"]')
 
-        ax.plot(H_line,label='MA_10',color='crimson') #繪製壓力線
-        ax.plot(M_line,label='MA_20',color='purple') #繪製MA20
-        ax.plot(L_line,label='MA_60',color='lightgreen') #繪製支撐線
+        self.ax.plot(H_line,label='MA_10',color='crimson') #繪製壓力線
+        self.ax.plot(M_line,label='MA_20',color='purple') #繪製MA20
+        self.ax.plot(L_line,label='MA_60',color='lightgreen') #繪製支撐線
         #ax.plot(sma_10,label='MA_120',color='crimson') #繪製MA10
         #ax.plot(sma_20,label='MA_120',color='crimson') #繪製MA20
         #ax.plot(sma_60,label='MA_120',color='crimson') #繪製MA60
         #ax.plot(sma_120,label='MA_120',color='crimson') #繪製MA120
         #ax.plot(sma_240,label='MA_240',color='purple') #繪製MA240
-        ax2.plot(original_stock_two["Kvalue"],label='Kvalue',color='blue') #繪製Kvalue
-        ax2.plot(original_stock_two["Dvalue"],label='Dvalue',color='red') #繪製Dvalue
-        ax4.plot(original_stock_two["RSI"],label='RSI',color='blue') #繪製RSI
-        ax3.plot(original_stock_two["DIF"],label='DIF',color='skyblue') #繪製DIF
+        self.ax2.plot(original_stock_two["Kvalue"],label='Kvalue',color='blue') #繪製Kvalue
+        self.ax2.plot(original_stock_two["Dvalue"],label='Dvalue',color='red') #繪製Dvalue
+        self.ax4.plot(original_stock_two["RSI"],label='RSI',color='blue') #繪製RSI
+        self.ax3.plot(original_stock_two["DIF"],label='DIF',color='skyblue') #繪製DIF
 
         #繪製柱狀MACD
-        ax3.set_xlim(xmin=0,xmax=len(original_stock_two["MACD"]))
+        self.ax3.set_xlim(xmin=0,xmax=len(original_stock_two["MACD"]))
         for row in range(len(original_stock_two["MACD"])):
-            ax3.bar(row,original_stock_two["MACD"][row],color='r' if original_stock_two["MACD"][row] > 0 else 'g')
+            self.ax3.bar(row,original_stock_two["MACD"][row],color='r' if original_stock_two["MACD"][row] > 0 else 'g')
         ######################################################
         
         #繪製X軸的日期
-        ax.set_xticks(range(0, len(count_stock_two.index), int(len(count_stock_two.index)/8)))
-        ax.set_xticklabels(count_stock_two.index[::int(len(count_stock_two.index)/8)])
+        self.ax.set_xticks(range(0, len(count_stock_two.index), int(len(count_stock_two.index)/8)))
+        self.ax.set_xticklabels(count_stock_two.index[::int(len(count_stock_two.index)/8)])
         ######################################################
 
         #以下為調整蠟燭圖，防止圖超出邊界
         if high_value > 200:
-            ax.set_yticks(range(int(low_value*0.9),int(high_value/0.9),30))
+            self.ax.set_yticks(range(int(low_value*0.9),int(high_value/0.9),30))
         elif 100 < high_value < 200:
-            ax.set_yticks(range(int(low_value*0.9),int(high_value/0.9),10))
+            self.ax.set_yticks(range(int(low_value*0.9),int(high_value/0.9),10))
         elif  30 < high_value < 100:
-            ax.set_yticks(range(int(low_value*0.9),int(high_value/0.9),5))
+            self.ax.set_yticks(range(int(low_value*0.9),int(high_value/0.9),5))
         else:
-            ax.set_yticks(range(int(low_value-2),int(high_value+3),3))
+            self.ax.set_yticks(range(int(low_value-2),int(high_value+3),3))
         ###########################
 
         self.canvas.draw() #將圖給畫出來 
@@ -363,14 +438,14 @@ class MatPlotMainWindow(QMainWindow, Ui_Matplot):
     #當tab被切換時，根據點選的月份顯示
     def onChange(self,index):
         try:
-            currentTab = self.tabWidget.currentIndex()
-            if currentTab == 0:
+            self.currentTab = self.tabWidget.currentIndex()
+            if self.currentTab == 0:
                 self.plot_(3)
                 self.verticalLayout.addWidget(self.canvas) #將畫布添加到verticalLayout
-            if currentTab == 1:
+            if self.currentTab == 1:
                 self.plot_(6)
                 self.verticalLayout_2.addWidget(self.canvas) #將畫布添加到verticalLayout_2
-            if currentTab == 2:
+            if self.currentTab == 2:
                 self.plot_(12)
                 self.verticalLayout_3.addWidget(self.canvas) #將畫布添加到verticalLayout_3
         except:

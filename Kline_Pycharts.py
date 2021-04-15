@@ -113,73 +113,6 @@ class MACD_Menu_Window(QWidget, Ui_MACD):
 		self.setupUi(self)
 ############################################################################################
 
-###################################主頁層的視窗###############################################
-class PageMainWindow(QtWidgets.QMainWindow, Ui_Page):
-	
-	def __init__(self, parent=None): 
-		super(PageMainWindow, self).__init__(parent)
-		self.setupUi(self)
-		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
-			database="stock",
-			port=3306
-		)
-		self.cursor = db.cursor()
-		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-02-23')
-		close = self.cursor.fetchone()
-		self.label_2.setText('加 權 指 數：' + str(close[0])) #在首頁上方顯示當日大盤的收盤價
-
-		self.pushButton.clicked.connect(lambda:self.switch(self.pushButton)) #連接篩選的頁面跳轉
-		self.pushButton_3.clicked.connect(lambda:self.switch(self.pushButton_3)) #連接日成交的頁面跳轉
-		self.pushButton_8.clicked.connect(lambda:self.switch(self.pushButton_8)) #連接技術分析的頁面跳轉
-		self.pushButton_2.clicked.connect(lambda:self.switch(self.pushButton_2)) #連接智慧選股的頁面跳轉	
-		self.label_2.clicked.connect(lambda:self.switch(self.label_2)) #連接上方加權指數的頁面跳轉
-		self.actionnext.triggered.connect(lambda:self.next_page()) #連接下一頁的跳轉
-	
-	def next_page(self): #透過讀檔知道下一個頁面，並進行跳轉
-		all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-		with open('./other_file/record.txt','r') as f:
-			next_p = f.readlines()
-		page.hide()
-		all_page.get(str(next_p[1]).replace('\n','')).show()
-				
-
-	def switch(self,btn): #執行跳轉，並且在文件紀錄跳轉的過程
-		if btn == self.pushButton:
-			with open('./other_file/record.txt','w') as f:
-				f.write('page\n')
-				f.write('select\n')
-			page.hide()
-			select.show()
-		elif btn == self.pushButton_3:
-			with open('./other_file/record.txt','w') as f:
-				f.write('page\n')
-				f.write('day\n')
-			page.hide()
-			day.show()
-		elif btn == self.pushButton_8:
-			with open('./other_file/record.txt','w') as f:
-				f.write('page\n')
-				f.write('PcWin\n')
-			page.hide()
-			PcWin.show()
-		elif btn == self.pushButton_2:
-			with open('./other_file/record.txt','w') as f:
-				f.write('page\n')
-				f.write('smart\n')
-			page.hide()
-			smart.show()
-		elif btn == self.label_2:
-			with open('./other_file/record.txt','w') as f:
-				f.write('page\n')
-				f.write('market\n')
-			page.hide()
-			market.show()
-############################################################################################
-
 ###################################篩選層的視窗###############################################
 class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 	
@@ -188,17 +121,18 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.setupUi(self)
 
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
 		self.cursor = db.cursor()
 		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-02-23')
+		self.cursor.execute(self.market_close,'2021-01-27')
 		close = self.cursor.fetchone()
 		self.label_2.setText('加 權 指 數：' + str(close[0])) #在上方顯示當日大盤的收盤價
+		self.actionenter.triggered.connect(lambda:PcWin.K_line(self.lineEdit.text(),'日'))
 		#########################################篩選的部分#############################################################
 		################################以下為篩選條件的所有menu與menu裡創建的元件(之後有空進行優化)###############################
 		self.own_menu = QMenu(self)
@@ -249,7 +183,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.toolButton_9.clicked.connect(lambda:self.clear_text_rank(self.toolButton_8,self.comboBox_7))
 		self.toolButton_37.clicked.connect(lambda:self.clear_text_rank(self.toolButton_36,self.comboBox_9))
 		###########################################################################################################################################
-		self.tableWidget.doubleClicked.connect(lambda:self.go_to_kline())
+		self.tableWidget.doubleClicked.connect(lambda:self.go_to_kline_select())
 
 		self.select_date_list = list() #紀錄T1~T6裡變化的元件，透過此陣列紀錄並放入
 		self.T_list = list() #防止T1~T12的條件重複紀錄
@@ -258,37 +192,89 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		#########################################日成交的部分########################################
 		self.day_info()
 		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-02-23')
+		self.cursor.execute(self.market_close,'2021-01-27')
 		close = self.cursor.fetchone()
-		self.label_2.setText('加 權 指 數：' + str(close[0]))
 		self.comboBox_10.activated.connect(lambda:self.get_class(self.comboBox_10.currentText()))
-		self.tableWidget_3.doubleClicked.connect(lambda:self.go_to_kline())
+		self.tableWidget_3.doubleClicked.connect(lambda:self.go_to_kline_day())
 		###########################################################################################
 
 		#######################################大盤走勢############################################
-		self.date_sql = '''SELECT TradeDate FROM TAIEX'''
-		self.cursor.execute(self.date_sql)
-		self.date_list = self.cursor.fetchall()
-		self.all_value_sql = '''SELECT OpeningIndex,ClosingIndex,HighestIndex,LowestIndex FROM TAIEX'''
-		self.cursor.execute(self.all_value_sql)
-		self.value = self.cursor.fetchall()
 		self.value_list2 = list()
-		self.open_pr = list()
-		self.close_pr = list()
-		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-02-23')
-		close = self.cursor.fetchone()
-		self.label_2.setText('加 權 指 數：' + str(close[0]))
-		for val in self.value:
-			self.va_list = list()
-			self.open_pr.append(val[0].replace(',',''))
-			self.close_pr.append(val[2].replace(',',''))
-			for i in val:
-				self.va_list.append(float(i.replace(',','')))
-			self.value_list2.append(self.va_list)	
+		self.open_pr_market = list()
+		self.close_pr_market = list()
+		self.high_pr_market = list()
+		self.low_pr_market = list()
+		self.dates_market = list()
+		self.vols_market = list()
+		self.macd_market = list()
+		self.rsi_market = list()
+		self.k_value_market = list()
+		self.d_value_market = list()
+		self.dif_market = list()
+		self.osc_market = list()
+
+		self.sort_info_market(self.close_pr_market,'ClosingIndex') #收盤
+		self.sort_info_market(self.open_pr_market,'OpeningIndex') #開盤
+		self.sort_info_market(self.high_pr_market,'HighestIndex') #最高價
+		self.sort_info_market(self.low_pr_market,'LowestIndex') #最低價
+		self.sort_info_market(self.dates_market,'TradeDate') #日期
+		self.sort_info_market(self.vols_market,'TradeValue') #成交量
+		self.sort_info_market(self.macd_market,'MACD9') #macd
+		self.sort_info_market(self.rsi_market,'RSI6') #rsi
+		self.sort_info_market(self.k_value_market,'K9_') #k_value
+		self.sort_info_market(self.d_value_market,'D9') #d_value
+		self.sort_info_market(self.dif_market,'DIF12and26') #dif	
+
+		for ma_dif_market in range(0,len(self.macd_market)):
+			if self.dif_market[ma_dif_market] == '#' or self.macd_market[ma_dif_market] == '#':
+				pass
+			else:
+				self.osc_market.append(float(self.dif_market[ma_dif_market])-float(self.macd_market[ma_dif_market]))
+		for info in zip(self.open_pr_market,self.close_pr_market,self.high_pr_market,self.low_pr_market):
+			self.value_list2.append(info)
+
+		self.sma_5 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-180:], 5) #製作MA5
+		self.sma_20 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-180:], 20) #製作MA20
+		self.sma_60 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-180:], 60) #製作MA60
+		self.H_line,self.M_line,self.L_line=talib.BBANDS(np.array(self.close_pr_market,dtype=float)[-180:], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)#製作布林通道
+		
+		self.comboBox_13.setCurrentIndex(0)
+		self.comboBox_12.setCurrentIndex(0)
+		self.comboBox_11.setCurrentIndex(0)
+		self.comboBox_14.activated.connect(lambda:self.market_kline())
+		self.comboBox_13.activated.connect(lambda:self.market_kline())
+		self.comboBox_12.activated.connect(lambda:self.market_kline())
+		self.comboBox_11.activated.connect(lambda:self.market_kline())		
+		#####################################上一頁、下一頁########################################
+		self.actionhome.triggered.connect(lambda:self.back_home())
+		self.actionback.triggered.connect(lambda:self.back_page())
+		self.actionnext.triggered.connect(lambda:self.next_page())
 		############################################################################################
 
-	def go_to_kline(self):
+
+	def sort_info_market(self,pr_list,sql_pr):
+		self.market_value = 'SELECT '+sql_pr+' FROM TAIEX'
+		self.cursor.execute(self.market_value)
+		if sql_pr == 'ClosingIndex' or sql_pr == 'OpeningIndex' or sql_pr == 'HighestIndex' or sql_pr == 'LowestIndex' or sql_pr == 'TradeValue':
+			for clo in self.cursor.fetchall():
+				pr_list.append(clo[0].replace(',',''))
+		else:
+			for clo in self.cursor.fetchall():
+				pr_list.append(clo[0])
+	##################################上一頁、下一頁#############################################
+	def back_page(self): #返回上一頁
+		select.show()
+		PcWin.hide()
+
+	def next_page(self): #往前下一頁
+		PcWin.show()
+		select.hide()
+
+	def back_home(self): #會到首頁
+		select.show()
+		PcWin.hide()
+
+	def go_to_kline_select(self):
 		PcWin.K_line(self.tableWidget.currentItem().text(),'日')
 
 	def clear_text_condition(self,hlayout,toolbutton,lineedit1,lineedit2): #按下X後清空所有欄位
@@ -317,9 +303,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 
 	def create_AC(self,label,combobox,dateedit,hlayout,spacer,day,week,month,season,select_date_list,T_text,T_list,action_text): #判斷日、周、月來決定放入哪些元件
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -468,9 +454,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		total_output = list() #紀錄所有條件包裝送入
 		total_date = list() #將處理過的時間放入此陣列
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -522,9 +508,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			total_output.append(['T6',str(sql_table_name[input_name.index(self.toolButton_34.text())]),str(sql_field_name[input_name.index(self.toolButton_34.text())]),'NOT' if self.checkBox_15.isChecked() else '',(self.lineEdit_32.text(),self.lineEdit_33.text()),total_date[self.T_list.index('T6')]])
 		if self.toolButton_6.text() != "請指定選股條件":
 			db = pymysql.connect(
-				host='127.0.0.1',
-				user='root',
-				password='',
+				host='163.18.104.164',
+				user='bambu',
+				password='test123',
 				database="stock",
 				port=3306
 			)
@@ -535,9 +521,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			total_output.append(['T7','cid','classification','!' if self.checkBox_2.isChecked() else '',select_stock_list[0]])
 		if self.toolButton_38.text() != "請指定選股條件":
 			db = pymysql.connect(
-				host='127.0.0.1',
-				user='root',
-				password='',
+				host='163.18.104.164',
+				user='bambu',
+				password='test123',
 				database="stock",
 				port=3306
 			)
@@ -563,38 +549,6 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 				self.tableWidget.setItem(count,i,newItem)		
 			count += 1
-
-	# def back_page(self): #返回上一頁
-	# 	all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		back_p = f.readlines()
-	# 	select.hide()
-	# 	all_page.get(str(back_p[back_p.index('select\n')-1]).replace('\n','')).show()
-	
-	# def next_page(self): #往前下一頁
-	# 	all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		next_p = f.readlines()
-	# 	select.hide()
-	# 	all_page.get(str(next_p[next_p.index('select\n')+1]).replace('\n','')).show()
-	
-	# def switch(self): #跳轉頁面
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		switch_info = f.readlines()
-	# 	other_info = list()
-	# 	for i in range(0,switch_info.index('select\n')):
-	# 		other_info.append(switch_info[i])
-	# 	other_info.append('market\n')
-	# 	with open('./other_file/record.txt','w') as f:
-	# 		for j in other_info:
-	# 				f.write(j)
-	# 	select.hide()
-	# 	market.show()
-
-	# def back_home(self): #會到首頁
-	# 	select.hide()
-	# 	page.show()	
-
 
 	def total_own_menu(self,menu,toolbutton,info,data_name): #將menu放入toolbutton
 		menu.triggered.connect(info)
@@ -738,9 +692,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 	def two_menu(self,menu,data_name):
 		self.classification = menu.addMenu('產業分類')
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -852,107 +806,27 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 # 	def __init__(self, parent=None): 
 # 		super(SmartMainWindow, self).__init__(parent)
 # 		self.setupUi(self)
-# 		db = pymysql.connect(
-# 			host='127.0.0.1',
-# 			user='root',
-# 			password='',
-# 			database="stock",
-# 			port=3306
-# 		)
+#		db = pymysql.connect(
+#			host='163.18.104.164',
+#			user='bambu',
+#			password='test123',
+#			database="stock",
+#			port=3306
+#		)
 # 		self.cursor = db.cursor()
 # 		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
 # 		self.cursor.execute(self.market_close,'2021-02-23')
 # 		close = self.cursor.fetchone()
 # 		self.label_2.setText('加 權 指 數：' + str(close[0]))
 # 		self.label_2.clicked.connect(lambda:self.switch())
-# 		self.actionhome.triggered.connect(lambda:self.back_home())
-# 		self.actionback.triggered.connect(lambda:self.back_page())
-# 		self.actionnext.triggered.connect(lambda:self.next_page())
 
-# 	def back_page(self):
-# 		all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-# 		with open('./other_file/record.txt','r') as f:
-# 			back_p = f.readlines()
-# 		smart.hide()
-# 		all_page.get(str(back_p[back_p.index('smart\n')-1]).replace('\n','')).show()
-	
-# 	def next_page(self):
-# 		all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-# 		with open('./other_file/record.txt','r') as f:
-# 			next_p = f.readlines()
-# 		smart.hide()
-# 		all_page.get(str(next_p[next_p.index('smart\n')+1]).replace('\n','')).show()
-	
-# 	def switch(self):
-# 		with open('./other_file/record.txt','r') as f:
-# 			switch_info = f.readlines()
-# 		other_info = list()
-# 		for i in range(0,switch_info.index('smart\n')):
-# 			other_info.append(switch_info[i])
-# 		other_info.append('market\n')
-# 		with open('./other_file/record.txt','w') as f:
-# 			for j in other_info:
-# 					f.write(j)
-# 		smart.hide()
-# 		market.show()
-
-# 	def back_home(self):
-# 		smart.hide()
-# 		page.show()
 #############################################################################################################################################
 
-###################################日成交層的視窗###############################################
-#class dayMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
-	
-	# def __init__(self, parent=None): 
-	# 	super(dayMainWindow, self).__init__(parent)
-	# 	self.setupUi(self)
-	# 	db = pymysql.connect(
-	# 		host='127.0.0.1',
-	# 		user='root',
-	# 		password='',
-	# 		database="stock",
-	# 		port=3306
-	# 	)
 
-	# 	self.cursor = db.cursor()
-
-		# self.actionhome.triggered.connect(lambda:self.back_home())
-		# self.actionback.triggered.connect(lambda:self.back_page())
-		# self.actionnext.triggered.connect(lambda:self.next_page())
-
-
-	# def back_page(self):
-	# 	all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		back_p = f.readlines()
-	# 	day.hide()
-	# 	all_page.get(str(back_p[back_p.index('day\n')-1]).replace('\n','')).show()
-	
-	# def next_page(self):
-	# 	all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		next_p = f.readlines()
-	# 	day.hide()
-	# 	all_page.get(str(next_p[next_p.index('day\n')+1]).replace('\n','')).show()
-
-	def go_to_kline(self):
+	def go_to_kline_day(self):
 		with open('./other_file/record.txt','a') as f:
 			f.write('PcWin' + '\n')
 		PcWin.K_line(self.tableWidget_3.currentItem().text(),'日')
-	
-	# def switch(self):
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		switch_info = f.readlines()
-	# 	other_info = list()
-	# 	for i in range(0,switch_info.index('day\n')):
-	# 		other_info.append(switch_info[i])
-	# 	other_info.append('market\n')
-	# 	with open('./other_file/record.txt','w') as f:
-	# 		for j in other_info:
-	# 				f.write(j)
-	# 	day.hide()
-	# 	market.show()
 
 	def get_class(self, class_text):
 		self.class_sql = '''SELECT cid FROM classification where c_name=%s'''
@@ -979,11 +853,6 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				count += 1				
 			except:
 				pass
-		
-	# def back_home(self):
-	# 	day.hide()
-	# 	page.show()
-
 
 	def day_info(self):
 		self.all_stick_sql = '''SELECT * FROM stock'''
@@ -1009,34 +878,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			pass
 
 
-############################################################################################
-
-		# self.actionhome.triggered.connect(lambda:self.back_home())
-		# self.actionback.triggered.connect(lambda:self.back_page())
-		# self.actionnext.triggered.connect(lambda:self.next_page())
-
-	# def back_page(self):
-	# 	all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		back_p = f.readlines()
-	# 	market.hide()
-	# 	all_page.get(str(back_p[back_p.index('market\n')-1]).replace('\n','')).show()
-	
-	# def next_page(self):
-	# 	all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-	# 	with open('./other_file/record.txt','r') as f:
-	# 		next_p = f.readlines()
-	# 	market.hide()
-	# 	all_page.get(str(next_p[next_p.index('market\n')+1]).replace('\n','')).show()
-
-	# def back_home(self):
-	# 	market.hide()
-	# 	page.show()
-
 	def market_kline(self):
 		self.kline = (
 			Kline(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(self.date_list[-180:])
+			.add_xaxis(self.dates_market[-180:])
 			.add_yaxis(
 				"kline", 
 				self.value_list2[-180:], 
@@ -1048,26 +893,41 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				),
 			)
 			.set_global_opts(
-				datazoom_opts = [opts.DataZoomOpts(type_="slider"),opts.DataZoomOpts(type_="inside")],
+				datazoom_opts = [opts.DataZoomOpts(type_="slider",pos_bottom='bottom',xaxis_index=[0, 1, 2, 3],),opts.DataZoomOpts(type_="inside",xaxis_index=[0, 1, 2, 3],)],
 				tooltip_opts = opts.TooltipOpts(
 					is_show_content=True,
 					formatter=JsCode(
+
 						"""
 							function (params) {
 								let res = '';
 								let res_two = '';
-								res_two += params[0].value[1] + ' ';
-								res_two += params[0].value[2] + ' ';
-								res_two += params[0].value[3] + ' ';
-								res_two += params[0].value[4] + ' ';
-
+								for (let i = 0; i < params.length; i++) {
+									var data = '<p>' + params[i].name + '</p>';
+									if (params[i].seriesName == 'vol' || params[i].seriesName == 'MACD'){
+										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value + '</span>' + '</p>';
+									}else if(params[i].seriesName == 'kline'){
+										res_two += params[i].value[1] + ' ';
+										res_two += params[i].value[2] + ' ';
+										res_two += params[i].value[3] + ' ';
+										res_two += params[i].value[4] + ' ';
+									}else if(params[i].seriesName == 'kline_bool'){
+										var z;
+									}else{
+										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value[1] + '</span>' + '</p>';
+									}
+								}
 								stock_info = res_two;
-
+								return data + res;
 							}
 						"""
-					)
+					),
+					position=['0%','0%'],
+					trigger="axis",
+					trigger_on="mousemove",
+					axis_pointer_type='cross',
 				),
-				axispointer_opts = opts.AxisPointerOpts(is_show=True),
+				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": "all"},{"yAxisIndex": [2,3]}]),
 				xaxis_opts = opts.AxisOpts(
 					is_show=True,
 					splitline_opts = opts.SplitLineOpts(is_show=True),
@@ -1081,16 +941,404 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				legend_opts = opts.LegendOpts(is_show=False, pos_right="center"),
 			)
 		)
-		if self.webEngineView.geometry().width() < 1600:
-			grid_chart = Grid(init_opts=opts.InitOpts(width="1550px", height="740px"))
+#################################以下為布林通道K線##########################################
+		self.kline_bool = (
+			Kline(init_opts=opts.InitOpts(width="1300px", height="300px"))
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				"kline_bool", 
+				self.value_list2[-180:], 
+				itemstyle_opts=opts.ItemStyleOpts(
+					color="#ec0000",
+					color0="#00da3c",
+					border_color="#ec0000",
+					border_color0="#00da3c",
+				),
+			)
+			.set_global_opts(
+				datazoom_opts = [opts.DataZoomOpts(type_="slider",pos_bottom='bottom',xaxis_index=[0, 1, 2, 3],),opts.DataZoomOpts(type_="inside",xaxis_index=[0, 1, 2, 3],)],
+				#title_opts = opts.TitleOpts(title="Kline"),
+				tooltip_opts = opts.TooltipOpts(
+					position=['0%','0%'],
+					trigger="axis",
+					trigger_on="mousemove",
+					axis_pointer_type='cross',
+					#is_always_show_content=True,
+				),
+				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": "all"}]),
+				xaxis_opts = opts.AxisOpts(
+					is_show=True,
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					axistick_opts = opts.AxisTickOpts(is_show=False),
+					axislabel_opts = opts.LabelOpts(is_show=False),
+				),
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_right="center"),
+			)
+		)
+##########################################################################################
+
+#################################以下為均線################################################
+		self.line_average_MA5 = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="MA5",
+				y_axis=self.sma_5,
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False,
+			)
+		)
+		# line_average_MA10 = (
+		# 	Line()
+		# 	.add_xaxis(dates[-180:])
+		# 	.add_yaxis(
+		# 		series_name="MA10",
+		# 		y_axis=sma_10,
+		# 		is_smooth=True,
+		# 		linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+		# 		label_opts=opts.LabelOpts(is_show=False),
+		# 		is_symbol_show=False,
+		# 	)
+		# )
+		self.line_average_MA20 = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="MA20",
+				y_axis=self.sma_20,
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False,
+			)
+		)
+		self.line_average_MA60 = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="MA60",
+				y_axis=self.sma_60,
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False,
+			)	
+		)
+##########################################################################################
+
+#################################以下為RSI指標##############################################
+		self.line_RSI = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="RSI",
+				y_axis=self.rsi_market[-180:],
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False
+			)
+			.set_global_opts(
+				xaxis_opts = opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_show=True,
+					axislabel_opts = opts.LabelOpts(is_show=True if str(self.comboBox_4.currentText()) == "RSI" else False),
+					axistick_opts = opts.AxisTickOpts(is_show=False),
+				),
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True,
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+############################################################################################
+
+#################################以下為KD指標################################################
+		self.line_K = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="K",
+				y_axis=self.k_value_market[-180:],
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False
+			)
+			.set_global_opts(
+				xaxis_opts = opts.AxisOpts(
+					is_show=True,
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					axislabel_opts = opts.LabelOpts(is_show=True if str(self.comboBox_4.currentText()) == "KD" else False),
+					axistick_opts = opts.AxisTickOpts(is_show=False),
+				),
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+
+		self.line_D = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="D",
+				y_axis=self.d_value_market[-180:],
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False
+			)
+			.set_global_opts(
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+############################################################################################
+
+#################################以下為布林通道##############################################
+		self.line_bool_H = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="bool",
+				y_axis=self.H_line,
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False
+			)
+			.set_global_opts(
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+
+		self.line_bool_M = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="bool",
+				y_axis=self.M_line,
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False
+			)
+			.set_global_opts(
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+
+		self.line_bool_L = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="bool",
+				y_axis=self.L_line,
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False
+			)
+			.set_global_opts(
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+############################################################################################
+
+#################################以下為成交量################################################
+		self.bar_macd = (
+			Bar()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="OSC", 
+				y_axis=self.osc_market[-180:],
+				label_opts=opts.LabelOpts(is_show=False),
+				itemstyle_opts=opts.ItemStyleOpts(
+					color=JsCode(
+						"""
+					function(params) {
+						var colorList;
+						if (params.value > 0) {
+							colorList = '#ef232a';
+						} else {
+							colorList = '#14b143';
+						}
+						return colorList;
+					}
+					"""
+					)
+				),
+			)
+			.set_global_opts(
+				xaxis_opts = opts.AxisOpts(
+					is_show=True,
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					axislabel_opts = opts.LabelOpts(is_show=True if str(self.comboBox_4.currentText()) == "成交量" else False),
+					axistick_opts = opts.AxisTickOpts(is_show=False),
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+			)
+		)
+############################################################################################
+
+#################################以下為MACD & DIF################################################
+		self.macd_line = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="macd_line",
+				y_axis=self.macd_market[-180:],
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(color="#006000"),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False,
+			)
+			.set_global_opts(
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+
+		self.dif = (
+			Line()
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="DIF",
+				y_axis=self.dif_market[-180:],
+				is_smooth=True,
+				linestyle_opts=opts.LineStyleOpts(color="#3A006F"),
+				label_opts=opts.LabelOpts(is_show=False),
+				is_symbol_show=False,
+			)
+			.set_global_opts(
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+			)
+		)
+
+		self.bar = (
+			Bar(init_opts=opts.InitOpts(width="1300px", height="300px"))
+			.add_xaxis(self.dates_market[-180:])
+			.add_yaxis(
+				series_name="vol", 
+				y_axis=self.vols_market[-180:],
+				label_opts=opts.LabelOpts(is_show=False),
+				itemstyle_opts=opts.ItemStyleOpts(
+					color=JsCode(
+						"""
+					function(params) {
+						var colorList;
+						if (closeData[params.dataIndex-1] < closeData[params.dataIndex] || openData[params.dataIndex] == closeData[params.dataIndex]) {
+							colorList = '#ef232a';
+						} else {
+							colorList = '#14b143';
+						}
+						return colorList;
+					}
+					"""
+					)
+				),
+			)
+			.set_global_opts(
+				xaxis_opts = opts.AxisOpts(
+					is_show=True,
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					axislabel_opts = opts.LabelOpts(is_show=True if str(self.comboBox_11.currentText()) == "成交量" else False),
+					axistick_opts = opts.AxisTickOpts(is_show=False),
+				),
+				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
+				yaxis_opts=opts.AxisOpts(
+					splitline_opts = opts.SplitLineOpts(is_show=True),
+					is_scale=True
+				),
+			)
+		)
+		self.ma_menu = MA_Menu_Window()
+		self.rsi_menu = RSI_Menu_Window()
+		self.kd_menu = KD_Menu_Window()
+		self.macd_menu = MACD_Menu_Window()
+
+		self.ma_menu.pushButton.clicked.connect(lambda:self.MA_botton())
+		for line_aver in self.ma_menu.total_ma:
+			if line_aver == 'MA5':
+				Kline_line_market = self.kline.overlap(self.line_average_MA5) #K線與均線合成
+			elif line_aver == 'MA10':
+				Kline_line_market = self.kline.overlap(self.line_average_MA10) #K線與均線合成
+			elif line_aver == 'MA20':
+				Kline_line_market = self.kline.overlap(self.line_average_MA20) #K線與均線合成
+			elif line_aver == 'MA60':
+				Kline_line_market = self.kline.overlap(self.line_average_MA60) #K線與均線合成
+		KD_line_market = self.line_K.overlap(self.line_D) #KD指標合成
+		MACD_market = self.bar_macd.overlap(self.macd_line).overlap(self.dif)
+		for line_bool_market in [self.line_bool_H,self.line_bool_M,self.line_bool_L]:
+			bool_line_market = self.kline_bool.overlap(line_bool_market)#K線與布林通道合成
+		
+		for com2 in range(self.comboBox_13.count()):
+			self.comboBox_13.model().item(com2).setEnabled(True)
+		for com3 in range(self.comboBox_12.count()):
+			self.comboBox_12.model().item(com3).setEnabled(True)
+		for com4 in range(self.comboBox_11.count()):
+			self.comboBox_11.model().item(com4).setEnabled(True)
+
+		for disable in [self.comboBox_12.currentText(),self.comboBox_11.currentText()]:
+			self.comboBox_13.model().item(self.comboBox_13.findText(disable)).setEnabled(False)
+			self.comboBox_12.model().item(self.comboBox_12.findText(disable)).setEnabled(False)
+			self.comboBox_11.model().item(self.comboBox_11.findText(disable)).setEnabled(False)
+		if (self.comboBox_13.currentText() == '成交量'):
+			self.comboBox_13.model().item(self.comboBox_13.findText('成交量')).setEnabled(False)
+			self.comboBox_12.model().item(self.comboBox_12.findText('成交量')).setEnabled(False)
+			self.comboBox_11.model().item(self.comboBox_11.findText('成交量')).setEnabled(False)
+		elif (self.comboBox_13.currentText() == '布林通道'):
+			self.comboBox_13.model().item(self.comboBox_13.findText('布林通道')).setEnabled(False)
+		if self.comboBox_13.currentText() != self.comboBox_12.currentText() and self.comboBox_13.currentText() != self.comboBox_11.currentText() and self.comboBox_12.currentText() != self.comboBox_11.currentText():
+			technology_all = {'K線及均線':Kline_line_market,'布林通道':bool_line_market,'KD':KD_line_market,'成交量':self.bar,'RSI':self.line_RSI,'MACD':MACD_market}
+			if self.webEngineView.geometry().width() < 700:
+				grid_chart = Grid(init_opts=opts.InitOpts(width="1500px", height="780px"))
+			else:
+				grid_chart = Grid(init_opts=opts.InitOpts(width=str(self.webEngineView.geometry().width()) + "px", height=str(self.webEngineView.geometry().height()-50) + "px"))
 			opendata = list()
 			closedata = list()
-			for opens in self.open_pr[-180:]:
+			for opens in self.open_pr_market[-180:]:
 				opendata.append(float(opens))
-			for close in self.close_pr[-180:]:
+			for close in self.close_pr_market[-180:]:
 				closedata.append(float(close))
 			grid_chart.add_js_funcs("var openData = {}".format(opendata))
-			grid_chart.add_js_funcs("var closeData = {}".format(closedata))			
+			grid_chart.add_js_funcs("var closeData = {}".format(closedata))
 			grid_chart.add_js_funcs("var stock_info = ''")
 			grid_chart.add_js_funcs("""
 			document.addEventListener("DOMContentLoaded", function(){
@@ -1105,33 +1353,76 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			}
 			document.body.onmousemove = bitch;
 			""")
+					
+			if (self.comboBox_13.currentText() == "布林通道"):
+				self.comboBox_11.setDisabled(True)
+				grid_chart.add(
+					technology_all[self.comboBox_14.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_top='1%',height="34%",pos_left='4%',pos_right='10'),
+				)
+				grid_chart.add(
+					technology_all[self.comboBox_13.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_bottom='28%', height="34%",pos_left='4%',pos_right='10'),
+				)
+				grid_chart.add(
+					technology_all[self.comboBox_12.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_bottom='9%', height="17%",pos_left='4%',pos_right='10'),
+				)
+				grid_chart.add(
+					technology_all[self.comboBox_11.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_bottom='-100%', height="0%"),
+				)				
+			else:
+				opendata = list()
+				closedata = list()
+				for opens in self.open_pr_market[-180:]:
+					opendata.append(float(opens))
+				for close in self.close_pr_market[-180:]:
+					closedata.append(float(close))
+				grid_chart.add_js_funcs("var openData = {}".format(opendata))
+				grid_chart.add_js_funcs("var closeData = {}".format(closedata))
+				grid_chart.add_js_funcs("var stock_info = ''")
+				grid_chart.add_js_funcs("""
+				document.addEventListener("DOMContentLoaded", function(){
+					new QWebChannel(qt.webChannelTransport, function(channel){
+						window.bridge = channel.objects.bridge;
+					})
+				})
+				function bitch(){
+					if (window.bridge){
+						window.bridge.strValue = stock_info;
+					}
+				}
+				document.body.onmousemove = bitch;
+				""")
+				
+				grid_chart.add(
+					technology_all[self.comboBox_14.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_top='1%',height="34%",pos_left='4%',pos_right='10'),
+				)
+				grid_chart.add(
+					technology_all[self.comboBox_13.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_bottom='45.5%', height="16%",pos_left='4%',pos_right='10'),
+				)
+				grid_chart.add(
+					technology_all[self.comboBox_12.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_bottom='27%', height="16%",pos_left='4%',pos_right='10'),
+				)
+				grid_chart.add(
+					technology_all[self.comboBox_11.currentText()],
+					grid_opts=opts.GridOpts(is_show=True,pos_bottom='9%', height="16%",pos_left='4%',pos_right='10'),
+				)
+				self.comboBox_11.setDisabled(False)
+			grid_chart.render("render_Market.html")
+			with open('./render_Market.html','r') as f:
+				html = f.read()
+			soup = BeautifulSoup(html,'html.parser')
+			new_tag = soup.new_tag('script', src='./qwebchannel.js')
+			soup.head.insert(0,new_tag)
+			with open('./render_Market.html','w') as f:
+				html = f.write(str(soup))
 		else:
-			grid_chart = Grid(init_opts=opts.InitOpts(width=str(self.webEngineView.geometry().width()) + "px", height=str(self.webEngineView.geometry().height()-50) + "px"))
-		
-			grid_chart.add_js_funcs("var stock_info = ''")
-			grid_chart.add_js_funcs("""
-			document.addEventListener("DOMContentLoaded", function(){
-				new QWebChannel(qt.webChannelTransport, function(channel){
-					window.bridge = channel.objects.bridge;
-				})
-			})
-			function bitch(){
-				if (window.bridge){
-					window.bridge.strValue = stock_info;
-				}
-			}
-			document.body.onmousemove = bitch;
-			""")
-		grid_chart.add(self.kline,grid_opts=opts.GridOpts(is_show=True))
-
-		grid_chart.render("render_Market.html")
-		with open('./render_Market.html','r') as f:
-			html = f.read()
-		soup = BeautifulSoup(html,'html.parser')
-		new_tag = soup.new_tag('script', src='./qwebchannel.js')
-		soup.head.insert(0,new_tag)
-		with open('./render_Market.html','w') as f:
-			html = f.write(str(soup))
+			pass
 		self.webEngineView.setUrl(QtCore.QUrl("file:///render_Market.html"))
 		self.thread = MarketThread()
 		self.thread.start()
@@ -1176,16 +1467,16 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		self.setupUi(self)
 
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
 		self.cursor = db.cursor()
 
 		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-02-23')
+		self.cursor.execute(self.market_close,'2021-01-27')
 		close = self.cursor.fetchone()
 		self.label_1000.setText('加 權 指 數：' + str(close[0]))
 	
@@ -1196,7 +1487,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		self.stock_number_name = pd.read_csv("./other_file/stock_number_name.csv",index_col="stock_name",encoding='utf8') #讀取stock_number_name.csv
    
 		self.actionenter.triggered.connect(lambda:self.K_line(self.lineEdit_100.text(),self.comboBox_135.currentText())) #點擊搜尋會跑出K_line函式的圖
-		self.home.triggered.connect(lambda:self.back_home())
 
 		self.ma_menu.pushButton.clicked.connect(lambda:self.MA_botton())
 
@@ -1230,12 +1520,24 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		self.listWidget_4.itemClicked.connect(lambda:self.check_input(self.listWidget_3.currentItem().text(),self.listWidget_4,self.listWidget_6))
 		self.listWidget_5.doubleClicked.connect(lambda:self.cancel_item(self.listWidget_5,self.listWidget_2))
 		self.listWidget_6.doubleClicked.connect(lambda:self.cancel_item(self.listWidget_6,self.listWidget_4))
-		self.label_1000.clicked.connect(lambda:self.switch())
 		self.pushButton_2.clicked.connect(lambda:self.clear_confident(self.pushButton_2))
 		self.pushButton.clicked.connect(lambda:self.clear_confident(self.pushButton))
 
+		self.home.triggered.connect(lambda:self.back_home())
 		self.actionback.triggered.connect(lambda:self.back_page())
 		self.actionnext.triggered.connect(lambda:self.next_page())
+
+	def back_page(self): #返回上一頁
+		select.show()
+		PcWin.hide()
+
+	def next_page(self): #往前下一頁
+		PcWin.show()
+		select.hide()
+
+	def back_home(self): #會到首頁
+		select.show()
+		PcWin.hide()
 
 	def clear_confident(self, btn):
 		if btn == self.pushButton_2:
@@ -1244,115 +1546,20 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			self.listWidget_6.clear()
 
 
-	def back_page(self):
-		all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-		with open('./other_file/record.txt','r') as f:
-			back_p = f.readlines()
-		PcWin.hide()
-		all_page.get(str(back_p[back_p.index('PcWin\n')-1]).replace('\n','')).show()
-	
-	def next_page(self):
-		all_page = {'page':page,'PcWin':PcWin,'market':market,'smart':smart,'day':day,'select':select}
-		with open('./other_file/record.txt','r') as f:
-			next_p = f.readlines()
-		PcWin.hide()
-		all_page.get(str(next_p[next_p.index('PcWin\n')+1]).replace('\n','')).show()
-	
-	def switch(self):
-		with open('./other_file/record.txt','r') as f:
-			switch_info = f.readlines()
-		other_info = list()
-		for i in range(0,switch_info.index('PcWin\n')):
-			other_info.append(switch_info[i])
-		other_info.append('market\n')
-		with open('./other_file/record.txt','w') as f:
-			for j in other_info:
-					f.write(j)
-		PcWin.hide()
-		market.show()
-
 	def cancel_item(self,list_cancel,list_color):
 		list_cancel.takeItem(list_cancel.currentIndex().row())
 
 	def get_total_text(self,sk_item,sk_index,listwd_index,listwd_index2):
 		text_item = list()
-		if sk_item[listwd_index.currentIndex().row()].findChildren(QLabel) != None:
-			for i in sk_item[listwd_index.currentIndex().row()].findChildren(QLabel):
-				text_item.append(i.text())
-		if sk_item[listwd_index.currentIndex().row()].findChild(QComboBox) != None:
-			for i in sk_item[listwd_index.currentIndex().row()].findChildren(QComboBox):
-				text_item.append(i.currentText())	
-		if sk_item[listwd_index.currentIndex().row()].findChildren(QLineEdit) != None:
-			for i in sk_item[listwd_index.currentIndex().row()].findChildren(QLineEdit):
-				text_item.append(i.text())	
-
-		if sk_index == 'KD':
-			if len(text_item) == 9:
-				total_info = str(text_item[0])+str(text_item[4])+str(text_item[7])+str(text_item[1])+str(text_item[5])+str(text_item[8])+str(text_item[2])+str(text_item[6])+str(text_item[3])
-				listwd_index2.addItem(total_info)
-			elif len(text_item) == 2:
-				total_info = str(text_item[0])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-		elif sk_index == 'MACD,DIF':
-			if len(text_item) == 6:
-				total_info = str(text_item[0])+str(text_item[3])+str(text_item[5])+str(text_item[1])+str(text_item[4])+str(text_item[2])
-				listwd_index2.addItem(total_info)
-			elif len(text_item) == 3:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-		elif sk_index == 'RSI':
-			total_info = str(text_item[0])+str(text_item[3])+str(text_item[5])+str(text_item[1])+str(text_item[4])+str(text_item[2])
-			listwd_index2.addItem(total_info)
-		elif sk_index == '均線':
-			total_info = str(text_item[0])+str(text_item[1])
-			listwd_index2.addItem(total_info)
-		elif sk_index == '布林通道':
-			if len(text_item) == 4:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[3])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-			elif len(text_item) == 1:
-				total_info = str(text_item[0])
-				listwd_index2.addItem(total_info)
-		elif sk_index == '賣壓比例':
-			total_info = str(text_item[0])+str(text_item[1])+str(text_item[2])
-			listwd_index2.addItem(total_info)
-		elif sk_index == 'MFI':
-			total_info = str(text_item[0])+str(text_item[1])+str(text_item[2])
-			listwd_index2.addItem(total_info)
-		elif sk_index == '波動率':
-			total_info = str(text_item[2])+str(text_item[0])+str(text_item[3])+str(text_item[1])
-			listwd_index2.addItem(total_info)
-		elif sk_index == '交易情況':
-			total_info = str(text_item[0])+str(text_item[2])+str(text_item[1])+str(text_item[3])
-			listwd_index2.addItem(total_info)
-		elif sk_index == '法人買賣':
-			total_info = str(text_item[0])+str(text_item[2])+str(text_item[3])+str(text_item[1])
-			listwd_index2.addItem(total_info)
-		elif sk_index == '融資融券':
-			if len(text_item) == 4 and '%' in text_item:
-				total_info = str(text_item[2])+str(text_item[0])+str(text_item[3])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-			else:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[3])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-		elif sk_index == '獲利情況':
-			if len(text_item) == 3 and '上季' in text_item:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-			elif len(text_item) == 5:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[1])+str(text_item[3])+str(text_item[4])
-				listwd_index2.addItem(total_info)
-			else:
-				total_info = str(text_item[1])+str(text_item[0])+str(text_item[2])
-				listwd_index2.addItem(total_info)				
-		elif sk_index == '股利':
-			if len(text_item) == 3:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[1])
-				listwd_index2.addItem(total_info)
-			elif len(text_item) == 4:
-				total_info = str(text_item[0])+str(text_item[2])+str(text_item[1])+str(text_item[3])
-				listwd_index2.addItem(total_info)
-
+		total_info = str()
+		for widget_children in sk_item[listwd_index.currentIndex().row()].children()[1:]:
+			try:
+				text_item.append(widget_children.text())
+			except:
+				text_item.append(widget_children.currentText())	
+		for get_item in text_item:
+			total_info += get_item
+		listwd_index2.addItem(total_info)
 
 	def check_input(self,sk,listwd,listwd2):
 		KD_item = [self.widget,self.widget_2,self.widget_3,self.widget_4,self.widget_5,self.widget_6,self.widget_7,self.widget_8,self.widget_9]
@@ -1495,11 +1702,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				listwid2.setItemWidget(item, Dividend)
 
 
-	def back_home(self):
-		PcWin.hide()
-		page.show()
-
-
 	def contextMenuEvent(self,event):
 		menu = QMenu(self)
 		MA = menu.addAction('MA')
@@ -1560,7 +1762,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		high_pr = list()
 		low_pr = list()
 		date_status = str()
-		day.hide()
+		select.hide()
 		PcWin.show()
 		self.lineEdit_100.setText(stock_text)
 		self.base_company(stock_text)
@@ -1591,7 +1793,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					self.sort_info(dates,'StartDate',number,date_status) #日期
 				elif date_status == 'MonthStockInformation':
 					self.sort_info(dates,'StartDate',number,date_status) #日期
-				self.sort_info(vols,'TradeVolume',number,date_status) #成交量
+				self.sort_info(vols,'TradeValue',number,date_status) #成交量
 				self.sort_info(macd,'MACD9',number,date_status) #macd
 				self.sort_info(rsi,'RSI6',number,date_status) #rsi
 				self.sort_info(k_value,'K9_',number,date_status) #k_value
@@ -1610,7 +1812,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					self.sort_info(dates,'StartDate',stock_text,date_status) #日期
 				elif date_status == 'MonthStockInformation':
 					self.sort_info(dates,'StartDate',stock_text,date_status) #日期
-				self.sort_info(vols,'TradeVolume',stock_text,date_status) #成交量
+				self.sort_info(vols,'TradeValue',stock_text,date_status) #成交量
 				self.sort_info(macd,'MACD9',stock_text,date_status) #macd
 				self.sort_info(rsi,'RSI6',stock_text,date_status) #rsi
 				self.sort_info(k_value,'K9_',stock_text,date_status) #k_value
@@ -1628,7 +1830,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				self.sort_info(dates,'StartDate','1101',date_status) #日期
 			elif date_status == 'MonthStockInformation':
 				self.sort_info(dates,'StartDate','1101',date_status) #日期
-			self.sort_info(vols,'TradeVolume','1101',date_status) #成交量
+			self.sort_info(vols,'TradeValue','1101',date_status) #成交量
 			self.sort_info(macd,'MACD9','1101',date_status) #macd
 			self.sort_info(rsi,'RSI6','1101',date_status) #rsi
 			self.sort_info(k_value,'K9_','1101',date_status) #k_value
@@ -2716,9 +2918,6 @@ if __name__=="__main__":
 	with open('./other_file/record.txt','w') as f:
 		f.truncate() 
 	PcWin = PyechartsMainWindow() #Pyecharts
-	page = PageMainWindow()
-	#day = dayMainWindow()
-	#market = MarketMainWindow()
 	select = SelectMainWindow()
 	#smart = SmartMainWindow()
 	channel = QWebChannel()
@@ -2729,5 +2928,5 @@ if __name__=="__main__":
 	channel123.registerObject("bridge",share1)
 	PcWin.webEngineView.page().setWebChannel(channel)
 	select.webEngineView.page().setWebChannel(channel123)
-	page.show()
+	select.show()
 	sys.exit(app.exec_())     

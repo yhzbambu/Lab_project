@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1579</width>
-    <height>906</height>
+    <height>1060</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,7 +21,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -2044,52 +2044,247 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_25">
-           <item>
-            <widget class="QListWidget" name="listWidget_4"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_27">
-           <item>
-            <widget class="QListWidget" name="listWidget_6"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_28">
-           <item>
-            <widget class="QListWidget" name="listWidget_7"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_26">
-           <item>
-            <widget class="QListWidget" name="listWidget_5"/>
-           </item>
-          </layout>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_25" stretch="1,1,0,4">
+          <item>
+           <widget class="QListWidget" name="listWidget_4"/>
+          </item>
+          <item>
+           <widget class="QListWidget" name="listWidget_5"/>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_11">
+            <item>
+             <widget class="QGroupBox" name="groupBox">
+              <property name="title">
+               <string>停券日期</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_7">
+                 <property name="rowCount">
+                  <number>1</number>
+                 </property>
+                 <property name="columnCount">
+                  <number>7</number>
+                 </property>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <row/>
+                 <column>
+                  <property name="text">
+                   <string>事項</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新增欄位</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>日期</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>最後過戶日</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>停止過戶期間</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>停止融資期間</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>最後回補日</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>除權除息</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_8">
+                 <property name="rowCount">
+                  <number>1</number>
+                 </property>
+                 <property name="columnCount">
+                  <number>6</number>
+                 </property>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <row>
+                  <property name="text">
+                   <string>新增列</string>
+                  </property>
+                 </row>
+                 <column>
+                  <property name="text">
+                   <string>新增欄位</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>日期</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>現金股利</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>盈餘配股</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>公積配股</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>承銷價</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>法說會</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_21">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_9">
+                 <property name="rowCount">
+                  <number>1</number>
+                 </property>
+                 <property name="columnCount">
+                  <number>4</number>
+                 </property>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <row/>
+                 <column>
+                  <property name="text">
+                   <string>新增欄位</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>日期</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>時間</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>摘要內容</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_4">
+                 <property name="title">
+                  <string>股東會</string>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_22">
+                  <item>
+                   <widget class="QTableWidget" name="tableWidget_10">
+                    <property name="rowCount">
+                     <number>1</number>
+                    </property>
+                    <property name="columnCount">
+                     <number>7</number>
+                    </property>
+                    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="horizontalHeaderStretchLastSection">
+                     <bool>false</bool>
+                    </attribute>
+                    <attribute name="verticalHeaderVisible">
+                     <bool>false</bool>
+                    </attribute>
+                    <row/>
+                    <column>
+                     <property name="text">
+                      <string>新增欄位</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>日期</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>性質</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>開會地點</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>新增欄位</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>服務代理</string>
+                     </property>
+                    </column>
+                    <column>
+                     <property name="text">
+                      <string>電子投票</string>
+                     </property>
+                    </column>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>

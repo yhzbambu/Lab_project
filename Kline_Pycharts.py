@@ -18,6 +18,7 @@ from ui_to_py.filter import *
 from pyecharts.charts import Kline,Line,Bar,Grid
 from pyecharts import options as opts
 from pyecharts.commons.utils import JsCode
+from pyecharts.globals import ThemeType
 #引入其他輔助模組
 from model import main
 from other_file import filter8
@@ -247,66 +248,267 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.actionnext.triggered.connect(lambda:self.next_page())
 		############################################################################################
 		self.listWidget_2.itemClicked.connect(lambda:self.Description_text())
-		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
-		self.total_x_list = ['StockReturn','DebtAndEquityRatio','ReturnOnEquity','Volume','Turnover','SeasonMarketValue','SeasonClosingPirce','PriceBookRatio','EarningToPriceRatio','BVPS','EPS','NetProfitAfterTax','NewPriceBookRatio','NewEarningToPriceRatio','GVI002','GVI004','GVI006','GVI008','GVI010',
-'GVI015','GVI020','GVI030','2020','12','31']	
-		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
-self.checkBox_28,self.checkBox_29,self.checkBox_30]
-		self.prediction_stock = main.main(self.total_x_list)
+		##################################大師心法#############################################
+		self.listWidget_3.itemClicked.connect(lambda:self.get_master_text(self.listWidget_3.currentIndex().row()))
+		#################################小道消息#################################################
+		self.listWidget_4.itemClicked.connect(lambda:self.get_legal_company())
+		self.listWidget_5.itemClicked.connect(lambda:self.get_company_all_info())
+# 		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
+# 		self.total_x_list = ['StockReturn','DebtAndEquityRatio','ReturnOnEquity','Volume','Turnover','SeasonMarketValue','SeasonClosingPirce','PriceBookRatio','EarningToPriceRatio','BVPS','EPS','NetProfitAfterTax','NewPriceBookRatio','NewEarningToPriceRatio','GVI002','GVI004','GVI006','GVI008','GVI010',
+# 'GVI015','GVI020','GVI030','2020','12','31']	
+# 		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
+# self.checkBox_28,self.checkBox_29,self.checkBox_30]
+# 		self.prediction_stock = main.main(self.total_x_list)
 
-		self.tableWidget_5.setRowCount(len(self.prediction_stock))
-		pd_count = 0
-		for pd_list in self.prediction_stock:
-			self.prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
-			self.cursor.execute(self.prediction_info,pd_list)
-			prediction_list = self.cursor.fetchone()
-			for pd_info in range(0,len(prediction_list)):
+# 		self.tableWidget_5.setRowCount(len(self.prediction_stock))
+# 		pd_count = 0
+# 		for pd_list in self.prediction_stock:
+# 			self.prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
+# 			self.cursor.execute(self.prediction_info,pd_list)
+# 			prediction_list = self.cursor.fetchone()
+# 			for pd_info in range(0,len(prediction_list)):
 				
-				newItem = QTableWidgetItem(str(prediction_list[pd_info]))
+# 				newItem = QTableWidgetItem(str(prediction_list[pd_info]))
+# 				textFont = QFont("song", 12, QFont.Bold)  
+# 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+# 				newItem.setFont(textFont)					
+# 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+# 				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
+# 			pd_count += 1
+								
+	def get_legal_company(self):
+		self.listWidget_5.clear()
+		self.select_company = 'SELECT Stock FROM Conference WHERE Date=%s'
+		self.cursor.execute(self.select_company,self.listWidget_4.currentItem().text())
+		self.get_company = self.cursor.fetchall()
+		for company in self.get_company:
+			self.listWidget_5.addItem(company[0])
+	def get_company_all_info(self):
+		self.legal_company = 'SELECT Date,Time,Place,Summary FROM Conference WHERE Stock=%s'
+		self.cursor.execute(self.legal_company,self.listWidget_5.currentItem().text())
+		self.all_legal_company = self.cursor.fetchall()
+		for all_legal in self.all_legal_company:
+			for legal in range(0,len(all_legal)):
+				newItem = QTableWidgetItem(str(all_legal[legal]))
 				textFont = QFont("song", 12, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem.setFont(textFont)					
 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
-			pd_count += 1
-								
-	
+				self.tableWidget_9.setItem(0,legal,newItem)	
+
+		self.share_company = 'SELECT Date,Nature,ElectronicVoting,MeetingPlace,StockAffairsAgent,StockAffairsTelephone,ReElectionOfDirectorsAndSupervisors FROM ShareholdersMeeting WHERE Stock=%s'
+		self.cursor.execute(self.share_company,self.listWidget_5.currentItem().text())
+		self.all_share_company = self.cursor.fetchall()
+		for all_share in self.all_share_company:
+			for share in range(0,len(all_share)):
+				newItem = QTableWidgetItem(str(all_share[share]))
+				textFont = QFont("song", 12, QFont.Bold)  
+				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+				newItem.setFont(textFont)					
+				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+				self.tableWidget_10.setItem(0,share,newItem)	
+
+		self.re_company = re.search('\d+',self.listWidget_5.currentItem().text())
+		self.Ex_dividend_company = 'SELECT Date,CashDividend,EarningsAllotment,PropertyAllotment,CashCapitalIncrease,UnderwritingPrice FROM ExDividend WHERE sid=%s'
+		self.cursor.execute(self.Ex_dividend_company,self.re_company.group(0))
+		self.all_Ex_company = self.cursor.fetchall()
+		for all_Ex in self.all_Ex_company:
+			for Ex in range(0,len(all_Ex)):
+				newItem = QTableWidgetItem(str(all_Ex[Ex]))
+				textFont = QFont("song", 12, QFont.Bold)  
+				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+				newItem.setFont(textFont)					
+				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+				self.tableWidget_8.setItem(0,Ex,newItem)		
+
+		self.Ticket_company = 'SELECT matter,Date,FinalDayForStockRransfer,PeriodOfClosingTheTransfer,StopFinancingPeriod,PeriodOfCessationOfSecuritiesLending,LastCoverDay FROM TicketSuspensionDate WHERE sid=%s'
+		self.cursor.execute(self.Ticket_company,self.re_company.group(0))
+		self.all_Ticket_company = self.cursor.fetchall()
+		for all_Ticket in self.all_Ticket_company:
+			for Ticket in range(0,len(all_Ticket)):
+				newItem = QTableWidgetItem(str(all_Ticket[Ticket]))
+				textFont = QFont("song", 12, QFont.Bold)  
+				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+				newItem.setFont(textFont)					
+				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+				self.tableWidget_7.setItem(0,Ticket,newItem)		
+
+	def get_master_text(self,master_number):
+		self.master_name = self.listWidget_3.currentItem().text()
+		if self.master_name == '彼得林區':
+			self.tableWidget_6.setColumnCount(8)
+			for i in range(0,8):
+				total = ['股票名稱','收盤','本益比','漲跌','漲跌幅','近2年' + '\n' + '平均營收成長率','近5年' + '\n' + '平均營收成長率','近一季負債比率']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)
+			self.get_master_info(7,master_number)
+		elif self.master_name == '班哲明格拉罕':
+			self.tableWidget_6.setColumnCount(8)
+			for i in range(0,8):
+				total = ['股票名稱','收盤','本益比','漲跌','漲跌幅','股價淨值比','近12個月營收(億)','近5年最小EPS']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(7,master_number)		
+		elif self.master_name == '華倫巴菲特':
+			self.tableWidget_6.setColumnCount(8)
+			for i in range(0,8):
+				total = ['股票名稱','收盤','漲跌','漲跌幅','股價淨值比','近12個月每股營收(元)','近4季股東權益報酬率(%)','近5年最小EPS']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(7,master_number)		
+		elif self.master_name == '詹姆士歐沙那希':
+			self.tableWidget_6.setColumnCount(8)
+			for i in range(0,8):
+				total = ['股票名稱','收盤','本益比','漲跌','漲跌幅','近4季合計稅後淨利(百萬元)','近4季股東權益報酬率(%)','近5年平均EPS成長率(%)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(7,master_number)		
+		elif self.master_name == '麥克墨菲':
+			self.tableWidget_6.setColumnCount(8)
+			for i in range(0,8):
+				total = ['股票名稱','收盤','漲跌','漲跌幅','近3年平均營收成長率(%)','近4季股東權益報酬率(%)','近4季合計稅後淨利(百萬元)','近一季股東權益總額(百萬元)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(7,master_number)		
+		elif self.master_name == '肯尼斯費雪':
+			self.tableWidget_6.setColumnCount(7)
+			for i in range(0,7):
+				total = ['股票名稱','收盤','漲跌','漲跌幅','近5年平均營收成長率(%)','近5年平均稅前淨利成長率(%)','近一季負債比率(%)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(6,master_number)		
+		elif self.master_name == '馬克約克奇':
+			self.tableWidget_6.setColumnCount(6)
+			for i in range(0,6):
+				total = ['股票名稱','收盤','漲跌','漲跌幅','近5年最小稅前淨利成長率(%)','近5年平均稅前淨利成長率(%)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(5,master_number)	
+		elif self.master_name == '麥克喜偉':
+			self.tableWidget_6.setColumnCount(8)
+			for i in range(0,8):
+				total = ['股票名稱','收盤','漲跌','漲跌幅','本益比','近5年最小營收成長率(%)','近4季股東權益報酬率(%)','近4季合計稅後淨利(百萬元)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget_6.horizontalHeader().setFont(font)		
+			self.get_master_info(7,master_number)	
+
+	def get_master_info(self,row_count,master_number):
+		master_count_col = 0
+		master_count_row = 1
+		master_count_stock = 0
+		self.master_text_sql = 'SELECT Description,Requirement FROM Master'
+		self.cursor.execute(self.master_text_sql)
+		self.master_text = self.cursor.fetchall()
+		self.textEdit_3.setText(str(self.master_text[master_number][0]) + '\n'  + '\n' + str(self.master_text[master_number][1]))
+		self.master_id_sql = 'SELECT MasterID FROM Master WHERE MasterName=%s'
+		self.cursor.execute(self.master_id_sql,self.listWidget_3.currentItem().text())
+		self.master_id = self.cursor.fetchone()
+		self.master_info_sql = 'SELECT * FROM MasterSelectStock WHERE MasterID=%s'
+		self.cursor.execute(self.master_info_sql,(self.master_id[0]))
+		self.master_info = self.cursor.fetchall()
+
+		self.tableWidget_6.setRowCount(int(len(self.master_info)/row_count))
+		for stock in self.master_info[0:len(self.master_info):row_count]:
+			newItem = QTableWidgetItem(str(stock[2]))
+			textFont = QFont("song", 12, QFont.Bold)  
+			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+			newItem.setFont(textFont)					
+			newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+			self.tableWidget_6.setItem(master_count_stock,0,newItem)	
+			master_count_stock += 1
+		for info in self.master_info:
+			try:
+				if int(len(self.master_info)/row_count) == master_count_col:
+					master_count_col = 0
+					master_count_row += 1
+			except:
+				pass
+			newItem = QTableWidgetItem(str(info[-1]))
+			textFont = QFont("song", 12, QFont.Bold)  
+			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+			newItem.setFont(textFont)					
+			newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+			self.tableWidget_6.setItem(master_count_col,master_count_row,newItem)	
+			master_count_col += 1
 
 
 	def sort_info_market(self,pr_list,sql_pr):
 		self.market_value = 'SELECT '+sql_pr+' FROM TAIEX'
 		self.cursor.execute(self.market_value)
-		if sql_pr == 'ClosingIndex' or sql_pr == 'OpeningIndex' or sql_pr == 'HighestIndex' or sql_pr == 'LowestIndex' or sql_pr == 'TradeValue':
+		if sql_pr == 'ClosingIndex' or sql_pr == 'OpeningIndex' or sql_pr == 'HighestIndex' or sql_pr == 'LowestIndex':
 			for clo in self.cursor.fetchall():
 				pr_list.append(clo[0].replace(',',''))
+		elif sql_pr == 'TradeValue':
+			for clo in self.cursor.fetchall():
+				pr_list.append(float(clo[0].replace(',',''))/1000000)	
 		else:
 			for clo in self.cursor.fetchall():
 				pr_list.append(clo[0])
-	def smart_stock(self):
-		x_list = list()	
-		for check_box in self.check_box_list:
-			if check_box.isChecked() == True:
-				x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
-		x_list.append('2020')
-		x_list.append('12')
-		x_list.append('31')
-		check_prediction_stock = main.main(x_list)
+	# def smart_stock(self):
+	# 	x_list = list()	
+	# 	for check_box in self.check_box_list:
+	# 		if check_box.isChecked() == True:
+	# 			x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
+	# 	x_list.append('2020')
+	# 	x_list.append('12')
+	# 	x_list.append('31')
+	# 	check_prediction_stock = main.main(x_list)
 
-		self.tableWidget_5.setRowCount(len(check_prediction_stock))
-		check_pd_count = 0
-		for check_list in check_prediction_stock:
-			check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
-			self.cursor.execute(check_prediction_info,check_list)
-			check_prediction_list = self.cursor.fetchone()
-			for check_pd_info in range(0,len(check_prediction_list)):
+		# self.tableWidget_5.setRowCount(len(check_prediction_stock))
+		# check_pd_count = 0
+		# for check_list in check_prediction_stock:
+		# 	check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
+		# 	self.cursor.execute(check_prediction_info,check_list)
+		# 	check_prediction_list = self.cursor.fetchone()
+		# 	for check_pd_info in range(0,len(check_prediction_list)):
 				
-				newItem = QTableWidgetItem(str(check_predicwwwwtion_list[check_pd_info]))
-				textFont = QFont("song", 12, QFont.Bold)  
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)					
-				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)	
-			check_pd_count += 1
+		# 		newItem = QTableWidgetItem(str(check_predicwwwwtion_list[check_pd_info]))
+		# 		textFont = QFont("song", 12, QFont.Bold)  
+		# 		newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+		# 		newItem.setFont(textFont)					
+		# 		newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+		# 		self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)	
+		# 	check_pd_count += 1
 	
 	def Description_text(self):
 		self.textEdit_2.clear()
@@ -538,7 +740,6 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 				else:
 					combobox_month = select.currentText()
 					month_check = re.search('.月.+',combobox_month)
-					print(month_check)
 					if month_check == None:
 						total_date.append(combobox_month)
 					else:
@@ -938,7 +1139,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 								let res_two = '';
 								for (let i = 0; i < params.length; i++) {
 									var data = '<p>' + params[i].name + '</p>';
-									if (params[i].seriesName == 'vol' || params[i].seriesName == 'MACD'){
+									if (params[i].seriesName == 'vol_market' || params[i].seriesName == 'MACD' || params[i].seriesName == 'OSC'){
 										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value + '</span>' + '</p>';
 									}else if(params[i].seriesName == 'kline'){
 										res_two += params[i].value[1] + ' ';
@@ -1232,7 +1433,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 				xaxis_opts = opts.AxisOpts(
 					is_show=True,
 					splitline_opts = opts.SplitLineOpts(is_show=True),
-					axislabel_opts = opts.LabelOpts(is_show=True if str(self.comboBox_4.currentText()) == "成交量" else False),
+					axislabel_opts = opts.LabelOpts(is_show=True if str(self.comboBox_11.currentText()) == "成交量" else False),
 					axistick_opts = opts.AxisTickOpts(is_show=False),
 				),
 				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
@@ -1284,12 +1485,11 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 				legend_opts = opts.LegendOpts(is_show=False, pos_bottom=10, pos_left="center"),
 			)
 		)
-
 		self.bar = (
 			Bar(init_opts=opts.InitOpts(width="1300px", height="300px"))
 			.add_xaxis(self.dates_market[-180:])
 			.add_yaxis(
-				series_name="vol", 
+				series_name="vol_market", 
 				y_axis=self.vols_market[-180:],
 				label_opts=opts.LabelOpts(is_show=False),
 				itemstyle_opts=opts.ItemStyleOpts(
@@ -1457,7 +1657,8 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 				html = f.write(str(soup))
 		else:
 			pass
-		self.webEngineView.setUrl(QtCore.QUrl("file:///home/icoding/istock/Lab_project-master/render_Market.html"))
+		#self.webEngineView.setUrl(QtCore.QUrl("file:///home/icoding/istock/Lab_project-master/render_Market.html"))
+		self.webEngineView.setUrl(QtCore.QUrl("file:///render_Market.html"))
 		self.thread = MarketThread()
 		self.thread.start()
 		self.thread.trigger.connect(self.addinfo)		
@@ -1638,7 +1839,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					total_info += widget_children.currentText()
 			self.text_item_buy.append(te_item)
 			listwd_index2.addItem(total_info)
-			print('買：',self.title_item_buy,self.text_item_buy)
 		elif buy_or_sell == 'sell':
 			for widget_children in sk_item[listwd_index.currentIndex().row()].children()[1:]:
 				if type(widget_children) == QLabel and label_count < 1:
@@ -1655,8 +1855,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 
 			self.text_item_sell.append(te_item)
 			listwd_index2.addItem(total_info)
-			print('賣：',self.title_item_sell,self.text_item_sell)
-
 
 	def check_input(self,sk,listwd,listwd2,buy_or_sell):
 		KD_item = [self.widget_2,self.widget,self.widget_3,self.widget_7,self.widget_8,self.widget_9,self.widget_4,self.widget_5,self.widget_6]
@@ -1804,6 +2002,17 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					pass
 				else:
 					pr_list.append(clo[0])
+		elif sql_pr == 'TradeVolume':
+			self.search_close = 'SELECT '+sql_pr+' FROM '+date_sql+' where sid=%s'
+			self.cursor.execute(self.search_close,num)
+			for clo in self.cursor.fetchall():
+				if clo[0] == '---' or clo[0] == '--':
+					pass
+				else:
+					try:
+						pr_list.append(float(clo[0].replace(',',''))/1000)		
+					except:
+						pass
 		else:
 			self.search_close = 'SELECT ClosingPrice FROM '+date_sql+' where sid=%s'
 			self.cursor.execute(self.search_close,num)
@@ -1869,7 +2078,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					self.sort_info(dates,'StartDate',number,date_status) #日期
 				elif date_status == 'MonthStockInformation':
 					self.sort_info(dates,'StartDate',number,date_status) #日期
-				self.sort_info(vols,'TradeValue',number,date_status) #成交量
+				self.sort_info(vols,'TradeVolume',number,date_status) #成交量
 				self.sort_info(macd,'MACD9',number,date_status) #macd
 				self.sort_info(rsi,'RSI6',number,date_status) #rsi
 				self.sort_info(k_value,'K9_',number,date_status) #k_value
@@ -1888,7 +2097,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					self.sort_info(dates,'StartDate',stock_text,date_status) #日期
 				elif date_status == 'MonthStockInformation':
 					self.sort_info(dates,'StartDate',stock_text,date_status) #日期
-				self.sort_info(vols,'TradeValue',stock_text,date_status) #成交量
+				self.sort_info(vols,'TradeVolume',stock_text,date_status) #成交量
 				self.sort_info(macd,'MACD9',stock_text,date_status) #macd
 				self.sort_info(rsi,'RSI6',stock_text,date_status) #rsi
 				self.sort_info(k_value,'K9_',stock_text,date_status) #k_value
@@ -1906,7 +2115,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				self.sort_info(dates,'StartDate','1101',date_status) #日期
 			elif date_status == 'MonthStockInformation':
 				self.sort_info(dates,'StartDate','1101',date_status) #日期
-			self.sort_info(vols,'TradeValue','1101',date_status) #成交量
+			self.sort_info(vols,'TradeVolume','1101',date_status) #成交量
 			self.sort_info(macd,'MACD9','1101',date_status) #macd
 			self.sort_info(rsi,'RSI6','1101',date_status) #rsi
 			self.sort_info(k_value,'K9_','1101',date_status) #k_value
@@ -1956,7 +2165,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 								let res_two = '';
 								for (let i = 0; i < params.length; i++) {
 									var data = '<p>' + params[i].name + '</p>';
-									if (params[i].seriesName == 'vol' || params[i].seriesName == 'MACD'){
+									if (params[i].seriesName == 'vol' || params[i].seriesName == 'MACD' || params[i].seriesName == 'OSC'){
 										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value + '</span>' + '</p>';
 									}else if(params[i].seriesName == 'kline'){
 										res_two += params[i].value[1] + ' ';
@@ -2472,7 +2681,8 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		else:
 			pass
 		if stock_text: 
-			self.webEngineView.setUrl(QtCore.QUrl("file:///home/icoding/istock/Lab_project-master/render.html"))
+			#self.webEngineView.setUrl(QtCore.QUrl("file:///home/icoding/istock/Lab_project-master/render.html"))
+			self.webEngineView.setUrl(QtCore.QUrl("file:///render.html"))
 			self.verticalLayout.addWidget(self.webEngineView)
 			self.thread = WorkThread()
 			self.thread.start()

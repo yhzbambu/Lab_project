@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1579</width>
+    <width>1682</width>
     <height>1060</height>
    </rect>
   </property>
@@ -21,7 +21,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -1243,6 +1243,13 @@
               </widget>
              </item>
              <item>
+              <widget class="QToolButton" name="toolButton_10">
+               <property name="text">
+                <string>請先選擇條件</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QToolButton" name="toolButton_39">
                <property name="text">
                 <string>X</string>
@@ -1837,6 +1844,13 @@
               <widget class="QToolButton" name="toolButton_6">
                <property name="text">
                 <string>請指定選股條件</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="toolButton_11">
+               <property name="text">
+                <string>請先選擇條件</string>
                </property>
               </widget>
              </item>

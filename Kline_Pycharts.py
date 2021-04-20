@@ -179,6 +179,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.toolButton_39.clicked.connect(lambda:self.clear_text_special(self.toolButton_38,self.checkBox_16))
 		self.toolButton_9.clicked.connect(lambda:self.clear_text_rank(self.toolButton_8,self.comboBox_7))
 		self.toolButton_37.clicked.connect(lambda:self.clear_text_rank(self.toolButton_36,self.comboBox_9))
+
+		self.toolButton_38.triggered.connect(lambda:self.change_tool(self.toolButton_38,self.toolButton_10))
+		self.toolButton_6.triggered.connect(lambda:self.change_tool(self.toolButton_6,self.toolButton_11))
 		###########################################################################################################################################
 		self.tableWidget.doubleClicked.connect(lambda:self.go_to_kline_select())
 
@@ -248,11 +251,15 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.actionnext.triggered.connect(lambda:self.next_page())
 		############################################################################################
 		self.listWidget_2.itemClicked.connect(lambda:self.Description_text())
+		self.tableWidget_5.doubleClicked.connect(lambda:PcWin.K_line(self.tableWidget_5.currentItem().text(),'日'))
 		##################################大師心法#############################################
 		self.listWidget_3.itemClicked.connect(lambda:self.get_master_text(self.listWidget_3.currentIndex().row()))
+		self.tableWidget_6.doubleClicked.connect(lambda:self.master_kline())
 		#################################小道消息#################################################
 		self.listWidget_4.itemClicked.connect(lambda:self.get_legal_company())
 		self.listWidget_5.itemClicked.connect(lambda:self.get_company_all_info())
+		
+		
 # 		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
 # 		self.total_x_list = ['StockReturn','DebtAndEquityRatio','ReturnOnEquity','Volume','Turnover','SeasonMarketValue','SeasonClosingPirce','PriceBookRatio','EarningToPriceRatio','BVPS','EPS','NetProfitAfterTax','NewPriceBookRatio','NewEarningToPriceRatio','GVI002','GVI004','GVI006','GVI008','GVI010',
 # 'GVI015','GVI020','GVI030','2020','12','31']	
@@ -275,6 +282,67 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 # 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
 # 				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
 # 			pd_count += 1
+
+	def change_tool(self,tool,change_tool):
+		if tool.text() in ['(日)K線','(週)K線','(月)K線']:
+			self.change_menu = QMenu(self)
+			for i in ['向上突破5日線','向上突破月線','向上突破季線','向下跌破5日線','向下跌破月線','向下跌破季線']:
+				self.change_menu.addAction(i)
+			if change_tool == self.toolButton_10:
+				self.change_menu.triggered.connect(self.total_info14)
+			elif change_tool == self.toolButton_11:
+				self.change_menu.triggered.connect(self.total_info15)
+		elif tool.text() in ['(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(週)RSI(6)','(週)RSI(9)','(週)RSI(12)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)']:
+			self.change_menu = QMenu(self)
+			for i in ['低於20','介於20~40','介於40~60','介於60~80','大於80']:
+				self.change_menu.addAction(i)
+			if change_tool == self.toolButton_10:
+				self.change_menu.triggered.connect(self.total_info14)
+			elif change_tool == self.toolButton_11:
+				self.change_menu.triggered.connect(self.total_info15)
+		elif tool.text() in ['(日)RSI(6)/RSI(9)','(週)RSI(6)/RSI(9)','(月)RSI(6)/RSI(9)']:
+			self.change_menu = QMenu(self)
+			for i in ['黃金交叉','小於20黃金交叉','介於20~50黃金交叉','介於50~80黃金交叉','高於80黃金交叉','死亡交叉','小於20死亡交叉','介於20~50死亡交叉','介於50~80死亡交叉','高於80死亡交叉']:
+				self.change_menu.addAction(i)
+			if change_tool == self.toolButton_10:
+				self.change_menu.triggered.connect(self.total_info14)
+			elif change_tool == self.toolButton_11:
+				self.change_menu.triggered.connect(self.total_info15)
+		elif tool.text() in ['(日)K(9)','(日)D(9)','(週)K(9)','(週)D(9)','(月)K(9)','(月)D(9)']:
+			self.change_menu = QMenu(self)
+			for i in ['低於20','介於20~40','介於40~60','介於60~80','大於80']:
+				self.change_menu.addAction(i)
+			if change_tool == self.toolButton_10:
+				self.change_menu.triggered.connect(self.total_info14)
+			elif change_tool == self.toolButton_11:
+				self.change_menu.triggered.connect(self.total_info15)
+		elif tool.text() in ['(日)K(9)/D(9)','(週)K(9)/D(9)','(月)K(9)/D(9)']:
+			self.change_menu = QMenu(self)
+			for i in ['黃金交叉','小於20黃金交叉','介於20~50黃金交叉','介於50~80黃金交叉','高於80黃金交叉','死亡交叉','小於20死亡交叉','介於20~50死亡交叉','介於50~80死亡交叉','高於80死亡交叉']:
+				self.change_menu.addAction(i)
+			if change_tool == self.toolButton_10:
+				self.change_menu.triggered.connect(self.total_info14)
+			elif change_tool == self.toolButton_11:
+				self.change_menu.triggered.connect(self.total_info15)
+		elif tool.text() in ['(日)MACD/DIF','(週)MACD/DIF','(月)MACD/DIF']:
+			self.change_menu = QMenu(self)
+			for i in ['MACD、DIF小於0','MACD、DIF大於0']:
+				self.change_menu.addAction(i)
+			if change_tool == self.toolButton_10:
+				self.change_menu.triggered.connect(self.total_info14)
+			elif change_tool == self.toolButton_11:
+				self.change_menu.triggered.connect(self.total_info15)
+		else:
+			change_tool.setDisabled(True)
+		try:
+			change_tool.setMenu(self.change_menu)
+			change_tool.setPopupMode(QtWidgets.QToolButton.MenuButtonPopup)
+		except:
+			pass
+
+	def master_kline(self):
+		self.re_master = re.search('\d+',self.tableWidget_6.currentItem().text()).group(0)
+		PcWin.K_line(self.re_master,'日')
 								
 	def get_legal_company(self):
 		self.listWidget_5.clear()
@@ -543,7 +611,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			self.label_18 = QtWidgets.QLabel()
 			self.label_18.setText('日期：')
 			self.dateEdit = QtWidgets.QDateEdit()
-			self.dateEdit.setDate(QDate(2021, 3, 26))
+			self.dateEdit.setDate(QDate(2021, 4, 19))
 			self.dateEdit.setReadOnly(True)
 			self.spacerItem20 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 			hlayout.addWidget(self.label_18)
@@ -590,7 +658,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			select_date_list.append(combobox)
 			T_list.append(T_text)
 		elif day != None:
-			dateedit.setDate(QDate(2021, 3, 26))
+			dateedit.setDate(QDate(2021, 4, 19))
 			hlayout.addWidget(dateedit)
 			hlayout.addItem(spacer)
 			select_date_list.append(dateedit)
@@ -627,14 +695,14 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			T_list.append(T_text)			
 		else:
 			if action_text not in ['K(9)','D(9)','RSI(6)','RSI(9)','RSI(12)','成交量均價(5)','成交量均價(20)','成交量均價(60)','成交價均價(5)','成交價均價(20)','成交價均價(60)','DIF(12)','DIF(26)','MFI(14)','賣壓比例','波動率']:
-				dateedit.setDate(QDate(2021, 3, 26))
+				dateedit.setDate(QDate(2021, 4, 19))
 				dateedit.setReadOnly(True)
 				hlayout.addWidget(dateedit)
 				hlayout.addItem(spacer)
 				select_date_list.append(dateedit)
 				T_list.append(T_text)
 			else:
-				dateedit.setDate(QDate(2021, 3, 26))
+				dateedit.setDate(QDate(2021, 4, 19))
 				hlayout.addWidget(dateedit)
 				hlayout.addItem(spacer)
 				select_date_list.append(dateedit)
@@ -663,7 +731,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			season_data = re.search('.季.+',action.text())
 			self.create_AC(self.label_19,self.comboBox_7,self.dateEdit_2,self.horizontalLayout_18,self.spacerItem21,day_data,week_data,month_data,season_data,self.select_date_list,'T2',self.T_list,action.text())
 		elif action.data() == 'own_menu2':
-			self.label_20 = QtWidgets.QLabel()
+			self.label_24 = QtWidgets.QLabel()
 			self.comboBox_8 = QtWidgets.QComboBox()
 			self.dateEdit_3 = QtWidgets.QDateEdit()
 			self.spacerItem22 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -671,9 +739,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			week_data = re.search('.週.+',action.text())
 			day_data = re.search('.日.+',action.text())
 			season_data = re.search('.季.+',action.text())
-			self.create_AC(self.label_20,self.comboBox_8,self.dateEdit_3,self.horizontalLayout_19,self.spacerItem22,day_data,week_data,month_data,season_data,self.select_date_list,'T3',self.T_list,action.text())
+			self.create_AC(self.label_24,self.comboBox_8,self.dateEdit_3,self.horizontalLayout_19,self.spacerItem22,day_data,week_data,month_data,season_data,self.select_date_list,'T3',self.T_list,action.text())
 		elif action.data() == 'own_menu3':
-			self.label_21 = QtWidgets.QLabel()
+			self.label_25 = QtWidgets.QLabel()
 			self.comboBox_9 = QtWidgets.QComboBox()
 			self.dateEdit_4 = QtWidgets.QDateEdit()
 			self.spacerItem23 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -681,9 +749,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			week_data = re.search('.週.+',action.text())
 			day_data = re.search('.日.+',action.text())
 			season_data = re.search('.季.+',action.text())
-			self.create_AC(self.label_21,self.comboBox_9,self.dateEdit_4,self.horizontalLayout_20,self.spacerItem23,day_data,week_data,month_data,season_data,self.select_date_list,'T4',self.T_list,action.text())
+			self.create_AC(self.label_25,self.comboBox_9,self.dateEdit_4,self.horizontalLayout_20,self.spacerItem23,day_data,week_data,month_data,season_data,self.select_date_list,'T4',self.T_list,action.text())
 		elif action.data() == 'own_menu4':
-			self.label_21 = QtWidgets.QLabel()
+			self.label_26 = QtWidgets.QLabel()
 			self.comboBox_10 = QtWidgets.QComboBox()
 			self.dateEdit_5 = QtWidgets.QDateEdit()
 			self.spacerItem24 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -691,9 +759,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			week_data = re.search('.週.+',action.text())
 			day_data = re.search('.日.+',action.text())
 			season_data = re.search('.季.+',action.text())
-			self.create_AC(self.label_21,self.comboBox_10,self.dateEdit_5,self.horizontalLayout_21,self.spacerItem24,day_data,week_data,month_data,season_data,self.select_date_list,'T5',self.T_list,action.text())
+			self.create_AC(self.label_26,self.comboBox_10,self.dateEdit_5,self.horizontalLayout_21,self.spacerItem24,day_data,week_data,month_data,season_data,self.select_date_list,'T5',self.T_list,action.text())
 		elif action.data() == 'own_menu5':
-			self.label_22 = QtWidgets.QLabel()
+			self.label_27 = QtWidgets.QLabel()
 			self.comboBox_11 = QtWidgets.QComboBox()
 			self.dateEdit_6 = QtWidgets.QDateEdit()
 			self.spacerItem25 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -701,13 +769,13 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			week_data = re.search('.週.+',action.text())
 			day_data = re.search('.日.+',action.text())
 			season_data = re.search('.季.+',action.text())
-			self.create_AC(self.label_22,self.comboBox_11,self.dateEdit_6,self.horizontalLayout_22,self.spacerItem25,day_data,week_data,month_data,season_data,self.select_date_list,'T6',self.T_list,action.text())
+			self.create_AC(self.label_27,self.comboBox_11,self.dateEdit_6,self.horizontalLayout_22,self.spacerItem25,day_data,week_data,month_data,season_data,self.select_date_list,'T6',self.T_list,action.text())
 
 	
 	def collect_condition(self): #將條件整理好並送入filter8.py裡
 		input_name = list() #介面上條件的名稱
 		sql_table_name = list() #紀錄SQL的表
-		sql_field_name = list() #紀錄SQ的TABLE
+		sql_field_name = list() #紀錄SQL的TABLE
 		total_output = list() #紀錄所有條件包裝送入
 		total_date = list() #將處理過的時間放入此陣列
 		db = pymysql.connect(
@@ -748,8 +816,8 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 						total_date.append(split_select_month[0])				
 			except:
 				pass
-
-		total_output.append(['T0','DayStockInformation','2021-03-26'])
+		
+		total_output.append(['T0','New',filter8.IsLastDay()])
 		if self.lineEdit_6.text() != '' and self.lineEdit_7.text() != '':
 			total_output.append(['T1',str(sql_table_name[input_name.index(self.toolButton_4.text())]),str(sql_field_name[input_name.index(self.toolButton_4.text())]),'NOT' if self.checkBox.isChecked() else '',(self.lineEdit_6.text(),self.lineEdit_7.text()),total_date[self.T_list.index('T1')]])
 		if self.lineEdit_24.text() != '' and self.lineEdit_25.text() != '':
@@ -762,36 +830,39 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			total_output.append(['T5',str(sql_table_name[input_name.index(self.toolButton_32.text())]),str(sql_field_name[input_name.index(self.toolButton_32.text())]),'NOT' if self.checkBox_14.isChecked() else '',(self.lineEdit_30.text(),self.lineEdit_31.text()),total_date[self.T_list.index('T5')]])
 		if self.lineEdit_32.text() != '' and self.lineEdit_33.text() != '':	
 			total_output.append(['T6',str(sql_table_name[input_name.index(self.toolButton_34.text())]),str(sql_field_name[input_name.index(self.toolButton_34.text())]),'NOT' if self.checkBox_15.isChecked() else '',(self.lineEdit_32.text(),self.lineEdit_33.text()),total_date[self.T_list.index('T6')]])
+		# if self.toolButton_6.text() != "請指定選股條件":
+		# 	db = pymysql.connect(
+		# 		host='163.18.104.164',
+		# 		user='bambu',
+		# 		password='test123',
+		# 		database="stock",
+		# 		port=3306
+		# 	)
+		# 	self.cursor = db.cursor()
+		# 	self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
+		# 	self.cursor.execute(self.select_stock,self.toolButton_6.text())
+		# 	select_stock_list = self.cursor.fetchone()
+		# 	total_output.append(['T7','cid','classification','!' if self.checkBox_2.isChecked() else '',select_stock_list[0]])
+		# if self.toolButton_38.text() != "請指定選股條件":
+		# 	db = pymysql.connect(
+		# 		host='163.18.104.164',
+		# 		user='bambu',
+		# 		password='test123',
+		# 		database="stock",
+		# 		port=3306
+		# 	)
+		# 	self.cursor = db.cursor()
+		# 	self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
+		# 	self.cursor.execute(self.select_stock,self.toolButton_38.text())
+		# 	select_stock_list = self.cursor.fetchone()
+		# 	total_output.append(['T8','cid','classification','!' if self.checkBox_16.isChecked() else '',select_stock_list[0]])
+
 		if self.toolButton_6.text() != "請指定選股條件":
-			db = pymysql.connect(
-				host='163.18.104.164',
-				user='bambu',
-				password='test123',
-				database="stock",
-				port=3306
-			)
-			self.cursor = db.cursor()
-			self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
-			self.cursor.execute(self.select_stock,self.toolButton_6.text())
-			select_stock_list = self.cursor.fetchone()
-			total_output.append(['T7','cid','classification','!' if self.checkBox_2.isChecked() else '',select_stock_list[0]])
-		if self.toolButton_38.text() != "請指定選股條件":
-			db = pymysql.connect(
-				host='163.18.104.164',
-				user='bambu',
-				password='test123',
-				database="stock",
-				port=3306
-			)
-			self.cursor = db.cursor()
-			self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
-			self.cursor.execute(self.select_stock,self.toolButton_38.text())
-			select_stock_list = self.cursor.fetchone()
-			total_output.append(['T8','cid','classification','!' if self.checkBox_16.isChecked() else '',select_stock_list[0]])
+			total_output.append(['T7',str(sql_table_name[input_name.index(self.toolButton_34.text())]),str(sql_field_name[input_name.index(self.toolButton_34.text())]),'NOT' if self.checkBox_15.isChecked() else '',(self.lineEdit_32.text(),self.lineEdit_33.text()),total_date[self.T_list.index('T6')]])
 		if self.toolButton_8.text() != "請指定排名條件":
-			total_output.append(['T10',str(sql_table_name[input_name.index(self.toolButton_8.text())]),str(sql_field_name[input_name.index(self.toolButton_8.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),'2021-03-26'])
+			total_output.append(['T10',str(sql_table_name[input_name.index(self.toolButton_8.text())]),str(sql_field_name[input_name.index(self.toolButton_8.text())]),'DESC' if self.comboBox_8.currentText() == '高到低' else 'ASC',self.comboBox_9.currentText(),'2021-04-19'])
 		if self.toolButton_36.text() != "請指定排名條件":
-			total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_8.currentText() == '高到低' else 'ASC',self.comboBox_9.currentText(),'2021-03-26'])
+			total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),'2021-04-19'])
 		self.select_info = filter8.Filter(total_output)
 		
 		count = 0
@@ -805,6 +876,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 				self.tableWidget.setItem(count,i,newItem)		
 			count += 1
+		print(total_output)
 
 	def total_own_menu(self,menu,toolbutton,info,data_name): #將menu放入toolbutton
 		menu.triggered.connect(info)
@@ -827,7 +899,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 ############################################以下為整理所有條件放入menu裡##############################################################
 	def one_menu(self,menu,data_name):
 		self.new_transaction = menu.addMenu('最新交易情況')
-		self.new = ['開盤價','收盤價','最高價','最低價','漲跌價差','成交股數','成交筆數','成交金額']
+		self.new = ['開盤價','收盤價','最高價','最低價','漲跌價差','成交股數','成交筆數','成交金額','成交量均值(5)','成交量均值(20)','成交量均值(60)','成交價均值(5)','成交價均值(20)','成交價均值(60)']
 		for i in self.new:
 			self.menu_action_new = QAction(i, self)
 			self.menu_action_new.setData(data_name)
@@ -835,9 +907,11 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		
 		self.old_transaction = menu.addMenu('歷史交易情況')
 		self.old_day = ['(日)開盤價','(日)收盤價','(日)最高價','(日)最低價','(日)漲跌價差','(日)漲跌幅度(%)','(日)成交股數',
-					'(日)成交筆數','(日)成交金額','(週)開盤價','(週)收盤價','(週)最高價','(週)最低價','(週)漲跌價差','(週)漲跌幅度(%)','(週)成交股數',
-					'(週)成交筆數','(週)成交金額','(月)開盤價','(月)收盤價','(月)最高價','(月)最低價','(月)漲跌價差','(月)漲跌幅度(%)','(月)成交股數',
-					'(月)成交筆數','(月)成交金額']
+					'(日)成交筆數','(日)成交金額','(日)成交量均值(5)','(日)成交量均值(20)','(日)成交量均值(60)','(日)成交價均值(5)','(日)成交價均值(20)','(日)成交價均值(60)',
+					'(週)開盤價','(週)收盤價','(週)最高價','(週)最低價','(週)漲跌價差','(週)漲跌幅度(%)','(週)成交股數','(週)成交筆數','(週)成交金額',
+					'(週)成交量均值(5)','(週)成交量均值(20)','(週)成交量均值(60)','(週)成交價均值(5)','(週)成交價均值(20)','(週)成交價均值(60)',
+					'(月)開盤價','(月)收盤價','(月)最高價','(月)最低價','(月)漲跌價差','(月)漲跌幅度(%)','(月)成交股數','(月)成交筆數','(月)成交金額',
+					'(月)成交量均值(5)','(月)成交量均值(20)','(月)成交量均值(60)','(月)成交價均值(5)','(月)成交價均值(20)','(月)成交價均值(60)',]
 
 		for i in self.old_day:
 			self.menu_action_old_day = QAction(i, self)
@@ -845,13 +919,21 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			self.old_transaction.addAction(self.menu_action_old_day)
 
 
-		self.skill_index = menu.addMenu('技術指標')
-		self.skill = ['K(9)','D(9)','RSI(6)','RSI(9)','RSI(12)','成交量均價(5)','成交量均價(20)','成交量均價(60)',
-						'成交價均價(5)','成交價均價(20)','成交價均價(60)','DIF(12)','DIF(26)','MFI(14)','賣壓比例','波動率']
-		for i in self.skill:
+		self.new_skill_index = menu.addMenu('技術指標')
+		self.new_skill = ['K(9)','D(9)','RSI(6)','RSI(9)','RSI(12)','MACD(9)','DIF12and26','MFI(14)','賣壓比例','波動率']
+		for i in self.new_skill:
 			self.menu_action_skill = QAction(i, self)
 			self.menu_action_skill.setData(data_name)
-			self.skill_index.addAction(self.menu_action_skill)
+			self.new_skill_index.addAction(self.menu_action_skill)
+
+		self.old_skill_index = menu.addMenu('歷史技術指標')
+		self.old_skill = ['(日)K(9)','(日)D(9)','(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(日)MACD(9)','(日)DIF12and26','(日)MFI(14)','(日)賣壓比例','(日)波動率',
+						'(週)K(9)','(週)D(9)','(週)RSI(6)','(週)RSI(9)','(週)RSI(12)','(週)MACD(9)','(週)DIF12and26','(週)MFI(14)','(週)賣壓比例','(週)波動率',
+						'(月)K(9)','(月)D(9)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)','(月)MACD(9)','(月)DIF12and26','(月)MFI(14)','(月)賣壓比例','(月)波動率',]
+		for i in self.old_skill:
+			self.menu_action_skill = QAction(i, self)
+			self.menu_action_skill.setData(data_name)
+			self.old_skill_index.addAction(self.menu_action_skill)
 
 		self.new_Legal_person = menu.addMenu('三大法人最新買賣情況')
 		self.new_legal = ['法人買賣超(張)_外資_不含自營','法人買賣超(張)_外資_自營','法人買賣超(張)_投信',
@@ -905,45 +987,45 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			self.menu_action_old_Monthly.setData(data_name)
 			self.old_Monthly_revenue.addAction(self.menu_action_old_Monthly)
 
-		self.new_Quarterl_synthesis = menu.addMenu('季綜合最新交易情況')
-		self.new_Quarterl = ['交易日數','開盤','最高','最低','收盤',
-						'漲跌','漲跌(%)','振福(%)','成交張數千張','成交張數日均','成交金額億元','成交金額日均'
-						,'法人買賣超(千張)外資','法人買賣超(千張)投信','法人買賣超(千張)自營','法人買賣超(千張)合計','外資持股(%)','融資(千張)增減'
-						,'融資(千張)餘額','融券(千張)增減','融券(千張)餘額','券資比(%)']
-		for i in self.new_Quarterl:
-			self.menu_action_new_Quarterl = QAction(i, self)
-			self.menu_action_new_Quarterl.setData(data_name)
-			self.new_Quarterl_synthesis.addAction(self.menu_action_new_Quarterl)
+		# self.new_Quarterl_synthesis = menu.addMenu('季綜合最新交易情況')
+		# self.new_Quarterl = ['交易日數','開盤','最高','最低','收盤',
+		# 				'漲跌','漲跌(%)','振福(%)','成交張數千張','成交張數日均','成交金額億元','成交金額日均'
+		# 				,'法人買賣超(千張)外資','法人買賣超(千張)投信','法人買賣超(千張)自營','法人買賣超(千張)合計','外資持股(%)','融資(千張)增減'
+		# 				,'融資(千張)餘額','融券(千張)增減','融券(千張)餘額','券資比(%)']
+		# for i in self.new_Quarterl:
+		# 	self.menu_action_new_Quarterl = QAction(i, self)
+		# 	self.menu_action_new_Quarterl.setData(data_name)
+		# 	self.new_Quarterl_synthesis.addAction(self.menu_action_new_Quarterl)
 
-		self.old_Quarterl_synthesis = menu.addMenu('季綜合歷史交易情況')
-		self.old_Quarterl = ['(季)交易日數','(季)開盤','(季)最高','(季)最低','(季)收盤',
-						'(季)漲跌','(季)漲跌(%)','(季)振福(%)','(季)成交張數千張','(季)成交張數日均','(季)成交金額億元','(季)成交金額日均'
-						,'(季)法人買賣超(千張)外資','(季)法人買賣超(千張)投信','(季)法人買賣超(千張)自營','(季)法人買賣超(千張)合計','(季)外資持股(%)','(季)融資(千張)增減'
-						,'(季)融資(千張)餘額','(季)融券(千張)增減','(季)融券(千張)餘額','(季)券資比(%)']
-		for i in self.old_Quarterl:
-			self.menu_action_old_Quarterl = QAction(i, self)
-			self.menu_action_old_Quarterl.setData(data_name)
-			self.old_Quarterl_synthesis.addAction(self.menu_action_old_Quarterl)
+		# self.old_Quarterl_synthesis = menu.addMenu('季綜合歷史交易情況')
+		# self.old_Quarterl = ['(季)交易日數','(季)開盤','(季)最高','(季)最低','(季)收盤',
+		# 				'(季)漲跌','(季)漲跌(%)','(季)振福(%)','(季)成交張數千張','(季)成交張數日均','(季)成交金額億元','(季)成交金額日均'
+		# 				,'(季)法人買賣超(千張)外資','(季)法人買賣超(千張)投信','(季)法人買賣超(千張)自營','(季)法人買賣超(千張)合計','(季)外資持股(%)','(季)融資(千張)增減'
+		# 				,'(季)融資(千張)餘額','(季)融券(千張)增減','(季)融券(千張)餘額','(季)券資比(%)']
+		# for i in self.old_Quarterl:
+		# 	self.menu_action_old_Quarterl = QAction(i, self)
+		# 	self.menu_action_old_Quarterl.setData(data_name)
+		# 	self.old_Quarterl_synthesis.addAction(self.menu_action_old_Quarterl)
 
-		self.new_business_performance = menu.addMenu('經營績效最新交易情況')
-		self.new_business = ['股本(億)','財報評分','年度股價(元)收盤','年度股價(元)平均','年度股價(元)漲跌',
-						'年度股價(元)漲跌(%)','獲利金額(億)營業收入','獲利金額(億)營業毛利','獲利金額(億)營業利益','獲利金額(億)業外損益'
-						,'獲利金額(億)稅後淨利','獲利率(%)營業毛利','獲利率(%)營業利益','獲利率(%)業外損益','獲利率(%)稅後淨利'
-						,'單季ROE(%)','年估ROE(%)','單季ROA(%)','年估ROA(%)','EPS(元)稅後EPS','EPS(元)年增(元)','BPS(元)']
-		for i in self.new_business:
-			self.menu_action_new_business = QAction(i, self)
-			self.menu_action_new_business.setData(data_name)
-			self.new_business_performance.addAction(self.menu_action_new_business)
+		# self.new_business_performance = menu.addMenu('經營績效最新交易情況')
+		# self.new_business = ['股本(億)','財報評分','年度股價(元)收盤','年度股價(元)平均','年度股價(元)漲跌',
+		# 				'年度股價(元)漲跌(%)','獲利金額(億)營業收入','獲利金額(億)營業毛利','獲利金額(億)營業利益','獲利金額(億)業外損益'
+		# 				,'獲利金額(億)稅後淨利','獲利率(%)營業毛利','獲利率(%)營業利益','獲利率(%)業外損益','獲利率(%)稅後淨利'
+		# 				,'單季ROE(%)','年估ROE(%)','單季ROA(%)','年估ROA(%)','EPS(元)稅後EPS','EPS(元)年增(元)','BPS(元)']
+		# for i in self.new_business:
+		# 	self.menu_action_new_business = QAction(i, self)
+		# 	self.menu_action_new_business.setData(data_name)
+		# 	self.new_business_performance.addAction(self.menu_action_new_business)
 	
-		self.old_business_performance = menu.addMenu('經營績效歷史交易情況')
-		self.old_business = ['(季)股本(億)','(季)財報評分','(季)年度股價(元)收盤','(季)年度股價(元)平均','(季)年度股價(元)漲跌',
-						'(季)年度股價(元)漲跌(%)','(季)獲利金額(億)營業收入','(季)獲利金額(億)營業毛利','(季)獲利金額(億)營業利益','(季)獲利金額(億)業外損益'
-						,'(季)獲利金額(億)稅後淨利','(季)獲利率(%)營業毛利','(季)獲利率(%)營業利益','(季)獲利率(%)業外損益','(季)獲利率(%)稅後淨利'
-						,'(季)單季ROE(%)','(季)年估ROE(%)','(季)單季ROA(%)','(季)年估ROA(%)','(季)EPS(元)稅後EPS','(季)EPS(元)年增(元)','(季)BPS(元)']
-		for i in self.old_business:
-			self.menu_action_old_business = QAction(i, self)
-			self.menu_action_old_business.setData(data_name)
-			self.old_business_performance.addAction(self.menu_action_old_business)
+		# self.old_business_performance = menu.addMenu('經營績效歷史交易情況')
+		# self.old_business = ['(季)股本(億)','(季)財報評分','(季)年度股價(元)收盤','(季)年度股價(元)平均','(季)年度股價(元)漲跌',
+		# 				'(季)年度股價(元)漲跌(%)','(季)獲利金額(億)營業收入','(季)獲利金額(億)營業毛利','(季)獲利金額(億)營業利益','(季)獲利金額(億)業外損益'
+		# 				,'(季)獲利金額(億)稅後淨利','(季)獲利率(%)營業毛利','(季)獲利率(%)營業利益','(季)獲利率(%)業外損益','(季)獲利率(%)稅後淨利'
+		# 				,'(季)單季ROE(%)','(季)年估ROE(%)','(季)單季ROA(%)','(季)年估ROA(%)','(季)EPS(元)稅後EPS','(季)EPS(元)年增(元)','(季)BPS(元)']
+		# for i in self.old_business:
+		# 	self.menu_action_old_business = QAction(i, self)
+		# 	self.menu_action_old_business.setData(data_name)
+		# 	self.old_business_performance.addAction(self.menu_action_old_business)
 
 	def two_menu(self,menu,data_name):
 		self.classification = menu.addMenu('產業分類')
@@ -963,67 +1045,68 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			self.menu_action.setData(data_name)
 			self.classification.addAction(self.menu_action)
 
-	def three_menu(self,menu,data_name):
-		self.new_transaction = menu.addMenu('最新交易情況')
-		self.new = ['開盤價','收盤價','最高價','最低價','漲跌價差','成交股數','成交筆數','成交金額']
-		for i in self.new:
-			self.menu_action_new = QAction(i, self)
-			self.menu_action_new.setData(data_name)
-			self.new_transaction.addAction(self.menu_action_new)
-
-		self.skill_index = menu.addMenu('技術指標')
-		self.skill = ['K(9)','D(9)','RSI(6)','RSI(9)','RSI(12)','成交量均價(5)','成交量均價(20)','成交量均價(60)',
-						'成交價均價(5)','成交價均價(20)','成交價均價(60)','DIF(12)','DIF(26)','MFI(14)','賣壓比例','波動率']
-		for i in self.skill:
-			self.menu_action_skill = QAction(i, self)
-			self.menu_action_skill.setData(data_name)
-			self.skill_index.addAction(self.menu_action_skill)
-
-		self.new_Legal_person = menu.addMenu('三大法人最新買賣情況')
-		self.new_legal = ['法人買賣超(張)_外資_不含自營','法人買賣超(張)_外資_自營','法人買賣超(張)_投信',
-					'法人買賣超(張)_自營商_自行買賣','法人買賣超(張)_自營商_避險','估計持股_外資',
-					'估計持股_投信','估計持股_自營商','持股比重(%)_外資','持股比重(%)_三大法人']
-		for i in self.new_legal:
-			self.menu_action_new_legal = QAction(i, self)
-			self.menu_action_new_legal.setData(data_name)
-			self.new_Legal_person.addAction(self.menu_action_new_legal)
-
-		self.new_Financing = menu.addMenu('融資融券最新買賣狀況')
-		self.new_finance = ['融資買進','融資賣出','融資現償','融資餘額','融資增減',
-						'融資限額','融資使用率','融券賣出','融券買進','融券券償'
-						,'融券餘額','融券增減','融券券資比','券資相抵']
-		for i in self.new_finance:
-			self.menu_action_new_finance = QAction(i, self)
-			self.menu_action_new_finance.setData(data_name)
-			self.new_Financing.addAction(self.menu_action_new_finance)
+		self.average_line = menu.addMenu('均線位置')
+		for i in ['(日)K線','(週)K線','(月)K線']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.average_line.addAction(self.menu_action)
 		
-		self.new_Monthly_revenue = menu.addMenu('月營收最新交易情況')
-		self.new_Monthly = ['當月營收','上月比較','去年同月營收','去年同月增減','當月累計營收',
-						'去年累計營收','前期比較']
-		for i in self.new_Monthly:
-			self.menu_action_new_Monthly = QAction(i, self)
-			self.menu_action_new_Monthly.setData(data_name)
-			self.new_Monthly_revenue.addAction(self.menu_action_new_Monthly)
+		self.drop_rsi = menu.addMenu('RSI落點')
+		for i in ['(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(週)RSI(6)','(週)RSI(9)','(週)RSI(12)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.drop_rsi.addAction(self.menu_action)
 
-		self.new_Quarterl_synthesis = menu.addMenu('季綜合最新交易情況')
-		self.new_Quarterl = ['交易日數','開盤','最高','最低','收盤',
-						'漲跌','漲跌(%)','振福(%)','成交張數千張','成交張數日均','成交金額億元','成交金額日均'
-						,'法人買賣超(千張)外資','法人買賣超(千張)投信','法人買賣超(千張)自營','法人買賣超(千張)合計','外資持股(%)','融資(千張)增減'
-						,'融資(千張)餘額','融券(千張)增減','融券(千張)餘額','券資比(%)']
-		for i in self.new_Quarterl:
-			self.menu_action_new_Quarterl = QAction(i, self)
-			self.menu_action_new_Quarterl.setData(data_name)
-			self.new_Quarterl_synthesis.addAction(self.menu_action_new_Quarterl)
+		self.cross_rsi = menu.addMenu('RSI交叉')
+		for i in ['(日)RSI(6)/RSI(9)','(週)RSI(6)/RSI(9)','(月)RSI(6)/RSI(9)']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.cross_rsi.addAction(self.menu_action)
+		
+		self.drop_kd = menu.addMenu('KD落點')
+		for i in ['(日)K(9)','(日)D(9)','(週)K(9)','(週)D(9)','(月)K(9)','(月)D(9)']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.drop_kd.addAction(self.menu_action)
 
-		self.new_business_performance = menu.addMenu('經營績效最新交易情況')
-		self.new_business = ['股本(億)','財報評分','年度股價(元)收盤','年度股價(元)平均','年度股價(元)漲跌',
-						'年度股價(元)漲跌(%)','獲利金額(億)營業收入','獲利金額(億)營業毛利','獲利金額(億)營業利益','獲利金額(億)業外損益'
-						,'獲利金額(億)稅後淨利','獲利率(%)營業毛利','獲利率(%)營業利益','獲利率(%)業外損益','獲利率(%)稅後淨利'
-						,'單季ROE(%)','年估ROE(%)','單季ROA(%)','年估ROA(%)','EPS(元)稅後EPS','EPS(元)年增(元)','BPS(元)']
-		for i in self.new_business:
-			self.menu_action_new_business = QAction(i, self)
-			self.menu_action_new_business.setData(data_name)
-			self.new_business_performance.addAction(self.menu_action_new_business)
+		self.cross_kd = menu.addMenu('KD交叉')
+		for i in ['(日)K(9)/D(9)','(週)K(9)/D(9)','(月)K(9)/D(9)']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.cross_kd.addAction(self.menu_action)
+
+		self.drop_macd = menu.addMenu('MACD落點')
+		for i in ['(日)MACD/DIF','(週)MACD/DIF','(月)MACD/DIF']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.drop_macd.addAction(self.menu_action)
+
+	def three_menu(self,menu,data_name):
+		self.rank_transaction = menu.addMenu('交易情況')
+		for i in ['成交價','成交股數','成交筆數','成交金額']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.rank_transaction.addAction(self.menu_action)
+
+		self.rank_kd = menu.addMenu('KD')
+		for i in ['(日)K(9)','(日)D(9)','(週)K(9)','(週)D(9)','(月)K(9)','(月)D(9)']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.rank_kd.addAction(self.menu_action)
+
+		self.rank_rsi = menu.addMenu('RSI')
+		for i in ['(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(週)RSI(6)','(週)RSI(9)','(週)RSI(12)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.rank_rsi.addAction(self.menu_action)
+
+		self.rank_macd = menu.addMenu('MACD')
+		for i in ['(日)MACD(9)','(週)MACD(9)','(月)MACD(9)','(日)DIF12and26','(週)DIF12and26','(月)DIF12and26']:
+			self.menu_action = QAction(i, self)
+			self.menu_action.setData(data_name)
+			self.rank_macd.addAction(self.menu_action)
+
+
 #############################################################################################################################################
 
 #############################################以下為當按下條件觸發Action後，改變toolbutton文字###################################################
@@ -1055,6 +1138,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.toolButton_40.setText(action.text())
 	def total_info13(self,action):
 		self.toolButton_41.setText(action.text())
+	def total_info14(self,action):
+		self.toolButton_10.setText(action.text())
+	def total_info15(self,action):
+		self.toolButton_11.setText(action.text())
 #############################################################################################################################################
 
 
@@ -1789,6 +1876,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 	def post_history(self):
 		count_1 = True
 		count_2 = False
+		self.listWidget_7.clear()
 		have_stock,stock_date,rate = newhistorytest.historytest(self.title_item_buy,self.text_item_buy,self.title_item_sell,self.text_item_sell,[self.dateEdit_5.text(),self.dateEdit_6.text()],int(self.lineEdit_100.text()))
 		self.label_23.setText(self.dateEdit_5.text() + ' ~ ' + self.dateEdit_6.text())
 		self.label_30.setText(str(rate))

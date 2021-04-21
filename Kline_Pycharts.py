@@ -258,6 +258,8 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		#################################小道消息#################################################
 		self.listWidget_4.itemClicked.connect(lambda:self.get_legal_company())
 		self.listWidget_5.itemClicked.connect(lambda:self.get_company_all_info())
+		################################達人密技###################################################
+		self.listWidget.itemClicked.connect(lambda:self.master_description_text())
 		
 		
 # 		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
@@ -282,6 +284,12 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 # 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
 # 				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
 # 			pd_count += 1
+
+	def master_description_text(self):
+		self.textEdit.clear()
+		Description = ['當技術指標日、周及月KD都交叉向上時，表短、中、長期趨勢都向上。如果日、周及月KD值又同時在50以上，表示短、中及長期該檔個股都很強勢，很多飆股都是這種技術型態，用此選股法選出之股票，未來上漲機率就很大。',
+						'20週戰法']
+		self.textEdit.setText(Description[self.listWidget.currentIndex().row()]) 
 
 	def change_tool(self,tool,change_tool):
 		if tool.text() in ['(日)K線','(週)K線','(月)K線']:
@@ -816,8 +824,71 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 						total_date.append(split_select_month[0])				
 			except:
 				pass
-		
-		total_output.append(['T0','New',filter8.IsLastDay()])
+
+		if self.comboBox_3.currentText() in ['成交資料(日)','成交資料(週)','成交資料(月)']:
+			total_output.append(['T0','New',filter8.IsLastDay()])
+			self.tableWidget.setColumnCount(9)
+			for i in range(0,9):
+				total = ['股票代碼','股票名稱','日期','開盤價','最高價','最低價','收盤價','漲跌價差','成交筆數']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget.horizontalHeader().setFont(font)
+		elif self.comboBox_3.currentText() == '技術指標-RSI':
+			total_output.append(['T0','RSI',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
+			self.tableWidget.setColumnCount(11)
+			for i in range(0,11):
+				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','RSI6(日)','RSI9(日)','RSI6(週)','RSI9(週)','RSI6(月)','RSI9(月)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget.horizontalHeader().setFont(font)
+		elif self.comboBox_3.currentText() == '技術指標-KD':
+			total_output.append(['T0','KD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
+			self.tableWidget.setColumnCount(11)
+			for i in range(0,11):
+				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','K(日)','D(日)','K(週)','D(週)','K(月)','D(月)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget.horizontalHeader().setFont(font)
+		elif self.comboBox_3.currentText() == '技術指標-MACD':
+			total_output.append(['T0','MACD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
+			self.tableWidget.setColumnCount(11)
+			for i in range(0,11):
+				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','MACD(日)','DIF(日)','MACD(週)','DIF(週)','MACD(月)','DIF(月)']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget.horizontalHeader().setFont(font)
+		# elif self.comboBox_3.currentText() == '法人買賣超-三大法人':
+		# 	total_output.append(['T0','institutional_investors',filter8.IsLastDay()])
+		# 	self.tableWidget.setColumnCount(11)
+		# 	for i in range(0,11):
+		# 		total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超(張)_外資_不含自營','法人買賣超(張)_外資_自營','法人買賣超(張)_投信','法人買賣超(張)_自營商_自行買賣','法人買賣超(張)_自營商_避險','總和']
+		# 		newItem = QTableWidgetItem(total[i])
+		# 		font = QFont()
+		# 		font.setPointSize(15)
+		# 		self.tableWidget.setHorizontalHeaderItem(i,newItem)
+		# 		stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+		# 		self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
+		# 		self.tableWidget.horizontalHeader().setFont(font)
+		if self.comboBox_4.currentText() == '上市':
+			total_output.append(['T16','market','mid','','1'])
+		elif self.comboBox_4.currentText() == '上櫃':
+			total_output.append(['T16','market','mid','','2'])
 		if self.lineEdit_6.text() != '' and self.lineEdit_7.text() != '':
 			total_output.append(['T1',str(sql_table_name[input_name.index(self.toolButton_4.text())]),str(sql_field_name[input_name.index(self.toolButton_4.text())]),'NOT' if self.checkBox.isChecked() else '',(self.lineEdit_6.text(),self.lineEdit_7.text()),total_date[self.T_list.index('T1')]])
 		if self.lineEdit_24.text() != '' and self.lineEdit_25.text() != '':
@@ -830,45 +901,119 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			total_output.append(['T5',str(sql_table_name[input_name.index(self.toolButton_32.text())]),str(sql_field_name[input_name.index(self.toolButton_32.text())]),'NOT' if self.checkBox_14.isChecked() else '',(self.lineEdit_30.text(),self.lineEdit_31.text()),total_date[self.T_list.index('T5')]])
 		if self.lineEdit_32.text() != '' and self.lineEdit_33.text() != '':	
 			total_output.append(['T6',str(sql_table_name[input_name.index(self.toolButton_34.text())]),str(sql_field_name[input_name.index(self.toolButton_34.text())]),'NOT' if self.checkBox_15.isChecked() else '',(self.lineEdit_32.text(),self.lineEdit_33.text()),total_date[self.T_list.index('T6')]])
-		# if self.toolButton_6.text() != "請指定選股條件":
-		# 	db = pymysql.connect(
-		# 		host='163.18.104.164',
-		# 		user='bambu',
-		# 		password='test123',
-		# 		database="stock",
-		# 		port=3306
-		# 	)
-		# 	self.cursor = db.cursor()
-		# 	self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
-		# 	self.cursor.execute(self.select_stock,self.toolButton_6.text())
-		# 	select_stock_list = self.cursor.fetchone()
-		# 	total_output.append(['T7','cid','classification','!' if self.checkBox_2.isChecked() else '',select_stock_list[0]])
-		# if self.toolButton_38.text() != "請指定選股條件":
-		# 	db = pymysql.connect(
-		# 		host='163.18.104.164',
-		# 		user='bambu',
-		# 		password='test123',
-		# 		database="stock",
-		# 		port=3306
-		# 	)
-		# 	self.cursor = db.cursor()
-		# 	self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
-		# 	self.cursor.execute(self.select_stock,self.toolButton_38.text())
-		# 	select_stock_list = self.cursor.fetchone()
-		# 	total_output.append(['T8','cid','classification','!' if self.checkBox_16.isChecked() else '',select_stock_list[0]])
 
 		if self.toolButton_6.text() != "請指定選股條件":
-			total_output.append(['T7',str(sql_table_name[input_name.index(self.toolButton_34.text())]),str(sql_field_name[input_name.index(self.toolButton_34.text())]),'NOT' if self.checkBox_15.isChecked() else '',(self.lineEdit_32.text(),self.lineEdit_33.text()),total_date[self.T_list.index('T6')]])
+			if self.toolButton_6.text() in ['(日)K線','(週)K線','(月)K線']:
+				if str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_11.text())]),str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_11.text())]),str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousWeek(),filter8.IsLastWeek(), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'MonthStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_11.text())]),str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousMonth(),filter8.IsLastMonth(), ''])
+			elif self.toolButton_6.text() in ['(日)RSI(6)/RSI(9)','(週)RSI(6)/RSI(9)','(月)RSI(6)/RSI(9)']:
+				if str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(),tuple(str(sql_field_name[input_name.index(self.toolButton_11.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousWeek(),filter8.IsLastWeek(),tuple(str(sql_field_name[input_name.index(self.toolButton_11.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousMonth(),filter8.IsLastMonth(),tuple(str(sql_field_name[input_name.index(self.toolButton_11.text())]).split('|')), ''])
+			elif self.toolButton_6.text() in ['(日)K(9)/D(9)','(週)K(9)/D(9)','(月)K(9)/D(9)']:
+				if str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(),tuple(str(sql_field_name[input_name.index(self.toolButton_11.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousWeek(),filter8.IsLastWeek(),tuple(str(sql_field_name[input_name.index(self.toolButton_11.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_6.text())]),'Y8',filter8.IsPreviousMonth(),filter8.IsLastMonth(),tuple(str(sql_field_name[input_name.index(self.toolButton_11.text())]).split('|')), ''])
+			elif self.toolButton_6.text() in ['(日)MACD/DIF','(週)MACD/DIF','(月)MACD/DIF']:
+				if str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_11.text())],sql_field_name[input_name.index(self.toolButton_11.text())]), filter8.IsLastDay()])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_11.text())],sql_field_name[input_name.index(self.toolButton_11.text())]), filter8.IsLastWeek()])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_6.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_11.text())],sql_field_name[input_name.index(self.toolButton_11.text())]), filter8.IsLastMonth()])
+			elif self.toolButton_6.text() in ['(日)K(9)','(日)D(9)','(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(週)K(9)','(週)D(9)','(週)RSI(6)','(週)RSI(9)',
+												'(週)RSI(12)','(月)K(9)','(月)D(9)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)']:
+				if str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_11.text())],sql_field_name[input_name.index(self.toolButton_11.text())]), filter8.IsLastDay()])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_11.text())],sql_field_name[input_name.index(self.toolButton_11.text())]), filter8.IsLastWeek()])
+				elif str(sql_table_name[input_name.index(self.toolButton_6.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_11.text())],sql_field_name[input_name.index(self.toolButton_11.text())]), filter8.IsLastMonth()])
+			else:
+				db = pymysql.connect(
+					host='163.18.104.164',
+					user='bambu',
+					password='test123',
+					database="stock",
+					port=3306
+				)
+				self.cursor = db.cursor()
+				self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
+				self.cursor.execute(self.select_stock,self.toolButton_6.text())
+				select_stock_list = self.cursor.fetchone()
+				total_output.append(['T8','classification','cid','!' if self.checkBox_2.isChecked() else '',select_stock_list[0]])
+
+		if self.toolButton_38.text() != "請指定選股條件":
+			if self.toolButton_38.text() in ['(日)K線','(週)K線','(月)K線']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousDay(),filter8.IsLastDay(), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousWeek(),filter8.IsLastWeek(), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousMonth(),filter8.IsLastMonth(), ''])
+			elif self.toolButton_38.text() in ['(日)RSI(6)/RSI(9)','(週)RSI(6)/RSI(9)','(月)RSI(6)/RSI(9)']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousDay(),filter8.IsLastDay(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousWeek(),filter8.IsLastWeek(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousMonth(),filter8.IsLastMonth(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+			elif self.toolButton_38.text() in ['(日)K(9)/D(9)','(週)K(9)/D(9)','(月)K(9)/D(9)']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousDay(),filter8.IsLastDay(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousWeek(),filter8.IsLastWeek(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y9',filter8.IsPreviousMonth(),filter8.IsLastMonth(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+			elif self.toolButton_38.text() in ['(日)MACD/DIF','(週)MACD/DIF','(月)MACD/DIF']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastDay()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastWeek()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastMonth()])
+			elif self.toolButton_38.text() in ['(日)K(9)','(日)D(9)','(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(週)K(9)','(週)D(9)','(週)RSI(6)','(週)RSI(9)',
+												'(週)RSI(12)','(月)K(9)','(月)D(9)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastDay()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastWeek()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastMonth()])
+			else:
+				db = pymysql.connect(
+					host='163.18.104.164',
+					user='bambu',
+					password='test123',
+					database="stock",
+					port=3306
+				)
+				self.cursor = db.cursor()
+				self.select_stock = '''SELECT * FROM classification WHERE c_name=%s'''
+				self.cursor.execute(self.select_stock,self.toolButton_6.text())
+				select_stock_list = self.cursor.fetchone()
+				total_output.append(['T9','classification','cid','!' if self.checkBox_2.isChecked() else '',select_stock_list[0]])
+
 		if self.toolButton_8.text() != "請指定排名條件":
 			total_output.append(['T10',str(sql_table_name[input_name.index(self.toolButton_8.text())]),str(sql_field_name[input_name.index(self.toolButton_8.text())]),'DESC' if self.comboBox_8.currentText() == '高到低' else 'ASC',self.comboBox_9.currentText(),'2021-04-19'])
 		if self.toolButton_36.text() != "請指定排名條件":
 			total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),'2021-04-19'])
 		self.select_info = filter8.Filter(total_output)
-		
+
 		count = 0
 		self.tableWidget.setRowCount(len(self.select_info))
 		for info in self.select_info: #將條件widget放入table裡
-			for i in range(0,9):
+			for i in range(0,int(self.tableWidget.columnCount())):
 				newItem = QTableWidgetItem(str(info[i]))
 				textFont = QFont("song", 12, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -929,7 +1074,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.old_skill_index = menu.addMenu('歷史技術指標')
 		self.old_skill = ['(日)K(9)','(日)D(9)','(日)RSI(6)','(日)RSI(9)','(日)RSI(12)','(日)MACD(9)','(日)DIF12and26','(日)MFI(14)','(日)賣壓比例','(日)波動率',
 						'(週)K(9)','(週)D(9)','(週)RSI(6)','(週)RSI(9)','(週)RSI(12)','(週)MACD(9)','(週)DIF12and26','(週)MFI(14)','(週)賣壓比例','(週)波動率',
-						'(月)K(9)','(月)D(9)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)','(月)MACD(9)','(月)DIF12and26','(月)MFI(14)','(月)賣壓比例','(月)波動率',]
+						'(月)K(9)','(月)D(9)','(月)RSI(6)','(月)RSI(9)','(月)RSI(12)','(月)MACD(9)','(月)DIF12and26','(月)MFI(14)','(月)賣壓比例','(月)波動率']
 		for i in self.old_skill:
 			self.menu_action_skill = QAction(i, self)
 			self.menu_action_skill.setData(data_name)

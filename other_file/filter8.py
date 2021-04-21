@@ -2,6 +2,7 @@
 # coding=utf-8
 from time import sleep
 def Filter(submit):
+    print(submit)
     import pymysql
     db=pymysql.connect(
         host='163.18.104.164',
@@ -15,10 +16,10 @@ def Filter(submit):
 
     sqls=[]
     # __________________________________
-    print(submit)
+    
     for I  in submit:
         # 處理顯示結果
-        if I[0] =='T0' and (I[1]=='New' or I[1]=='DayStockInformation'):
+        if I[0] =='T0' and I[1]=='New':
             sqls.append(
                 "(SELECT stock.sid,stock.s_name,DayStockInformation.TradeDate,DayStockInformation.OpeningPrice,DayStockInformation.HighestPrice,DayStockInformation.LowestPrice,DayStockInformation.ClosingPrice,DayStockInformation.Change_,DayStockInformation.Transation_ FROM DayStockInformation,stock WHERE TradeDate='{0[2]}' and stock.sid=DayStockInformation.sid) ".format(I)
             )
@@ -91,18 +92,44 @@ def Filter(submit):
                     )
                 # 黃金交叉
                 if I[1] == 'KDGoldenCross' or I[1]=='RSIGoldenCross':
-                    extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
-                    
-                    sqls.append(
-                        "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
-                    )
+                    if I[4]=='DayStockInformation':
+                        extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        
+                        sqls.append(
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
+                        )
+                    if I[4]=='WeekStockInformation':
+                        extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        
+                        sqls.append(
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingWeek='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingWeek='{0[7]}' {1})".format(I,extra)
+                        )
+                    if I[4]=='MonthStockInformation':
+                        extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                
+                        sqls.append(
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingMonth='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[7]}' {1})".format(I,extra)
+                        )
                 # 死亡交叉
                 if I[1] == 'KDGDeathCross' or I[1]=='RSIDeathCross':
-                    extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                    if I[4]=='DayStockInformation':
+                        extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        
+                        sqls.append(
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
+                        )
+                    if I[4]=='WeekStockInformation':
+                        extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
                     
-                    sqls.append(
-                        "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
-                    )
+                        sqls.append(
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingWeek='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingWeek='{0[7]}' {1})".format(I,extra)
+                        )
+                    if I[4]=='MonthStockInformation':
+                        extra=" and REPLACE(K9_,',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        
+                        sqls.append(
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingMonth='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingMonth='{0[7]}' {1})".format(I,extra)
+                        )
                 # 向上突破
                 if I[1]=='BreakupwardMV':
                     if I[4]=='DayStockInformation':
@@ -275,7 +302,7 @@ if __name__=='__main__':
             # ['T0','RSI',LastDay,LastWeek,LastMonth],
             # ['T0','KD',LastDay,LastWeek,LastMonth],
             # # 成交股數
-            #  ['T1', 'DayStockInformation', 'OpeningPrice', 'NOT', ('10', '20'), '2021/3/26'],
+            # ['T1', 'DayStockInformation', 'OpeningPrice', '', ('10', '20'), '2021/3/26'],
             # # # # 資券相抵
             # ['T2','MarginPurchase_ShortSale','Equity_Balance','',('0','1220000000000000'),'2021-01-27'],
             # #最高價
@@ -295,7 +322,7 @@ if __name__=='__main__':
             # ['T8','DayStockInformation','K9_','',('60','80'),time],
             # ['T8','DayStockInformation','K9_','',('80','100000000'),time],
             # ['KD150','',''],
-            # ['T8','KDGoldenCross','K9_','D9','DayStockInformation','Y8',PreviousDay,LastDay,('-1000000','1000000'),''],
+            ['T8','KDGoldenCross','K9_','D9','WeekStockInformation','Y8',PreviousWeek,LastWeek,('-1000000','1000000'),''],
             # ['T8','KDGoldenCross','K9_','D9','DayStockInformation','Y8',PreviousDay,LastDay,('20','50'),''],
             # ['T8','RSIGoldenCross','RSI6','RSI9','DayStockInformation','Y8',PreviousDay,LastDay,('20','50'),''],
             # ['T8','RSIDeathCross','RSI6','RSI9','DayStockInformation','Y8',PreviousDay,LastDay,('20','50'),''],
@@ -307,7 +334,7 @@ if __name__=='__main__':
             # ['T10','DayStockInformation','Transation_','DESC','100',LastDay],
             # ['T13','DayStockInformation','HighestPrice','*1','+2','2021-03-29','>=','C13','DayStockInformation','K9_','*1','+1',LastDay],
             
-            # ['T16','market','mid','','1'],
+            ['T16','market','mid','','1'],
     ]
     # SELECT sid,,TradeDate FROM DayStockInformation where TradeDate='' ORDER BY CONVERT(REPLACE(HighestPrice,',',''),DECIMAL(9,2))   )
     information=Filter(submit)

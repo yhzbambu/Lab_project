@@ -3,8 +3,8 @@ def Connect():
     config = {
     'host':'163.18.104.164',
     'port':3306,
-    'user':'bambu',
-    'password':'test123',
+    'user':'bobo',
+    'password':'bobo123',
     'charset':'utf8',
     'cursorclass':pymysql.cursors.DictCursor,
     'database':'stock'
@@ -59,8 +59,20 @@ def Preprocess(data, submit):
         index = index+1
     return data
 
-def minmax(datas):
+def minmax(datas, sid):
     from sklearn import preprocessing
+    with open("reverse.txt", 'a', newline='') as Input:
+        Min = 1000.0
+        Max = -1000.0
+        for i in range(len(datas)):
+            Min = min(Min, float(datas[i][len(datas[0])-1]))
+            Max = max(Max, float(datas[i][len(datas[0])-1]))
+        Input.write(str(sid))
+        Input.write(" ")
+        Input.write(str(Min))
+        Input.write(" ")
+        Input.write(str(Max))
+        Input.write("\n")
     scaler = preprocessing.MinMaxScaler()
     scaler.fit(datas)
     return scaler.transform(datas)
@@ -94,11 +106,11 @@ def normalization(datas, submit):
     r = 0
     while r != len(listdata):
         if info[r][0] != info[l][0]:
-            listdata[l:r] = minmax(listdata[l:r]).tolist()
+            listdata[l:r] = minmax(listdata[l:r], info[l][0]).tolist()
             l = r
         else:
             r = r+1
-    listdata[l:] = (minmax(listdata[l:])).tolist()
+    listdata[l:] = minmax(listdata[l:], info[len(info)-1][0]).tolist()
     for i in range(0, len(info)):
         listdata[i].insert(0, info[i][1])
         listdata[i].insert(0, info[i][0])
@@ -128,18 +140,19 @@ def callCFunc():
     func.main()
 
 def getFinalResult():
-    with open("model/stocklist.in", 'r') as f:
+    with open("stocklist.txt", 'r') as f:
         contents = f.read()
         ret = contents.split("\n")
         ret.pop()
         return ret
 def main(submit):
-    datas = Connect()
-    datas = Preprocess(datas, submit)
-    datas, valid = normalization(datas, submit)
-    writeToFile(datas, "Train.csv")
-    writeToFile(valid, "Valid.csv")
-    callCFunc()
-    ret = getFinalResult()
-    return ret
+    with open("reverse.txt", 'w') as f:
+        datas = Connect()
+        datas = Preprocess(datas, submit)
+        datas, valid = normalization(datas, submit)
+        writeToFile(datas, "Train.csv")
+        writeToFile(valid, "Valid.csv")
+        callCFunc()
+        ret = getFinalResult()
+        return ret
 ## main([2021, 4, 11])

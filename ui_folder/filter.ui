@@ -21,7 +21,7 @@
        <bool>true</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -2058,12 +2058,16 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout_25" stretch="1,1,0,4">
+         <layout class="QHBoxLayout" name="horizontalLayout_25" stretch="0,0,4">
           <item>
-           <widget class="QListWidget" name="listWidget_4"/>
-          </item>
-          <item>
-           <widget class="QListWidget" name="listWidget_5"/>
+           <layout class="QVBoxLayout" name="verticalLayout_23" stretch="3,1">
+            <item>
+             <widget class="QListWidget" name="listWidget_4"/>
+            </item>
+            <item>
+             <widget class="QListWidget" name="listWidget_5"/>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="Line" name="line_2">

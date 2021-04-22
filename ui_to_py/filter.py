@@ -833,6 +833,8 @@ class Ui_MainPage(object):
 		self.gridLayout_3.setObjectName("gridLayout_3")
 		self.horizontalLayout_25 = QtWidgets.QHBoxLayout()
 		self.horizontalLayout_25.setObjectName("horizontalLayout_25")
+		self.verticalLayout_23 = QtWidgets.QVBoxLayout()
+		self.verticalLayout_23.setObjectName("verticalLayout_23")
 		self.listWidget_4 = QtWidgets.QListWidget(self.tab_8)
 		self.listWidget_4.setObjectName("listWidget_4")
 		self.legal_date = '''SELECT DISTINCT Date FROM Conference ORDER BY Date DESC'''
@@ -840,10 +842,13 @@ class Ui_MainPage(object):
 		legal_list = cursor.fetchall()	
 		for legal in legal_list:
 			self.listWidget_4.addItem(legal[0])
-		self.horizontalLayout_25.addWidget(self.listWidget_4)
+		self.verticalLayout_23.addWidget(self.listWidget_4)
 		self.listWidget_5 = QtWidgets.QListWidget(self.tab_8)
 		self.listWidget_5.setObjectName("listWidget_5")
-		self.horizontalLayout_25.addWidget(self.listWidget_5)
+		self.verticalLayout_23.addWidget(self.listWidget_5)
+		self.verticalLayout_23.setStretch(0, 3)
+		self.verticalLayout_23.setStretch(1, 1)
+		self.horizontalLayout_25.addLayout(self.verticalLayout_23)
 		self.line_2 = QtWidgets.QFrame(self.tab_8)
 		self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
 		self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
@@ -856,10 +861,12 @@ class Ui_MainPage(object):
 		self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.groupBox)
 		self.verticalLayout_12.setObjectName("verticalLayout_12")
 		self.tableWidget_7 = QtWidgets.QTableWidget(self.groupBox)
-		self.tableWidget_7.setRowCount(1)
+		self.tableWidget_7.setRowCount(2)
 		self.tableWidget_7.setColumnCount(7)
 		self.tableWidget_7.setObjectName("tableWidget_7")
 		self.tableWidget_7.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		for i in range(0,7):
+			self.tableWidget_7.setSpan(0,i,2,1)
 		for i in range(0,7):
 			total = ['事項','日期','最後過戶日','停止過戶期間','停止融資期間','停止融券期間','最後回補日']
 			newItem = QTableWidgetItem(total[i])
@@ -877,10 +884,12 @@ class Ui_MainPage(object):
 		self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.groupBox_2)
 		self.verticalLayout_13.setObjectName("verticalLayout_13")
 		self.tableWidget_8 = QtWidgets.QTableWidget(self.groupBox_2)
-		self.tableWidget_8.setRowCount(1)
+		self.tableWidget_8.setRowCount(2)
 		self.tableWidget_8.setColumnCount(6)
 		self.tableWidget_8.setObjectName("tableWidget_8")
 		self.tableWidget_8.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		for i in range(0,6):
+			self.tableWidget_8.setSpan(0,i,2,1)
 		for i in range(0,6):
 			total = ['日期','現金股利','盈餘配股','公積配股','現金增資','承銷價']
 			newItem = QTableWidgetItem(total[i])
@@ -898,10 +907,12 @@ class Ui_MainPage(object):
 		self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.groupBox_3)
 		self.verticalLayout_21.setObjectName("verticalLayout_21")
 		self.tableWidget_9 = QtWidgets.QTableWidget(self.groupBox_3)
-		self.tableWidget_9.setRowCount(1)
+		self.tableWidget_9.setRowCount(2)
 		self.tableWidget_9.setColumnCount(4)
 		self.tableWidget_9.setObjectName("tableWidget_9")
 		self.tableWidget_9.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		for i in range(0,4):
+			self.tableWidget_9.setSpan(0,i,2,1)
 		for i in range(0,4):
 			total = ['日期','時間','地點','摘要內容']
 			newItem = QTableWidgetItem(total[i])
@@ -918,10 +929,12 @@ class Ui_MainPage(object):
 		self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.groupBox_4)
 		self.verticalLayout_22.setObjectName("verticalLayout_22")
 		self.tableWidget_10 = QtWidgets.QTableWidget(self.groupBox_4)
-		self.tableWidget_10.setRowCount(1)
+		self.tableWidget_10.setRowCount(2)
 		self.tableWidget_10.setColumnCount(7)
 		self.tableWidget_10.setObjectName("tableWidget_10")
 		self.tableWidget_10.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		for i in range(0,7):
+			self.tableWidget_10.setSpan(0,i,2,1)
 		for i in range(0,7):
 			total = ['日期','性質','改選董監','開會地點','服務代理','服務電話','電子投票']
 			newItem = QTableWidgetItem(total[i])
@@ -938,9 +951,7 @@ class Ui_MainPage(object):
 		self.verticalLayout_21.addWidget(self.groupBox_4)
 		self.verticalLayout_11.addWidget(self.groupBox_3)
 		self.horizontalLayout_25.addLayout(self.verticalLayout_11)
-		self.horizontalLayout_25.setStretch(0, 1)
-		self.horizontalLayout_25.setStretch(1, 1)
-		self.horizontalLayout_25.setStretch(3, 4)
+		self.horizontalLayout_25.setStretch(2, 4)
 		self.gridLayout_3.addLayout(self.horizontalLayout_25, 0, 0, 1, 1)
 		self.tabWidget.addTab(self.tab_8, "")
 		self.tab_3 = QtWidgets.QWidget()
@@ -958,7 +969,7 @@ class Ui_MainPage(object):
 		self.textEdit.setObjectName("textEdit")
 		self.textEdit.setReadOnly(True)
 		self.verticalLayout_8.addWidget(self.textEdit)
-		self.verticalLayout_8.setStretch(0, 4)
+		self.verticalLayout_8.setStretch(0, 1)
 		self.verticalLayout_8.setStretch(1, 1)
 		self.horizontalLayout_12.addLayout(self.verticalLayout_8)
 		self.tableWidget_4 = QtWidgets.QTableWidget(self.tab_3)
@@ -987,8 +998,8 @@ class Ui_MainPage(object):
 		self.textEdit_3.setObjectName("textEdit_3")
 		self.textEdit_3.setReadOnly(True)
 		self.verticalLayout_6.addWidget(self.textEdit_3)
-		self.verticalLayout_6.setStretch(0, 4)
-		self.verticalLayout_6.setStretch(1, 1)
+		self.verticalLayout_6.setStretch(0, 2)
+		self.verticalLayout_6.setStretch(1, 2)
 		self.horizontalLayout_15.addLayout(self.verticalLayout_6)
 		self.tableWidget_6 = QtWidgets.QTableWidget(self.tab_2)
 		self.tableWidget_6.setObjectName("tableWidget_6")

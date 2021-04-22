@@ -141,9 +141,15 @@ def callCFunc():
 
 def getFinalResult():
     with open("stocklist.txt", 'r') as f:
+        ret = [[], []]
         contents = f.read()
-        ret = contents.split("\n")
-        ret.pop()
+        data = contents.split("\n")
+        data.pop()
+        for i in data:
+            print(i)
+            s = i.split()
+            ret[0].append(s[0])
+            ret[1].append(s[1])
         return ret
 def main(submit):
     with open("reverse.txt", 'w') as f:

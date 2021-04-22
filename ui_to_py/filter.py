@@ -974,8 +974,19 @@ class Ui_MainPage(object):
 		self.horizontalLayout_12.addLayout(self.verticalLayout_8)
 		self.tableWidget_4 = QtWidgets.QTableWidget(self.tab_3)
 		self.tableWidget_4.setObjectName("tableWidget_4")
-		self.tableWidget_4.setColumnCount(0)
+		self.tableWidget_4.setColumnCount(9)
 		self.tableWidget_4.setRowCount(0)
+		self.tableWidget_4.verticalHeader().setVisible(False)
+		self.tableWidget_4.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		for i in range(0,9):
+			total = ['股票代碼','日期','成交量','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
+			newItem = QTableWidgetItem(total[i])
+			font = QFont()
+			font.setPointSize(20)
+			self.tableWidget_4.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			self.tableWidget_4.horizontalHeader().setStyleSheet(stylesheet)
+			self.tableWidget_4.horizontalHeader().setFont(font)
 		self.horizontalLayout_12.addWidget(self.tableWidget_4)
 		self.horizontalLayout_12.setStretch(0, 0)
 		self.horizontalLayout_12.setStretch(1, 4)

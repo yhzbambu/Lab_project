@@ -260,36 +260,50 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.listWidget_5.itemClicked.connect(lambda:self.get_company_all_info())
 		################################達人密技###################################################
 		self.listWidget.itemClicked.connect(lambda:self.master_description_text())
+		self.tableWidget_4.doubleClicked.connect(lambda:PcWin.K_line(self.tableWidget_4.currentItem().text(),'日'))
 		
 		
-		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
-		self.total_x_list = ['StockReturn','DebtAndEquityRatio','ReturnOnEquity','Volume','Turnover','SeasonMarketValue','SeasonClosingPirce','PriceBookRatio','EarningToPriceRatio','BVPS','EPS','NetProfitAfterTax','NewPriceBookRatio','NewEarningToPriceRatio','GVI002','GVI004','GVI006','GVI008','GVI010',
-'GVI015','GVI020','GVI030','2020','12','31']	
-		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
-self.checkBox_28,self.checkBox_29,self.checkBox_30]
-		self.prediction_stock = main.main(self.total_x_list)
+# 		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
+# 		self.total_x_list = ['StockReturn','DebtAndEquityRatio','ReturnOnEquity','Volume','Turnover','SeasonMarketValue','SeasonClosingPirce','PriceBookRatio','EarningToPriceRatio','BVPS','EPS','NetProfitAfterTax','NewPriceBookRatio','NewEarningToPriceRatio','GVI002','GVI004','GVI006','GVI008','GVI010',
+# 'GVI015','GVI020','GVI030','2020','12','31']	
+# 		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
+# self.checkBox_28,self.checkBox_29,self.checkBox_30]
+# 		self.prediction_stock = main.main(self.total_x_list)
 
-		self.tableWidget_5.setRowCount(len(self.prediction_stock))
-		pd_count = 0
-		for pd_list in self.prediction_stock:
-			self.prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
-			self.cursor.execute(self.prediction_info,pd_list)
-			prediction_list = self.cursor.fetchone()
-			for pd_info in range(0,len(prediction_list)):
+# 		self.tableWidget_5.setRowCount(len(self.prediction_stock))
+# 		pd_count = 0
+# 		for pd_list in self.prediction_stock:
+# 			self.prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
+# 			self.cursor.execute(self.prediction_info,pd_list)
+# 			prediction_list = self.cursor.fetchone()
+# 			for pd_info in range(0,len(prediction_list)):
 				
-				newItem = QTableWidgetItem(str(prediction_list[pd_info]))
-				textFont = QFont("song", 12, QFont.Bold)  
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)					
-				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
-			pd_count += 1
+# 				newItem = QTableWidgetItem(str(prediction_list[pd_info]))
+# 				textFont = QFont("song", 12, QFont.Bold)  
+# 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+# 				newItem.setFont(textFont)					
+# 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+# 				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
+# 			pd_count += 1
 
 	def master_description_text(self):
 		self.textEdit.clear()
 		Description = ['當技術指標日、周及月KD都交叉向上時，表短、中、長期趨勢都向上。如果日、周及月KD值又同時在50以上，表示短、中及長期該檔個股都很強勢，很多飆股都是這種技術型態，用此選股法選出之股票，未來上漲機率就很大。',
 						'20週戰法']
 		self.textEdit.setText(Description[self.listWidget.currentIndex().row()]) 
+		self.select_info = filter8.Filter([['T0','New',filter8.IsLastDay()],['KD150','','']])
+		count = 0
+		self.tableWidget_4.setRowCount(len(self.select_info))
+		for info in self.select_info: #將條件widget放入table裡
+			for i in range(0,int(self.tableWidget_4.columnCount())):
+				newItem = QTableWidgetItem(str(info[i]))
+				textFont = QFont("song", 12, QFont.Bold)  
+				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+				newItem.setFont(textFont)
+				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
+				self.tableWidget_4.setItem(count,i,newItem)		
+			count += 1
+
 
 	def change_tool(self,tool,change_tool):
 		if tool.text() in ['(日)K線','(週)K線','(月)K線']:
@@ -560,31 +574,31 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		else:
 			for clo in self.cursor.fetchall():
 				pr_list.append(clo[0])
-	def smart_stock(self):
-		x_list = list()	
-		for check_box in self.check_box_list:
-			if check_box.isChecked() == True:
-				x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
-		x_list.append('2020')
-		x_list.append('12')
-		x_list.append('31')
-		check_prediction_stock = main.main(x_list)
+	# def smart_stock(self):
+	# 	x_list = list()	
+	# 	for check_box in self.check_box_list:
+	# 		if check_box.isChecked() == True:
+	# 			x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
+	# 	x_list.append('2020')
+	# 	x_list.append('12')
+	# 	x_list.append('31')
+	# 	check_prediction_stock = main.main(x_list)
 
-		self.tableWidget_5.setRowCount(len(check_prediction_stock))
-		check_pd_count = 0
-		for check_list in check_prediction_stock:
-			check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
-			self.cursor.execute(check_prediction_info,check_list)
-			check_prediction_list = self.cursor.fetchone()
-			for check_pd_info in range(0,len(check_prediction_list)):
+	# 	self.tableWidget_5.setRowCount(len(check_prediction_stock))
+	# 	check_pd_count = 0
+	# 	for check_list in check_prediction_stock:
+	# 		check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
+	# 		self.cursor.execute(check_prediction_info,check_list)
+	# 		check_prediction_list = self.cursor.fetchone()
+	# 		for check_pd_info in range(0,len(check_prediction_list)):
 				
-				newItem = QTableWidgetItem(str(check_predicwwwwtion_list[check_pd_info]))
-				textFont = QFont("song", 12, QFont.Bold)  
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)					
-				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)	
-			check_pd_count += 1
+	# 			newItem = QTableWidgetItem(str(check_predicwwwwtion_list[check_pd_info]))
+	# 			textFont = QFont("song", 12, QFont.Bold)  
+	# 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+	# 			newItem.setFont(textFont)					
+	# 			newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+	# 			self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)	
+	# 		check_pd_count += 1
 	
 	def Description_text(self):
 		self.textEdit_2.clear()
@@ -873,18 +887,18 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
 				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget.horizontalHeader().setFont(font)
-		# elif self.comboBox_3.currentText() == '法人買賣超-三大法人':
-		# 	total_output.append(['T0','institutional_investors',filter8.IsLastDay()])
-		# 	self.tableWidget.setColumnCount(11)
-		# 	for i in range(0,11):
-		# 		total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超(張)_外資_不含自營','法人買賣超(張)_外資_自營','法人買賣超(張)_投信','法人買賣超(張)_自營商_自行買賣','法人買賣超(張)_自營商_避險','總和']
-		# 		newItem = QTableWidgetItem(total[i])
-		# 		font = QFont()
-		# 		font.setPointSize(15)
-		# 		self.tableWidget.setHorizontalHeaderItem(i,newItem)
-		# 		stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
-		# 		self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-		# 		self.tableWidget.horizontalHeader().setFont(font)
+		elif self.comboBox_3.currentText() == '法人買賣超-三大法人':
+			total_output.append(['T0','institutional_investors',filter8.IsLastDay()])
+			self.tableWidget.setColumnCount(11)
+			for i in range(0,11):
+				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超(張)_外資_不含自營','法人買賣超(張)_外資_自營','法人買賣超(張)_投信','法人買賣超(張)_自營商_自行買賣','法人買賣超(張)_自營商_避險','總和']
+				newItem = QTableWidgetItem(total[i])
+				font = QFont()
+				font.setPointSize(15)
+				self.tableWidget.setHorizontalHeaderItem(i,newItem)
+				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
+				self.tableWidget.horizontalHeader().setFont(font)
 		if self.comboBox_4.currentText() == '上市':
 			total_output.append(['T16','market','mid','','1'])
 		elif self.comboBox_4.currentText() == '上櫃':
@@ -1009,6 +1023,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		if self.toolButton_36.text() != "請指定排名條件":
 			total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),'2021-04-19'])
 		self.select_info = filter8.Filter(total_output)
+
 
 		count = 0
 		self.tableWidget.setRowCount(len(self.select_info))

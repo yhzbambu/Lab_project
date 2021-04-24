@@ -20,8 +20,13 @@
       <property name="enabled">
        <bool>true</bool>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
+      </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">
@@ -2233,68 +2238,68 @@
                  </column>
                 </widget>
                </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string>股東會</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_22">
                <item>
-                <widget class="QGroupBox" name="groupBox_4">
-                 <property name="title">
-                  <string>股東會</string>
+                <widget class="QTableWidget" name="tableWidget_10">
+                 <property name="rowCount">
+                  <number>1</number>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_22">
-                  <item>
-                   <widget class="QTableWidget" name="tableWidget_10">
-                    <property name="rowCount">
-                     <number>1</number>
-                    </property>
-                    <property name="columnCount">
-                     <number>7</number>
-                    </property>
-                    <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-                     <bool>false</bool>
-                    </attribute>
-                    <attribute name="horizontalHeaderStretchLastSection">
-                     <bool>false</bool>
-                    </attribute>
-                    <attribute name="verticalHeaderVisible">
-                     <bool>false</bool>
-                    </attribute>
-                    <row/>
-                    <column>
-                     <property name="text">
-                      <string>新增欄位</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>日期</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>性質</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>開會地點</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>新增欄位</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>服務代理</string>
-                     </property>
-                    </column>
-                    <column>
-                     <property name="text">
-                      <string>電子投票</string>
-                     </property>
-                    </column>
-                   </widget>
-                  </item>
-                 </layout>
+                 <property name="columnCount">
+                  <number>7</number>
+                 </property>
+                 <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
+                 </attribute>
+                 <row/>
+                 <column>
+                  <property name="text">
+                   <string>新增欄位</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>日期</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>性質</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>開會地點</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>新增欄位</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>服務代理</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>電子投票</string>
+                  </property>
+                 </column>
                 </widget>
                </item>
               </layout>

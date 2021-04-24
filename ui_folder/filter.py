@@ -21,6 +21,9 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName("gridLayout")
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
         self.tabWidget.setEnabled(True)
+        font = QtGui.QFont()
+        font.setPointSize(20)
+        self.tabWidget.setFont(font)
         self.tabWidget.setObjectName("tabWidget")
         self.tab_5 = QtWidgets.QWidget()
         self.tab_5.setObjectName("tab_5")
@@ -866,7 +869,8 @@ class Ui_MainWindow(object):
         self.tableWidget_9.setHorizontalHeaderItem(3, item)
         self.tableWidget_9.verticalHeader().setVisible(False)
         self.verticalLayout_21.addWidget(self.tableWidget_9)
-        self.groupBox_4 = QtWidgets.QGroupBox(self.groupBox_3)
+        self.verticalLayout_11.addWidget(self.groupBox_3)
+        self.groupBox_4 = QtWidgets.QGroupBox(self.tab_8)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.groupBox_4)
         self.verticalLayout_22.setObjectName("verticalLayout_22")
@@ -892,8 +896,7 @@ class Ui_MainWindow(object):
         self.tableWidget_10.horizontalHeader().setStretchLastSection(False)
         self.tableWidget_10.verticalHeader().setVisible(False)
         self.verticalLayout_22.addWidget(self.tableWidget_10)
-        self.verticalLayout_21.addWidget(self.groupBox_4)
-        self.verticalLayout_11.addWidget(self.groupBox_3)
+        self.verticalLayout_11.addWidget(self.groupBox_4)
         self.horizontalLayout_25.addLayout(self.verticalLayout_11)
         self.horizontalLayout_25.setStretch(2, 4)
         self.gridLayout_3.addLayout(self.horizontalLayout_25, 0, 0, 1, 1)
@@ -1308,7 +1311,7 @@ class Ui_MainWindow(object):
         self.toolBar.addAction(self.actionenter)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

@@ -60,6 +60,9 @@ class Ui_Pyechart(object):
 		self.label_2000.setObjectName("label_2000")
 		self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
 		self.tabWidget.setObjectName("tabWidget")
+		font = QtGui.QFont()
+		font.setPointSize(12)
+		self.tabWidget.setFont(font)
 		self.tab = QtWidgets.QWidget()
 		self.tab.setObjectName("tab")
 		self.gridLayout_3 = QtWidgets.QGridLayout(self.tab)
@@ -168,6 +171,7 @@ class Ui_Pyechart(object):
 		self.verticalLayout_2.setObjectName("verticalLayout_2")
 		self.tableWidget_6 = QtWidgets.QTableWidget(self.tab_2)
 		self.tableWidget_6.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+		self.tableWidget_6.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tableWidget_6.setRowCount(10)
 		self.tableWidget_6.setColumnCount(9)
 		self.tableWidget_6.setObjectName("tableWidget_6")
@@ -201,29 +205,15 @@ class Ui_Pyechart(object):
 		self.tableWidget_7.setRowCount(10)
 		self.tableWidget_7.setColumnCount(8)
 		self.tableWidget_7.setObjectName("tableWidget_7")
-		self.tableWidget_7.horizontalHeader().setVisible(False)
 		self.tableWidget_7.verticalHeader().setVisible(False)
-		for i in range(0,3):
-			total = ['年度/月份','營業收入','累計營業收入']
-			number = [0,1,5]
+
+		for i in range(0,8):
+			total = ['年度/月份','營業收入'+'\n'+'當月營收','營業收入'+'\n'+'上月比較%','營業收入'+'\n'+'去年同月營收','營業收入'+'\n'+'去年同月增減%','累計營業收入'+'\n'+'當月累計營收','累計營業收入'+'\n'+'去年累計營收','累計營業收入'+'\n'+'前期比較%']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_7.setItem(0,number[i],newItem)	
-		for j in range(0,7):
-			total = ['當月營收','上月比較%','去年同月營收','去年同月增減%','當月累計營收','去年累計營收','前期比較%']
-			number = [1,2,3,4,5,6,7]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_7.setItem(1,number[j],newItem)	
-		self.tableWidget_7.setSpan(0,0,2,1)
-		self.tableWidget_7.setSpan(0,1,1,4)
-		self.tableWidget_7.setSpan(0,5,1,3)
+			self.tableWidget_7.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_7.horizontalHeader().setStyleSheet(stylesheet)	
+
 		self.verticalLayout_14.addWidget(self.tableWidget_7)
 		self.tabWidget.addTab(self.tab_11, "")
 		self.tab_3 = QtWidgets.QWidget()
@@ -266,22 +256,8 @@ class Ui_Pyechart(object):
 		self.tableWidget_2.setRowCount(30)
 		self.tableWidget_2.setColumnCount(13)
 		self.tableWidget_2.setObjectName("tableWidget_2")
-		self.tableWidget_2.horizontalHeader().setVisible(False)
 		self.tableWidget_2.verticalHeader().setVisible(False)
 		self.tableWidget_2.verticalHeader().setMinimumSectionSize(30)
-		self.tableWidget_2.setSpan(0,0,3,1)
-		self.tableWidget_2.setSpan(0,1,1,5)
-		self.tableWidget_2.setSpan(0,6,3,1)
-		self.tableWidget_2.setSpan(0,7,1,4)
-		self.tableWidget_2.setSpan(0,11,1,2)
-		self.tableWidget_2.setSpan(1,1,1,2)
-		self.tableWidget_2.setSpan(1,4,1,2)
-		self.tableWidget_2.setSpan(1,7,2,1)
-		self.tableWidget_2.setSpan(1,8,2,1)
-		self.tableWidget_2.setSpan(1,9,2,1)
-		self.tableWidget_2.setSpan(1,10,2,1)
-		self.tableWidget_2.setSpan(1,11,2,1)
-		self.tableWidget_2.setSpan(1,12,2,1)
 		self.verticalLayout_4.addWidget(self.tableWidget_2)
 		self.verticalLayout_5.addLayout(self.verticalLayout_4)
 		self.tabWidget.addTab(self.tab_3, "")
@@ -338,20 +314,11 @@ class Ui_Pyechart(object):
 		self.verticalLayout_6.setObjectName("verticalLayout_6")
 		self.tableWidget_3 = QtWidgets.QTableWidget(self.tab_4)
 		self.tableWidget_3.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		self.tableWidget_3.setRowCount(10)
-		self.tableWidget_3.setColumnCount(18)
+		self.tableWidget_3.setRowCount(15)
+		self.tableWidget_3.setColumnCount(15)
 		self.tableWidget_3.setObjectName("tableWidget_3")
-		self.tableWidget_3.horizontalHeader().setVisible(False)
 		self.tableWidget_3.verticalHeader().setVisible(False)
 		self.tableWidget_3.verticalHeader().setMinimumSectionSize(30)
-		self.tableWidget_3.setSpan(0,0,2,4)
-		self.tableWidget_3.setSpan(0,4,1,2)
-		self.tableWidget_3.setSpan(0,6,1,2)	
-		self.tableWidget_3.setSpan(0,8,1,2)	
-		self.tableWidget_3.setSpan(0,10,1,2)	
-		self.tableWidget_3.setSpan(0,12,1,2)	
-		self.tableWidget_3.setSpan(0,14,1,2)
-		self.tableWidget_3.setSpan(0,16,1,2)
 		self.verticalLayout_6.addWidget(self.tableWidget_3)
 		self.verticalLayout_7.addLayout(self.verticalLayout_6)
 		self.tabWidget.addTab(self.tab_4, "")
@@ -366,35 +333,7 @@ class Ui_Pyechart(object):
 		self.tableWidget.setRowCount(10)
 		self.tableWidget.setColumnCount(23)
 		self.tableWidget.setObjectName("tableWidget")
-		self.tableWidget.horizontalHeader().setVisible(False)
 		self.tableWidget.verticalHeader().setVisible(False)
-		self.tableWidget.setSpan(0,0,3,1)
-		self.tableWidget.setSpan(0,1,3,1)
-		self.tableWidget.setSpan(0,2,3,1)	
-		self.tableWidget.setSpan(1,3,2,1)
-		self.tableWidget.setSpan(1,4,2,1)
-		self.tableWidget.setSpan(1,5,2,1)
-		self.tableWidget.setSpan(1,6,2,1)
-		self.tableWidget.setSpan(1,7,2,1)
-		self.tableWidget.setSpan(1,8,2,1)
-		self.tableWidget.setSpan(1,9,2,1)
-		self.tableWidget.setSpan(1,10,2,1)
-		self.tableWidget.setSpan(1,11,2,1)
-		self.tableWidget.setSpan(1,12,2,1)
-		self.tableWidget.setSpan(1,13,2,1)
-		self.tableWidget.setSpan(1,14,2,1)
-		self.tableWidget.setSpan(1,15,2,1)
-		self.tableWidget.setSpan(1,20,2,1)
-		self.tableWidget.setSpan(1,21,2,1)
-		self.tableWidget.setSpan(0,3,1,4)	
-		self.tableWidget.setSpan(0,7,1,5)	
-		self.tableWidget.setSpan(0,12,1,4)	
-		self.tableWidget.setSpan(0,16,3,1)	
-		self.tableWidget.setSpan(0,17,3,1)	
-		self.tableWidget.setSpan(0,18,3,1)
-		self.tableWidget.setSpan(0,19,3,1)
-		self.tableWidget.setSpan(0,20,1,2)	
-		self.tableWidget.setSpan(0,22,3,1)		
 		self.verticalLayout_8.addWidget(self.tableWidget)
 		self.verticalLayout_9.addLayout(self.verticalLayout_8)
 		self.tabWidget.addTab(self.tab_5, "")
@@ -409,26 +348,7 @@ class Ui_Pyechart(object):
 		self.tableWidget_4.setRowCount(10)
 		self.tableWidget_4.setColumnCount(19)
 		self.tableWidget_4.setObjectName("tableWidget_4")
-		self.tableWidget_4.horizontalHeader().setVisible(False)
 		self.tableWidget_4.verticalHeader().setVisible(False)
-		self.tableWidget_4.setSpan(0,0,3,1)
-		self.tableWidget_4.setSpan(0,1,3,1)
-		self.tableWidget_4.setSpan(0,2,3,1)
-		self.tableWidget_4.setSpan(0,3,1,5)
-		self.tableWidget_4.setSpan(0,8,1,4)
-		self.tableWidget_4.setSpan(0,12,1,7)
-		self.tableWidget_4.setSpan(1,3,2,1)
-		self.tableWidget_4.setSpan(1,4,2,1)
-		self.tableWidget_4.setSpan(1,5,2,1)
-		self.tableWidget_4.setSpan(1,6,2,1)
-		self.tableWidget_4.setSpan(1,7,2,1)
-		self.tableWidget_4.setSpan(1,8,2,1)
-		self.tableWidget_4.setSpan(1,9,2,1)
-		self.tableWidget_4.setSpan(1,10,2,1)
-		self.tableWidget_4.setSpan(1,11,2,1)
-		self.tableWidget_4.setSpan(1,12,1,3)
-		self.tableWidget_4.setSpan(1,15,1,3)
-		self.tableWidget_4.setSpan(1,18,2,1)
 		self.verticalLayout_10.addWidget(self.tableWidget_4)
 		self.verticalLayout_11.addLayout(self.verticalLayout_10)
 		self.tabWidget.addTab(self.tab_6, "")
@@ -468,10 +388,7 @@ class Ui_Pyechart(object):
 		self.tableWidget_5.setRowCount(10)
 		self.tableWidget_5.setColumnCount(15)
 		self.tableWidget_5.setObjectName("tableWidget_5")
-		self.tableWidget_5.horizontalHeader().setVisible(False)
 		self.tableWidget_5.verticalHeader().setVisible(False)
-		self.tableWidget_5.setSpan(0,1,1,7)
-		self.tableWidget_5.setSpan(0,8,1,6)
 		self.verticalLayout_12.addWidget(self.tableWidget_5)
 		self.verticalLayout_13.addLayout(self.verticalLayout_12)
 		self.tabWidget.addTab(self.tab_7, "")
@@ -699,123 +616,50 @@ class Ui_Pyechart(object):
 		self.toolBar.addWidget(self.lineEdit_100)
 		self.toolBar.addAction(self.actionenter)
 
-
-		for i in range(0,5):
-			total = ['日期','法人買賣超(張)','總合','估計持股','持股比重(%)']
-			number = [0,1,6,7,11]
+		for i in range(0,13):
+			total = ['日期','外資買賣超'+'\n'+'不含自營','外資買賣超'+'\n'+'自營','投信買賣超','自營商買賣超'+'\n'+'自行買賣',
+			'自營商買賣超'+'\n'+'避險','總和','外資'+'\n'+'估計持股','投信'+'\n'+'估計持股','自營商'+'\n'+'估計持股','綜合'+'\n'+'估計持股',
+			'持股比重(%)'+'\n'+'外資','持股比重(%)'+'\n'+'三大法人']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_2.setItem(0,number[i],newItem)
-		for j in range(0,9):
-			total = ['外資','投信','自營商','外資','投信','自營商','綜合','外資','三大法人']
-			number = [1,3,4,7,8,9,10,11,12]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_2.setItem(1,number[j],newItem)	
-		for k in range(0,5):
-			total = ['不含自營商','自營',' ','自行買賣','避險']
-			number = [1,2,3,4,5]
-			newItem = QTableWidgetItem(total[k])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#CCEEFF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_2.setItem(2,number[k],newItem)						
+			self.tableWidget_2.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_2.horizontalHeader().setStyleSheet(stylesheet)		
 
-
-		for i in range(0,4):
-			total = ['','融資','融券','資券']
-			number = [0,1,8,14]
+		for i in range(0,15):
+			total = ['日期','融資買進','融資賣出','融資現償','融資餘額','融資增減','融資限額','融資使用率','融券賣出','融券買進','融券券償','融券餘額','融券增減','融券券資比','資券相抵']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_5.setItem(0,number[i],newItem)	
-		for j in range(0,15):
-			total = ['日期','買進','賣出','現償','餘額','增減','限額','使用率','賣出','買進','券償','餘額','增減','券資比','相抵']
-			number = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_5.setItem(1,number[j],newItem)			
+			self.tableWidget_5.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_5.horizontalHeader().setStyleSheet(stylesheet)	
+	
 
-
-		for i in range(0,12):
-			total = ['季度','股本(億)','財報評分','季度股價(元)','獲利金額(億)','獲利率(%)','單季ROE(%)','年估ROE(%)','單季ROA(%)','年估ROA(%)','EPS(元)','BPS(元)']
-			number = [0,1,2,3,7,12,16,17,18,19,20,22]
+		for i in range(0,23):
+			total = ['季度','股本(億)','財報評分','季度股價'+'\n'+'收盤(元)','季度股價'+'\n'+'平均(元)','季度股價'+'\n'+'漲跌(元)','季度股價'+'\n'+'漲跌(元)(%)',
+					'獲利金額(億)'+'\n'+'營業收入','獲利金額(億)'+'\n'+'營業毛利','獲利金額(億)'+'\n'+'營業利益','獲利金額(億)'+'\n'+'業外損益','獲利金額(億)'+'\n'+'稅後淨利',
+					'獲利率(%)'+'\n'+'營業毛利','獲利率(%)'+'\n'+'營業利益','獲利率(%)'+'\n'+'業外損益','獲利率(%)'+'\n'+'稅後淨利','單季ROE'+'\n'+'(%)','年估ROE'+'\n'+'(%)',
+					'單季ROA'+'\n'+'(%)','年估ROA'+'\n'+'(%)','EPS(元)'+'\n'+'稅後EPS','EPS(元)'+'\n'+'年增(元)','BPS(元)']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget.setItem(0,number[i],newItem)	
-		for j in range(0,15):
-			total = ['收盤','平均','漲跌','漲跌(%)','營業收入','營業毛利','營業利益','業外損益','稅後淨利','營業毛利','營業利益','業外損益','稅後淨利','稅後EPS','年增(元)']
-			number = [3,4,5,6,7,8,9,10,11,12,13,14,15,20,21]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget.setItem(1,number[j],newItem)					
+			self.tableWidget.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:12px; color:white;}"
+			self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)		
+				
 
-
-		for i in range(0,8):
-			total = ['資產','2020Q3','2020Q2','2020Q1','2019Q4','2019Q3','2019Q2','2019Q1']
-			number = [0,4,6,8,10,12,14,16]
+		for i in range(0,15):
+			total = ['資產','2020Q3'+'\n'+'金額','2020Q3(%)','2020Q2'+'\n'+'金額','2020Q2(%)','2020Q1'+'\n'+'金額','2020Q1(%)','2019Q4'+'\n'+'金額','2019Q4(%)',
+			'2019Q3'+'\n'+'金額','2019Q3(%)','2019Q2'+'\n'+'金額','2019Q2(%)','2019Q1'+'\n'+'金額','2019Q1(%)','2018Q4'+'\n'+'金額','2018Q4(%)']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_3.setItem(0,number[i],newItem)
-		for j in range(0,14):
-			total = ['金額','%','金額','%','金額','%','金額','%','金額','%','金額','%','金額','%']
-			number = [4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_3.setItem(1,number[j],newItem)					
+			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_3.horizontalHeader().setStyleSheet(stylesheet)		
 
-
-		for i in range(0,6):
-			total = ['股利發放年度','股利所屬盈餘期間','股東會日期','除息日程','除權日程','股東股利(元/股)']
-			number = [0,1,2,3,8,12]
+		for i in range(0,19):
+			total = ['股利'+'\n'+'發放年度','股利所屬'+'\n'+'盈餘期間','股東會'+'\n'+'日期','除息'+'\n'+'交易日','除息'+'\n'+'參考價','填息'+'\n'+'完成日',
+					'填息'+'\n'+'花費日數','現金股利'+'\n'+'發放日','除權'+'\n'+'交易日','除息'+'\n'+'參考價','填權'+'\n'+'完成日','填權'+'\n'+'花費日數',
+					'現金股利'+'\n'+'盈餘','現金股利'+'\n'+'公積','現金股利'+'\n'+'合計','股票股利'+'\n'+'盈餘','股票股利'+'\n'+'公積','股票股利'+'\n'+'合併','股利合計']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_4.setItem(0,number[i],newItem)			
-		for j in range(0,12):
-			total = ['除息交易日','除息參考價','填息完成日','填息花費日數','現金股利發放日','除權交易日','除息參考價','填權完成日','填權花費日數','現金股利','股票股利','股利合計']
-			number = [3,4,5,6,7,8,9,10,11,12,15,18]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_4.setItem(1,number[j],newItem)		
-		for k in range(0,6):
-			total = ['盈餘','公積','合計','盈餘','公積','合併']
-			number = [12,13,14,15,16,17]
-			newItem = QTableWidgetItem(total[k])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#CCEEFF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_4.setItem(2,number[k],newItem)	
+			self.tableWidget_4.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:18px; color:white;}"
+			self.tableWidget_4.horizontalHeader().setStyleSheet(stylesheet)		
 
 		self.retranslateUi(MainWindow)
 		self.tabWidget.setCurrentIndex(7)

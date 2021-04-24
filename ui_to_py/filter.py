@@ -52,11 +52,14 @@ class Ui_MainPage(object):
 		sizePolicy.setHeightForWidth(self.label_3.sizePolicy().hasHeightForWidth())
 		self.label_3.setSizePolicy(sizePolicy)
 		font = QtGui.QFont()
-		font.setPointSize(15)
+		font.setPointSize(12)
 		self.label_3.setFont(font)
 		self.label_3.setObjectName("label_3")
 		self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
 		self.tabWidget.setObjectName("tabWidget")
+		font = QtGui.QFont()
+		font.setPointSize(12)
+		self.tabWidget.setFont(font)
 		self.tab_5 = QtWidgets.QWidget()
 		self.tab_5.setObjectName("tab_5")
 		self.gridLayout_2 = QtWidgets.QGridLayout(self.tab_5)
@@ -781,12 +784,9 @@ class Ui_MainPage(object):
 		for i in range(0,9):
 			total = ['股票代碼','股票名稱','日期','開盤價','最高價','最低價','收盤價','漲跌價差','成交筆數']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(15)
 			self.tableWidget.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
 			self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget.horizontalHeader().setFont(font)
 		self.horizontalLayout.addWidget(self.tableWidget)
 		self.horizontalLayout_14.addLayout(self.horizontalLayout)
 		self.tabWidget.addTab(self.tab_6, "")
@@ -819,12 +819,9 @@ class Ui_MainPage(object):
 		for i in range(0,9):
 			total = ['股票代碼','日期','成交量','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(20)
 			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
 			self.tableWidget_3.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_3.horizontalHeader().setFont(font)
 		self.verticalLayout_7.addWidget(self.tableWidget_3)
 		self.tabWidget.addTab(self.tab_7, "")
 		self.tab_8 = QtWidgets.QWidget()
@@ -861,21 +858,17 @@ class Ui_MainPage(object):
 		self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.groupBox)
 		self.verticalLayout_12.setObjectName("verticalLayout_12")
 		self.tableWidget_7 = QtWidgets.QTableWidget(self.groupBox)
-		self.tableWidget_7.setRowCount(2)
+		self.tableWidget_7.setRowCount(1)
 		self.tableWidget_7.setColumnCount(7)
 		self.tableWidget_7.setObjectName("tableWidget_7")
 		self.tableWidget_7.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		for i in range(0,7):
-			self.tableWidget_7.setSpan(0,i,2,1)
+		self.tableWidget_7.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,7):
 			total = ['事項','日期','最後過戶日','停止過戶期間','停止融資期間','停止融券期間','最後回補日']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(15)
 			self.tableWidget_7.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
-			self.tableWidget_7.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_7.horizontalHeader().setFont(font)		
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_7.horizontalHeader().setStyleSheet(stylesheet)	
 		self.tableWidget_7.verticalHeader().setVisible(False)
 		self.verticalLayout_12.addWidget(self.tableWidget_7)
 		self.verticalLayout_11.addWidget(self.groupBox)
@@ -884,21 +877,17 @@ class Ui_MainPage(object):
 		self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.groupBox_2)
 		self.verticalLayout_13.setObjectName("verticalLayout_13")
 		self.tableWidget_8 = QtWidgets.QTableWidget(self.groupBox_2)
-		self.tableWidget_8.setRowCount(2)
+		self.tableWidget_8.setRowCount(1)
 		self.tableWidget_8.setColumnCount(6)
 		self.tableWidget_8.setObjectName("tableWidget_8")
 		self.tableWidget_8.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		for i in range(0,6):
-			self.tableWidget_8.setSpan(0,i,2,1)
+		self.tableWidget_8.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,6):
 			total = ['日期','現金股利','盈餘配股','公積配股','現金增資','承銷價']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(15)
 			self.tableWidget_8.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
-			self.tableWidget_8.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_8.horizontalHeader().setFont(font)		
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_8.horizontalHeader().setStyleSheet(stylesheet)	
 		self.tableWidget_8.verticalHeader().setVisible(False)
 		self.verticalLayout_13.addWidget(self.tableWidget_8)
 		self.verticalLayout_11.addWidget(self.groupBox_2)
@@ -907,49 +896,41 @@ class Ui_MainPage(object):
 		self.verticalLayout_21 = QtWidgets.QVBoxLayout(self.groupBox_3)
 		self.verticalLayout_21.setObjectName("verticalLayout_21")
 		self.tableWidget_9 = QtWidgets.QTableWidget(self.groupBox_3)
-		self.tableWidget_9.setRowCount(2)
+		self.tableWidget_9.setRowCount(1)
 		self.tableWidget_9.setColumnCount(4)
 		self.tableWidget_9.setObjectName("tableWidget_9")
 		self.tableWidget_9.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		for i in range(0,4):
-			self.tableWidget_9.setSpan(0,i,2,1)
+		self.tableWidget_9.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,4):
 			total = ['日期','時間','地點','摘要內容']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(15)
 			self.tableWidget_9.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
-			self.tableWidget_9.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_9.horizontalHeader().setFont(font)		
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_9.horizontalHeader().setStyleSheet(stylesheet)	
 		self.tableWidget_9.verticalHeader().setVisible(False)
 		self.verticalLayout_21.addWidget(self.tableWidget_9)
-		self.groupBox_4 = QtWidgets.QGroupBox(self.groupBox_3)
+		self.groupBox_4 = QtWidgets.QGroupBox(self.tab_8)
 		self.groupBox_4.setObjectName("groupBox_4")
 		self.verticalLayout_22 = QtWidgets.QVBoxLayout(self.groupBox_4)
 		self.verticalLayout_22.setObjectName("verticalLayout_22")
 		self.tableWidget_10 = QtWidgets.QTableWidget(self.groupBox_4)
-		self.tableWidget_10.setRowCount(2)
+		self.tableWidget_10.setRowCount(1)
 		self.tableWidget_10.setColumnCount(7)
 		self.tableWidget_10.setObjectName("tableWidget_10")
 		self.tableWidget_10.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-		for i in range(0,7):
-			self.tableWidget_10.setSpan(0,i,2,1)
+		self.tableWidget_10.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,7):
 			total = ['日期','性質','改選董監','開會地點','服務代理','服務電話','電子投票']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(15)
 			self.tableWidget_10.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
 			self.tableWidget_10.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_10.horizontalHeader().setFont(font)		
 		self.tableWidget_10.horizontalHeader().setSortIndicatorShown(False)
 		self.tableWidget_10.horizontalHeader().setStretchLastSection(False)
 		self.tableWidget_10.verticalHeader().setVisible(False)
-		self.verticalLayout_22.addWidget(self.tableWidget_10)
-		self.verticalLayout_21.addWidget(self.groupBox_4)
 		self.verticalLayout_11.addWidget(self.groupBox_3)
+		self.verticalLayout_22.addWidget(self.tableWidget_10)
+		self.verticalLayout_11.addWidget(self.groupBox_4)
 		self.horizontalLayout_25.addLayout(self.verticalLayout_11)
 		self.horizontalLayout_25.setStretch(2, 4)
 		self.gridLayout_3.addLayout(self.horizontalLayout_25, 0, 0, 1, 1)
@@ -981,12 +962,9 @@ class Ui_MainPage(object):
 		for i in range(0,9):
 			total = ['股票代碼','日期','成交量','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(20)
 			self.tableWidget_4.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
 			self.tableWidget_4.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_4.horizontalHeader().setFont(font)
 		self.horizontalLayout_12.addWidget(self.tableWidget_4)
 		self.horizontalLayout_12.setStretch(0, 0)
 		self.horizontalLayout_12.setStretch(1, 4)
@@ -1021,12 +999,9 @@ class Ui_MainPage(object):
 		for i in range(0,8):
 			total = ['股票名稱','收盤','本益比','漲跌','漲跌幅','近2年' + '\n' + '平均營收成長率','近5年' + '\n' + '平均營收成長率','近一季負債比率']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(15)
 			self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
 			self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_6.horizontalHeader().setFont(font)
 		self.horizontalLayout_15.addWidget(self.tableWidget_6)
 		self.horizontalLayout_15.setStretch(0, 0)
 		self.horizontalLayout_15.setStretch(1, 4)
@@ -1059,12 +1034,9 @@ class Ui_MainPage(object):
 		for i in range(0,9):
 			total = ['股票代碼','日期','成交股數','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
 			newItem = QTableWidgetItem(total[i])
-			font = QFont()
-			font.setPointSize(20)
 			self.tableWidget_5.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
 			self.tableWidget_5.horizontalHeader().setStyleSheet(stylesheet)
-			self.tableWidget_5.horizontalHeader().setFont(font)
 		self.horizontalLayout_13.addWidget(self.tableWidget_5)
 		self.horizontalLayout_13.setStretch(0, 0)
 		self.horizontalLayout_13.setStretch(1, 4)
@@ -1164,6 +1136,7 @@ class Ui_MainPage(object):
 			newItem = QTableWidgetItem(total[i])
 			textFont = QFont("song", 10, QFont.Bold)  
 			newItem.setBackground(QColor('#00AAAA'))  
+			newItem.setForeground(QBrush(QColor(255, 255, 255)))
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_2.setItem(number[i],0,newItem)

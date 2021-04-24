@@ -264,15 +264,14 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		
 		
 		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
-		self.total_x_list = ['StockReturn','DebtAndEquityRatio','ReturnOnEquity','Volume','Turnover','SeasonMarketValue','SeasonClosingPirce','PriceBookRatio','EarningToPriceRatio','BVPS','EPS','NetProfitAfterTax','NewPriceBookRatio','NewEarningToPriceRatio','GVI002','GVI004','GVI006','GVI008','GVI010',
-'GVI015','GVI020','GVI030','2020','12','31']	
+		self.total_x_list = ['2020','12','31']	
 		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
 self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		self.prediction_stock = main.main(self.total_x_list)
 
 		self.tableWidget_5.setRowCount(len(self.prediction_stock))
 		pd_count = 0
-		for pd_list in self.prediction_stock:
+		for pd_list in self.prediction_stock[0]:
 			self.prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
 			self.cursor.execute(self.prediction_info,pd_list)
 			prediction_list = self.cursor.fetchone()
@@ -380,7 +379,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		for all_legal in self.all_legal_company:
 			for legal in range(0,len(all_legal)):
 				newItem = QTableWidgetItem(str(all_legal[legal]))
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 15, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem.setFont(textFont)					
 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
@@ -392,7 +391,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		for all_share in self.all_share_company:
 			for share in range(0,len(all_share)):
 				newItem = QTableWidgetItem(str(all_share[share]))
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 15, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem.setFont(textFont)					
 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
@@ -405,7 +404,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		for all_Ex in self.all_Ex_company:
 			for Ex in range(0,len(all_Ex)):
 				newItem = QTableWidgetItem(str(all_Ex[Ex]))
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 15, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem.setFont(textFont)					
 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
@@ -417,7 +416,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		for all_Ticket in self.all_Ticket_company:
 			for Ticket in range(0,len(all_Ticket)):
 				newItem = QTableWidgetItem(str(all_Ticket[Ticket]))
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 15, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem.setFont(textFont)					
 				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
@@ -574,31 +573,31 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 		else:
 			for clo in self.cursor.fetchall():
 				pr_list.append(clo[0])
-	def smart_stock(self):
-		x_list = list()	
-		for check_box in self.check_box_list:
-			if check_box.isChecked() == True:
-				x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
-		x_list.append('2020')
-		x_list.append('12')
-		x_list.append('31')
-		check_prediction_stock = main.main(x_list)
+	# def smart_stock(self):
+	# 	x_list = list()	
+	# 	for check_box in self.check_box_list:
+	# 		if check_box.isChecked() == True:
+	# 			x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
+	# 	x_list.append('2020')
+	# 	x_list.append('12')
+	# 	x_list.append('31')
+	# 	check_prediction_stock = main.main(x_list)
 
-		self.tableWidget_5.setRowCount(len(check_prediction_stock))
-		check_pd_count = 0
-		for check_list in check_prediction_stock:
-			check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
-			self.cursor.execute(check_prediction_info,check_list)
-			check_prediction_list = self.cursor.fetchone()
-			for check_pd_info in range(0,len(check_prediction_list)):
+	# 	self.tableWidget_5.setRowCount(len(check_prediction_stock))
+	# 	check_pd_count = 0
+	# 	for check_list in check_prediction_stock:
+	# 		check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
+	# 		self.cursor.execute(check_prediction_info,check_list)
+	# 		check_prediction_list = self.cursor.fetchone()
+	# 		for check_pd_info in range(0,len(check_prediction_list)):
 				
-				newItem = QTableWidgetItem(str(check_predicwwwwtion_list[check_pd_info]))
-				textFont = QFont("song", 12, QFont.Bold)  
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)					
-				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)	
-			check_pd_count += 1
+	# 			newItem = QTableWidgetItem(str(check_predicwwwwtion_list[check_pd_info]))
+	# 			textFont = QFont("song", 12, QFont.Bold)  
+	# 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+	# 			newItem.setFont(textFont)					
+	# 			newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+	# 			self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)	
+	# 		check_pd_count += 1
 	
 	def Description_text(self):
 		self.textEdit_2.clear()
@@ -845,60 +844,45 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 			for i in range(0,9):
 				total = ['股票代碼','股票名稱','日期','開盤價','最高價','最低價','收盤價','漲跌價差','成交筆數']
 				newItem = QTableWidgetItem(total[i])
-				font = QFont()
-				font.setPointSize(15)
 				self.tableWidget.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				stylesheet = "::section{Background-color:rgb(148, 148, 255); font:15px; color:white;}"
 				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-				self.tableWidget.horizontalHeader().setFont(font)
 		elif self.comboBox_3.currentText() == '技術指標-RSI':
 			total_output.append(['T0','RSI',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
 			self.tableWidget.setColumnCount(11)
 			for i in range(0,11):
 				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','RSI6(日)','RSI9(日)','RSI6(週)','RSI9(週)','RSI6(月)','RSI9(月)']
 				newItem = QTableWidgetItem(total[i])
-				font = QFont()
-				font.setPointSize(15)
 				self.tableWidget.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				stylesheet = "::section{Background-color:rgb(148, 148, 255); font:15px; color:white;}"
 				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-				self.tableWidget.horizontalHeader().setFont(font)
 		elif self.comboBox_3.currentText() == '技術指標-KD':
 			total_output.append(['T0','KD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
 			self.tableWidget.setColumnCount(11)
 			for i in range(0,11):
 				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','K(日)','D(日)','K(週)','D(週)','K(月)','D(月)']
 				newItem = QTableWidgetItem(total[i])
-				font = QFont()
-				font.setPointSize(15)
 				self.tableWidget.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				stylesheet = "::section{Background-color:rgb(148, 148, 255); font:15px; color:white;}"
 				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-				self.tableWidget.horizontalHeader().setFont(font)
 		elif self.comboBox_3.currentText() == '技術指標-MACD':
 			total_output.append(['T0','MACD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
 			self.tableWidget.setColumnCount(11)
 			for i in range(0,11):
 				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','MACD(日)','DIF(日)','MACD(週)','DIF(週)','MACD(月)','DIF(月)']
 				newItem = QTableWidgetItem(total[i])
-				font = QFont()
-				font.setPointSize(15)
 				self.tableWidget.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				stylesheet = "::section{Background-color:rgb(148, 148, 255); font:15px; color:white;}"
 				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-				self.tableWidget.horizontalHeader().setFont(font)
 		elif self.comboBox_3.currentText() == '法人買賣超-三大法人':
 			total_output.append(['T0','institutional_investors',filter8.IsLastDay()])
 			self.tableWidget.setColumnCount(11)
 			for i in range(0,11):
-				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超(張)_外資_不含自營','法人買賣超(張)_外資_自營','法人買賣超(張)_投信','法人買賣超(張)_自營商_自行買賣','法人買賣超(張)_自營商_避險','總和']
+				total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超' + '\n' + '外資不含自營','法人買賣超' + '\n' + '外資+自營','法人買賣超' + '\n' + '投信','法人買賣超' + '\n' + '自營商' + '\n' + '自行買賣','法人買賣超' + '\n' + '自營商_避險','總和']
 				newItem = QTableWidgetItem(total[i])
-				font = QFont()
-				font.setPointSize(15)
 				self.tableWidget.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:rgb(148, 148, 255)}"
+				stylesheet = "::section{Background-color:rgb(148, 148, 255); font:15px; color:white;}"
 				self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
-				self.tableWidget.horizontalHeader().setFont(font)
 		if self.comboBox_4.currentText() == '上市':
 			total_output.append(['T16','market','mid','','1'])
 		elif self.comboBox_4.currentText() == '上櫃':
@@ -1036,7 +1020,6 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 				self.tableWidget.setItem(count,i,newItem)		
 			count += 1
-		print(total_output)
 
 	def total_own_menu(self,menu,toolbutton,info,data_name): #將menu放入toolbutton
 		menu.triggered.connect(info)
@@ -1387,16 +1370,16 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 								for (let i = 0; i < params.length; i++) {
 									var data = '<p>' + params[i].name + '</p>';
 									if (params[i].seriesName == 'vol_market' || params[i].seriesName == 'MACD' || params[i].seriesName == 'OSC'){
-										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value + '</span>' + '</p>';
+										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value.toFixed(2) + '</span>' + '</p>';
 									}else if(params[i].seriesName == 'kline'){
-										res_two += params[i].value[1] + ' ';
-										res_two += params[i].value[2] + ' ';
-										res_two += params[i].value[3] + ' ';
-										res_two += params[i].value[4] + ' ';
+										res_two += parseFloat(params[i].value[1]).toFixed(2) + ' ';
+										res_two += parseFloat(params[i].value[2]).toFixed(2) + ' ';
+										res_two += parseFloat(params[i].value[3]).toFixed(2) + ' ';
+										res_two += parseFloat(params[i].value[4]).toFixed(2) + ' ';
 									}else if(params[i].seriesName == 'kline_bool'){
 										var z;
 									}else{
-										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value[1] + '</span>' + '</p>';
+										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + parseFloat(params[i].value[1]).toFixed(2) + '</span>' + '</p>';
 									}
 								}
 								stock_info = res_two;
@@ -1409,7 +1392,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 					trigger_on="mousemove",
 					axis_pointer_type='cross',
 				),
-				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": "all"},{"yAxisIndex": [2,3]}]),
+				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": [0,1,2]} if self.comboBox_13.currentText() == '布林通道' else {"xAxisIndex": "all"}]),
 				xaxis_opts = opts.AxisOpts(
 					is_show=True,
 					splitline_opts = opts.SplitLineOpts(is_show=True),
@@ -1447,7 +1430,7 @@ self.checkBox_28,self.checkBox_29,self.checkBox_30]
 					axis_pointer_type='cross',
 					#is_always_show_content=True,
 				),
-				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": "all"}]),
+				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": [0,1,2]} if self.comboBox_13.currentText() == '布林通道' else {"xAxisIndex": "all"}]),
 				xaxis_opts = opts.AxisOpts(
 					is_show=True,
 					splitline_opts = opts.SplitLineOpts(is_show=True),
@@ -2041,8 +2024,8 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		self.label_23.setText(self.dateEdit_5.text() + ' ~ ' + self.dateEdit_6.text())
 		self.label_30.setText(str(rate))
 		self.label_31.setText(str(len(stock_date[0]) + len(stock_date[1])))
-		if len(stock_date[0]) > len(stock_date[1]):
-			for count_3 in range(0,len(stock_date[0])+1):
+		if len(stock_date[0]) >= len(stock_date[1]):
+			for count_3 in range(0,len(stock_date[0])+len(stock_date[1])):
 				if count_1:
 					try:
 						self.listWidget_7.addItem(str(stock_date[0][0]) + ' 買入')
@@ -2414,16 +2397,16 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 								for (let i = 0; i < params.length; i++) {
 									var data = '<p>' + params[i].name + '</p>';
 									if (params[i].seriesName == 'vol' || params[i].seriesName == 'MACD' || params[i].seriesName == 'OSC'){
-										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value + '</span>' + '</p>';
+										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + parseFloat(params[i].value).toFixed(2) + '</span>' + '</p>';
 									}else if(params[i].seriesName == 'kline'){
-										res_two += params[i].value[1] + ' ';
-										res_two += params[i].value[2] + ' ';
-										res_two += params[i].value[3] + ' ';
-										res_two += params[i].value[4] + ' ';
+										res_two += parseFloat(params[i].value[1]).toFixed(2) + ' ';
+										res_two += parseFloat(params[i].value[2]).toFixed(2) + ' ';
+										res_two += parseFloat(params[i].value[3]).toFixed(2) + ' ';
+										res_two += parseFloat(params[i].value[4]).toFixed(2) + ' ';
 									}else if(params[i].seriesName == 'kline_bool'){
 										var z;
 									}else{
-										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + params[i].value[1] + '</span>' + '</p>';
+										res += '<p>' + params[i].marker + params[i].seriesName + '：' + '<span>' + parseFloat(params[i].value[1]).toFixed(2) + '</span>' + '</p>';
 									}
 								}
 								stock_info = res_two;
@@ -2432,7 +2415,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						"""
 					)
 				),
-				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": "all"},{"yAxisIndex": [2,3]}]),
+				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": [0,1,2]} if self.comboBox_2.currentText() == '布林通道' else {"xAxisIndex": "all"}]),
 				xaxis_opts = opts.AxisOpts(
 					is_show=True,
 					splitline_opts = opts.SplitLineOpts(is_show=True),
@@ -2445,6 +2428,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				),
 				legend_opts = opts.LegendOpts(is_show=False, pos_right="center"),
 			)
+			
 		)
 ##########################################################################################
 
@@ -2472,7 +2456,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					axis_pointer_type='cross',
 					#is_always_show_content=True,
 				),
-				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": "all"}]),
+				axispointer_opts = opts.AxisPointerOpts(is_show=True,link=[{"xAxisIndex": [0,1,2]} if self.comboBox_2.currentText() == '布林通道' else {"xAxisIndex": "all"}]),
 				xaxis_opts = opts.AxisOpts(
 					is_show=True,
 					splitline_opts = opts.SplitLineOpts(is_show=True),
@@ -2959,52 +2943,47 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		try:
 			FinDetail = pd.read_html("./other_file/auto_selenium/selenium" + stock_num + "/FinDetail (" + str(sorted(set(self.season),reverse=True).index(season_change)+1) + ').xls',encoding='utf-8')
 			if table_change == '資產':
-				self.FD_start = 2
+				self.FD_start = 0
 				self.FD_end = FinDetail[0][0][FinDetail[0][0].values == '負債'].index[0]
 				self.tableWidget_3.setRowCount(self.FD_end)
 			elif table_change == '負債':
 				self.FD_start = FinDetail[0][0][FinDetail[0][0].values == '負債'].index[0]
 				self.FD_end = FinDetail[0][0][FinDetail[0][0].values == '股東權益'].index[0]
-				self.tableWidget_3.setRowCount(self.FD_end-self.FD_start+2)
+				self.tableWidget_3.setRowCount(self.FD_end-self.FD_start)
 			elif table_change == '股東權益':
 				self.FD_start = FinDetail[0][0][FinDetail[0][0].values == '股東權益'].index[0]
 				self.FD_end = FinDetail[0][0][FinDetail[0][0].values == '財務報告書–公開資訊觀測站'].index[0]
-				self.tableWidget_3.setRowCount(self.FD_end-self.FD_start+2)
+				self.tableWidget_3.setRowCount(self.FD_end-self.FD_start)
 		except:
 			pass
-		for i in range(0,8):
+		for i in range(0,15):
 			sort_season = sorted(set(self.season),reverse=True)
 			season_index = sorted(set(self.season),reverse=True).index(season_change)
-			total = ['資產',sort_season[season_index],sort_season[season_index+1],sort_season[season_index+2],sort_season[season_index+3],sort_season[season_index+4],sort_season[season_index+5],sort_season[season_index+6]]
-			number = [0,4,6,8,10,12,14,16]
+			total = ['資產',sort_season[season_index]+'\n'+'金額',sort_season[season_index]+'\n'+'(%)',
+							sort_season[season_index+1]+'\n'+'金額',sort_season[season_index+1]+'\n'+'(%)',
+							sort_season[season_index+2]+'\n'+'金額',sort_season[season_index+2]+'\n'+'(%)',
+							sort_season[season_index+3]+'\n'+'金額',sort_season[season_index+3]+'\n'+'(%)',
+							sort_season[season_index+4]+'\n'+'金額',sort_season[season_index+4]+'\n'+'(%)',
+							sort_season[season_index+5]+'\n'+'金額',sort_season[season_index+5]+'\n'+'(%)',
+							sort_season[season_index+6]+'\n'+'金額',sort_season[season_index+6]+'\n'+'(%)',
+							sort_season[season_index+7]+'\n'+'金額',sort_season[season_index+7]+'\n'+'(%)']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#0080FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_3.setItem(0,number[i],newItem)
-		for j in range(0,14):
-			total = ['金額','%','金額','%','金額','%','金額','%','金額','%','金額','%','金額','%']
-			number = [4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 10, QFont.Bold)  
-			newItem.setBackground(QColor('#84C1FF'))  
-			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-			newItem.setFont(textFont)
-			self.tableWidget_3.setItem(1,number[j],newItem)	
+			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			self.tableWidget_3.horizontalHeader().setStyleSheet(stylesheet)		
+
 		try:
 			for a in FinDetail[0].columns:
-				count = 2
+				count = 0
 				for k in range(self.FD_start,self.FD_end):
 					newItem = QTableWidgetItem(FinDetail[0][a][k])
 					textFont = QFont("song", 10, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)	
 					if a == 0:	
-						self.tableWidget_3.setSpan(count,0,1,4)	
 						self.tableWidget_3.setItem(count,0,newItem)	
 					else:
-						self.tableWidget_3.setItem(count,a+3,newItem)
+						self.tableWidget_3.setItem(count,a,newItem)
 					count += 1		
 		except:
 			pass				
@@ -3015,16 +2994,18 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		for i in range(0,10):
 			total = ['公司名稱','董事長','實收資本額','發言人','總機電話','統一編號','公司地址','英文簡稱','英文通訊地址','主要經營業務']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 12, QFont.Bold)  
+			textFont = QFont("song", 20, QFont.Bold)  
 			newItem.setBackground(QColor('#2894FF'))  
+			newItem.setForeground(QBrush(QColor(255, 255, 255)))
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(i,0,newItem)				
 		for j in range(0,8):
 			total = ['成立日期','總經理','已發行普通股數','代理發言人','傳真號碼','公司網站','電子郵件','英文全名']
 			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 12, QFont.Bold)  
+			textFont = QFont("song", 20, QFont.Bold)  
 			newItem.setBackground(QColor('#2894FF'))  
+			newItem.setForeground(QBrush(QColor(255, 255, 255)))
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(j,5,newItem)		
@@ -3051,7 +3032,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
-					textFont = QFont("song", 12, QFont.Bold)  
+					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
 					if st_len % 2 != 0:
@@ -3059,7 +3040,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					else:
 						self.tableWidget_6.setItem(count,7,newItem)
 
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3079,7 +3060,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
-					textFont = QFont("song", 12, QFont.Bold)  
+					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
 					if st_len % 2 != 0:
@@ -3087,7 +3068,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					else:
 						self.tableWidget_6.setItem(count,7,newItem)
 
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3103,16 +3084,18 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		for i in range(0,7):
 			total = ['特別股','公司債發行','股票過戶地址','簽證會計事務所','簽證會計師1','簽證會計師2','備註']
 			newItem = QTableWidgetItem(total[i])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#2894FF'))  
+			textFont = QFont("song", 20, QFont.Bold)  
+			newItem.setBackground(QColor('#2894FF')) 
+			newItem.setForeground(QBrush(QColor(255, 255, 255))) 
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(i,0,newItem)				
 		for j in range(0,6):
 			total = ['特別股發行','股票過戶機構','過戶機構電話','變更前名稱','變更前簡稱','變更核准日']
 			newItem = QTableWidgetItem(total[j])
-			textFont = QFont("song", 12, QFont.Bold)  
-			newItem.setBackground(QColor('#2894FF'))  
+			textFont = QFont("song", 20, QFont.Bold)  
+			newItem.setBackground(QColor('#2894FF')) 
+			newItem.setForeground(QBrush(QColor(255, 255, 255))) 
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(j,5,newItem)		
@@ -3137,7 +3120,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
-					textFont = QFont("song", 12, QFont.Bold)  
+					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
 					if st_len % 2 != 0:
@@ -3145,7 +3128,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					else:
 						self.tableWidget_6.setItem(count,7,newItem)
 
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3165,7 +3148,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
-					textFont = QFont("song", 12, QFont.Bold)  
+					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
 					if st_len % 2 != 0:
@@ -3173,7 +3156,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					else:
 						self.tableWidget_6.setItem(count,7,newItem)
 
-				textFont = QFont("song", 12, QFont.Bold)  
+				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3200,7 +3183,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len+3,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
 				else:
 					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
@@ -3215,7 +3198,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len+3,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
 
 
 			except:
@@ -3231,7 +3214,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len+3,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
 				else:
 					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
@@ -3246,7 +3229,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len+3,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
 
 
 
@@ -3259,7 +3242,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 				if date1 == 0 and date2 == 0:
-					self.tableWidget_5.setRowCount(len(stock_list)+2)
+					self.tableWidget_5.setRowCount(len(stock_list))
 					for st_len in range(0,len(stock_list)):
 						for st_list in range(1,len(stock_list[st_len])):
 							input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
@@ -3267,14 +3250,14 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_5.setItem(st_len+2,input_table[st_list-1],newItem)
+							self.tableWidget_5.setItem(st_len,input_table[st_list-1],newItem)
 				else:
 					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
 					date22 = datetime.date(datetime.strptime(date2, "%Y/%m/%d"))
 					self.cursor.execute(self.stock_info,(stock_num,date11,date22))
 					stock_list_date = self.cursor.fetchall()	
-					self.tableWidget_5.setRowCount(len(stock_list_date)+2)
+					self.tableWidget_5.setRowCount(len(stock_list_date))
 					for st_len in range(0,len(stock_list_date)):
 						for st_list in range(1,len(stock_list_date[st_len])):
 							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
@@ -3282,14 +3265,14 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_5.setItem(st_len+2,input_table[st_list-1],newItem)
+							self.tableWidget_5.setItem(st_len,input_table[st_list-1],newItem)
 
 			except:
 				self.stock_info = '''SELECT * FROM MarginPurchase_ShortSale WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 				if date1 == 0 and date2 == 0:
-					self.tableWidget_5.setRowCount(len(stock_list)+2)
+					self.tableWidget_5.setRowCount(len(stock_list))
 					for st_len in range(0,len(stock_list)):
 						for st_list in range(1,len(stock_list[st_len])):
 							input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
@@ -3297,14 +3280,14 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_5.setItem(st_len+2,input_table[st_list-1],newItem)
+							self.tableWidget_5.setItem(st_len,input_table[st_list-1],newItem)
 				else:
 					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
 					date22 = datetime.date(datetime.strptime(date2, "%Y/%m/%d"))
 					self.cursor.execute(self.stock_info,(stock_num,date11,date22))
 					stock_list_date = self.cursor.fetchall()	
-					self.tableWidget_5.setRowCount(len(stock_list_date)+2)
+					self.tableWidget_5.setRowCount(len(stock_list_date))
 					for st_len in range(0,len(stock_list_date)):
 						for st_list in range(1,len(stock_list_date[st_len])):
 							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
@@ -3312,7 +3295,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_5.setItem(st_len+2,input_table[st_list-1],newItem)
+							self.tableWidget_5.setItem(st_len,input_table[st_list-1],newItem)
  
 
 	def month_income(self,stock_num):
@@ -3323,7 +3306,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 
-				self.tableWidget_7.setRowCount(len(stock_list)+2)
+				self.tableWidget_7.setRowCount(len(stock_list))
 				for st_len in range(0,len(stock_list)):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7]
@@ -3331,13 +3314,13 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
-						self.tableWidget_7.setItem(st_len+2,input_table[st_list-1],newItem)	
+						self.tableWidget_7.setItem(st_len,input_table[st_list-1],newItem)	
 			except:
 				self.stock_info = '''SELECT * FROM MonthlyRevenue WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 
-				self.tableWidget_7.setRowCount(len(stock_list)+2)
+				self.tableWidget_7.setRowCount(len(stock_list))
 				for st_len in range(0,len(stock_list)):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7]
@@ -3345,7 +3328,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
-						self.tableWidget_7.setItem(st_len+2,input_table[st_list-1],newItem)	
+						self.tableWidget_7.setItem(st_len,input_table[st_list-1],newItem)	
 
 	def business_performance(self,stock_num):
 		if stock_num != '':
@@ -3363,7 +3346,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
-						self.tableWidget.setItem(st_len+3,input_table[st_list-1],newItem)	
+						self.tableWidget.setItem(st_len,input_table[st_list-1],newItem)	
 			except:
 				self.stock_info = '''SELECT * FROM OperatingPerformance WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
@@ -3377,7 +3360,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
-						self.tableWidget.setItem(st_len+3,input_table[st_list-1],newItem)	
+						self.tableWidget.setItem(st_len,input_table[st_list-1],newItem)	
 
 	def dividend(self,stock_num):
 		if stock_num != '':
@@ -3387,7 +3370,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 
-				self.tableWidget_4.setRowCount(len(stock_list)+3)
+				self.tableWidget_4.setRowCount(len(stock_list))
 				for st_len in range(0,len(stock_list)):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
@@ -3395,13 +3378,13 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
-						self.tableWidget_4.setItem(st_len+3,input_table[st_list-1],newItem)	
+						self.tableWidget_4.setItem(st_len,input_table[st_list-1],newItem)	
 			except:
 				self.stock_info = '''SELECT * FROM EntitlementSchedule WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 
-				self.tableWidget_4.setRowCount(len(stock_list)+3)
+				self.tableWidget_4.setRowCount(len(stock_list))
 				for st_len in range(0,len(stock_list)):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
@@ -3409,7 +3392,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
-						self.tableWidget_4.setItem(st_len+3,input_table[st_list-1],newItem)
+						self.tableWidget_4.setItem(st_len,input_table[st_list-1],newItem)
 
 
 	def company_change(self,btn):

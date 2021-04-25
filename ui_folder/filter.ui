@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1682</width>
-    <height>1060</height>
+    <height>1229</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>9</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -22,11 +27,11 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>20</pointsize>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="tab_5">
        <attribute name="title">

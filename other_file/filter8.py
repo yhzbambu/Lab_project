@@ -34,11 +34,11 @@ def Filter(submit):
         if I[0] =='T0' and I[1] =='institutional_investors':
 
             sqls.append(
-                "(SELECT stock.sid,stock.s_name,institutional_investors.sumForeignNoDealer,institutional_investors.sumForeignWithDealer,institutional_investors.sumING,institutional_investors.sumDealerBySelf,institutional_investors.sumDealerHedging,institutional_investors.Sum,institutional_investors.foreignHolding,institutional_investors.ingHolding,institutional_investors.dealerHolding,institutional_investors.HoldingSum,institutional_investors.foreignHoldingRate,institutional_investors.sumHoldingRate FROM institutional_investors,stock WHERE TradeDate='{0[2]}' and stock.sid=institutional_investors.sid) ".format(I)
+                "(SELECT stock.sid,stock.s_name,DayStockInformation.TradeDate,DayStockInformation.ClosingPrice,institutional_investors.sumForeignNoDealer,institutional_investors.sumForeignWithDealer,institutional_investors.sumING,institutional_investors.sumDealerBySelf,institutional_investors.sumDealerHedging,institutional_investors.Sum FROM institutional_investors,stock,DayStockInformation WHERE DayStockInformation.TradeDate='{0[2]}' and  institutional_investors.TradeDate='{0[2]}' and institutional_investors.TradeDate=DayStockInformation.TradeDate and stock.sid=institutional_investors.sid and stock.sid=DayStockInformation.sid) ".format(I)
             )
         else:
             # 表日期
-            if len(I)<=6:
+            if len(I)<=6 or (I[0]=='T13' or I[0]=='T14' or I[0]=='T15'):
                 if I[1]=='DayStockInformation':
                     Day="TradeDate='{0[5]}'".format(I)
                 if  I[1]=='MarginPurchase_ShortSale':
@@ -87,92 +87,92 @@ def Filter(submit):
                 if (I[1] == 'DayStockInformation' or  I[1] =='WeekStockInformation' or I[1] =='MonthStockInformation') and I[2]!='MACD9':
                     
                     sqls.append(
-                        """(SELECT sid,{0[2]} FROM {0[1]} WHERE REPLACE({0[2]},',','') {0[3]} BETWEEN CONVERT(REPLACE('{0[4][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[4][1]}',',',''),SIGNED)  AND {1})""".format(I,Day)
+                        """(SELECT sid,{0[2]} FROM {0[1]} WHERE CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)) {0[3]} BETWEEN CONVERT(REPLACE('{0[4][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[4][1]}',',',''),SIGNED)  AND {1})""".format(I,Day)
                     )
                 # MACD落點
                 if I[2]=='MACD9' and (I[1] == 'DayStockInformation' or  I[1] =='WeekStockInformation' or I[1] =='MonthStockInformation'):
                     sqls.append(
-                        """(SELECT sid,{0[2]},{0[3]} FROM {0[1]} WHERE REPLACE({0[2]},',','') {0[4]} BETWEEN CONVERT(REPLACE('{0[5][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[5][1]}',',',''),SIGNED) AND REPLACE({0[3]},',','') {0[4]} BETWEEN CONVERT(REPLACE('{0[5][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[5][1]}',',',''),SIGNED)  AND {1}) """.format(I,Day)
+                        """(SELECT sid,{0[2]},{0[3]} FROM {0[1]} WHERE CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)) {0[4]} BETWEEN CONVERT(REPLACE('{0[5][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[5][1]}',',',''),SIGNED) AND CONVERT(REPLACE({0[3]},',',''),DECIMAL(9,2)) {0[4]} BETWEEN CONVERT(REPLACE('{0[5][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[5][1]}',',',''),SIGNED)  AND {1}) """.format(I,Day)
                     )
                 # 黃金交叉
                 if I[1] == 'KDGoldenCross' or I[1]=='RSIGoldenCross':
                     if I[4]=='DayStockInformation':
-                        extra=" and REPLACE({0[2]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2))  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                         
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
                         )
                     if I[4]=='WeekStockInformation':
-                        extra=" and REPLACE({0[2]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2))  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                         
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingWeek='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingWeek='{0[7]}' {1})".format(I,extra)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and  TradingWeek='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingWeek='{0[7]}' {1})".format(I,extra)
                         )
                     if I[4]=='MonthStockInformation':
-                        extra=" and REPLACE({0[2]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2))  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                 
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingMonth='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[7]}' {1})".format(I,extra)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingMonth='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[7]}' {1})".format(I,extra)
                         )
                 # 死亡交叉
                 if I[1] == 'KDGDeathCross' or I[1]=='RSIDeathCross':
                     if I[4]=='DayStockInformation':
-                        extra=" and REPLACE({0[2]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2))  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                         
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE  {0[9]} {0[2]}>{0[3]} and TradeDate='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[7]}' {1})".format(I,extra)
                         )
                     if I[4]=='WeekStockInformation':
-                        extra=" and REPLACE({0[2]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2))  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                     
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingWeek='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingWeek='{0[7]}' {1})".format(I,extra)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and  TradingWeek='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingWeek='{0[7]}' {1})".format(I,extra)
                         )
                     if I[4]=='MonthStockInformation':
-                        extra=" and REPLACE({0[2]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2))  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                         
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingMonth='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingMonth='{0[7]}' {1})".format(I,extra)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE  {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[6]}' {1}) AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingMonth='{0[7]}' {1})".format(I,extra)
                         )
                 # 向上突破
                 if I[1]=='Breakupward':
                     if I[4]=='DayStockInformation':
-                        extra=" and REPLACE({0[3]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and REPLACE({0[3]},',','')  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                 
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradeDate='{0[7]}')".format(I)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and  TradeDate='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradeDate='{0[7]}')".format(I)
                         )
                     if I[4]=='WeekStockInformation':
-                        extra=" and REPLACE({0[3]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and REPLACE({0[3]},',','')  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                 
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingWeek='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingWeek='{0[7]}')".format(I)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and  TradingWeek='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingWeek='{0[7]}')".format(I)
                         ) 
                     if I[4]=='MonthStockInformation':
-                        extra=" and REPLACE({0[3]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and REPLACE({0[3]},',','')  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
         
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingMonth='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[7]}')".format(I)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and  TradingMonth='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[7]}')".format(I)
                         ) 
                 # 向下突破
                 if I[1]=='Downwardbreak':
                     if I[4]=='DayStockInformation':
-                        extra=" and REPLACE({0[3]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and REPLACE({0[3]},',','')  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                 
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradeDate='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[7]}')".format(I)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and  TradeDate='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradeDate='{0[7]}')".format(I)
                         )
                     if I[4]=='WeekStockInformation':
-                        extra=" and REPLACE({0[3]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and REPLACE({0[3]},',','')  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                 
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingWeek='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingWeek='{0[7]}')".format(I)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and  TradingWeek='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingWeek='{0[7]}')".format(I)
                         ) 
                     if I[4]=='MonthStockInformation':
-                        extra=" and REPLACE({0[3]},',','')  BETWEEN CONVERT(REPLACE('{0[8][0]}',',',''),SIGNED) AND CONVERT(REPLACE('{0[8][1]}',',',''),SIGNED)".format(I)
+                        extra=" and REPLACE({0[3]},',','')  CONVERT(REPLACE({0[8][0]},',',''),DECIMAL(9,2)) AND CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)))".format(I)
                 
                         sqls.append(
-                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE TradingMonth='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingMonth='{0[7]}')".format(I)
+                            "(SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}>{0[3]} and TradingMonth='{0[6]}') AS {0[5]} INNER JOIN (SELECT sid,{0[2]},{0[3]} FROM {0[4]} WHERE {0[9]} {0[2]}<{0[3]} and TradingMonth='{0[7]}')".format(I)
                         ) 
                 # OSC由負轉正
                 if I[1]=='FromNegativeToPositive':
@@ -211,9 +211,12 @@ def Filter(submit):
                 sqls.append(
                     "(SELECT sid,{0[2]} FROM {0[1]} WHERE {1} ORDER BY CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)) {0[3]} LIMIT {0[4]})".format(I,Day)
                 )
+
+            # 比較
             if I[0] =='T13' or I[0]== 'T14' or I[0] == 'T15':
                 sqls.append(
-                    "(SELECT sid,{0[9]} FROM {0[8]} WHERE {1}) AS {0[7]}  INNER JOIN (SELECT sid,{0[2]} FROM {0[1]} WHERE {2})".format(I,Day,Day2)
+                    "(SELECT sid,CONVERT(REPLACE({0[9]},',',''),DECIMAL(9,2)) as C2 FROM {0[8]} WHERE {1}) AS {0[7]}  INNER JOIN (SELECT sid,CONVERT(REPLACE({0[2]},',',''),DECIMAL(9,2)) as C1 FROM {0[1]} WHERE {2})".format(I,Day,Day2)
+
                 )
             # 上市櫃選擇
             if I[0] == 'T16':
@@ -266,25 +269,27 @@ def Filter(submit):
             if I[1] == 'market':
                 sql=sql +" market.mid={0[0]}.mid AND " .format(I)
             if I[1] == 'KDGoldenCross':
-                # sql=sql +" Y8.sid=T8.sid AND " .format(I)
-                sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.K9_>Y8.K9_ AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
+                # sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.K9_>Y8.K9_ AND " .format(I)
             if I[1]== 'RSIGoldenCross':
-                sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.RSI6>Y8.RSI9 AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
+                # sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.RSI6>Y8.RSI9 AND " .format(I)
             if I[1] == 'KDDeathCross':
-                # sql=sql +" Y8.sid=T8.sid AND " .format(I)
-                sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.K9_<Y8.K9_ AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
+                # sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.K9_<Y8.K9_ AND " .format(I)
             if I[1]== 'RSIDeathCross':
-                sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.RSI6<Y8.RSI9 AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
+                # sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.RSI6<Y8.RSI9 AND " .format(I)
             if I[1] == 'Breakupward':
-                # sql=sql +" Y8.sid=T8.sid AND " .format(I)
-                sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.ClosingPrice>Y8.ClosingPrice AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
+                # sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.ClosingPrice>Y8.ClosingPrice AND " .format(I)
             if I[1] == 'Downwardbreak': 
-                # sql=sql +" Y8.sid=T8.sid AND " .format(I)
-                sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.ClosingPrice>Y8.ClosingPrice AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
+                # sql=sql +" Y8.sid=T8.sid AND {0[9]} T8.ClosingPrice>Y8.ClosingPrice AND " .format(I)
             if I[1] =='FromNegativeToPositive' or I[1]=='FromPositiveToNegative':
-                sql=sql +" Y8.sid=T8.sid AND " .format(I)
+                sql=sql +" {0[0]}.sid={0[5]}.sid AND " .format(I)
             if I[0] == "T13" or I[0] == "T14" or I[0] == "T15":
-                sql=sql +" {0[0]}.{0[2]}{0[3]}{0[4]}{0[6]}{0[7]}.{0[9]}{0[10]}{0[11]} AND {0[0]}.sid={0[7]}.sid AND".format(I)
+                sql=sql +" {0[0]}.C1{0[3]}{0[4]}{0[6]}{0[7]}.C2{0[10]}{0[11]} AND {0[0]}.sid={0[7]}.sid AND".format(I)
             if I[0] =='KD150':
                 sql=sql+" D150.sid=DY150.sid AND W150.sid=WY150.sid AND M150.sid=KD150.sid AND D150.sid=T0.sid AND DY150.sid=T0.sid AND W150.sid=T0.sid AND WY150.sid=T0.sid AND M150.sid=T0.sid AND KD150.sid=T0.sid AND D150.K9_>DY150.D9 AND W150.K9_>WY150.D9 AND M150.K9_>KD150.D9 AND"
             if I[0]=='20MV':
@@ -374,10 +379,10 @@ if __name__=='__main__':
     # T7~T9為特殊篩選
     # T10~T12 排行篩選
     submit=[
-            ['T0','New',LastDay],
+            # ['T0','New',LastDay],
             # ['T0','institutional_investors',LastDay],
             # ['T0','RSI',LastDay,LastWeek,LastMonth],
-            # ['T0','KD',LastDay,LastWeek,LastMonth],
+            ['T0','KD',LastDay,LastWeek,LastMonth],
             # # 成交股數
             # ['T1', 'DayStockInformation', 'OpeningPrice', '', ('10', '20'), '2021/3/26'],
             # # # # 資券相抵
@@ -404,9 +409,9 @@ if __name__=='__main__':
             # ['T8','DayStockInformation','K9_','',('60','80'),time],
             # ['T8','DayStockInformation','K9_','',('80','100000000'),time],
             # ['KD150','K9_','D9',LastDay,PreviousDay,LastWeek,PreviousWeek,LastMonth,PreviousMonth],
-            ['20MV',LastDay,NearlyAWeek,LastWeek,PreviousWeek,TwoWeeksAgo],
-            # ['T8','KDGoldenCross','K9_','D9','WeekStockInformation','Y8',PreviousWeek,LastWeek,('-1000000','1000000'),''],
-            # ['T8','KDGoldenCross','K9_','D9','DayStockInformation','Y8',PreviousDay,LastDay,('20','50'),''],
+            # ['20MV',LastDay,NearlyAWeek,LastWeek,PreviousWeek,TwoWeeksAgo],
+            # ['T9','KDGoldenCross','K9_','D9','WeekStockInformation','Y9',PreviousWeek,LastWeek,('-1000000','1000000'),''],
+            # ['T8','KDGoldenCross','K9_','D9','DayStockInformation','Y8',PreviousDay,LastDay,('-10000','500000'),''],
             # ['T8','FromNegativeToPositive','DIF12and26','MACD9','DayStockInformation','Y8',PreviousDay,LastDay,'',''],
             # ['T8','FromPositiveToNegative','DIF12and26','MACD9','DayStockInformation','Y8',PreviousDay,LastDay,'',''],
             # ['T8','RSIGoldenCross','RSI6','RSI9','DayStockInformation','Y8',PreviousDay,LastDay,('20','50'),''],
@@ -417,7 +422,7 @@ if __name__=='__main__':
             # ['T8','Downwardbreak','ClosingPrice','PriceMA20','WeekStockInformation','Y8',PreviousWeek,LastWeek, ''],
             # ['T8','Breakupward','ClosingPrice','PriceMA20','MonthStockInformation','Y8',PreviousMonth,LastMonth, ''],
             # ['T10','DayStockInformation','Transation_','DESC','100',LastDay],
-            # ['T13','DayStockInformation','HighestPrice','*1','+2','2021-03-29','>=','C13','DayStockInformation','K9_','*1','+1',LastDay],
+            ['T13','DayStockInformation','HighestPrice','*1','+2','2021-03-29','>=','C13','DayStockInformation','K9_','*1','+1',LastDay],
             
             ['T16','market','mid','','1'],
     ]

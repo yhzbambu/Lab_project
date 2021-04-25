@@ -662,7 +662,7 @@ class Ui_Pyechart(object):
 			self.tableWidget_4.horizontalHeader().setStyleSheet(stylesheet)		
 
 		self.retranslateUi(MainWindow)
-		self.tabWidget.setCurrentIndex(7)
+		self.tabWidget.setCurrentIndex(0)
 		self.tabWidget_2.setCurrentIndex(0)
 		QtCore.QMetaObject.connectSlotsByName(MainWindow)
 	

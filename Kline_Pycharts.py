@@ -126,7 +126,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		)
 		self.cursor = db.cursor()
 		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-01-27')
+		self.cursor.execute(self.market_close,'2021-04-14')
 		close = self.cursor.fetchone()
 		self.label_2.setText('加 權 指 數：' + str(close[0])) #在上方顯示當日大盤的收盤價
 		self.actionenter.triggered.connect(lambda:PcWin.K_line(self.lineEdit.text(),'日'))
@@ -175,8 +175,8 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.toolButton_31.clicked.connect(lambda:self.clear_text_condition(self.horizontalLayout_15,self.toolButton_30,self.lineEdit_28,self.lineEdit_29))
 		self.toolButton_33.clicked.connect(lambda:self.clear_text_condition(self.horizontalLayout_13,self.toolButton_32,self.lineEdit_30,self.lineEdit_31))
 		self.toolButton_35.clicked.connect(lambda:self.clear_text_condition(self.horizontalLayout_16,self.toolButton_34,self.lineEdit_32,self.lineEdit_33))
-		self.toolButton_7.clicked.connect(lambda:self.clear_text_special(self.toolButton_6,self.checkBox_2))
-		self.toolButton_39.clicked.connect(lambda:self.clear_text_special(self.toolButton_38,self.checkBox_16))
+		self.toolButton_7.clicked.connect(lambda:self.clear_text_special(self.toolButton_6,self.toolButton_11,self.checkBox_2))
+		self.toolButton_39.clicked.connect(lambda:self.clear_text_special(self.toolButton_38,self.toolButton_10,self.checkBox_16))
 		self.toolButton_9.clicked.connect(lambda:self.clear_text_rank(self.toolButton_8,self.comboBox_7))
 		self.toolButton_37.clicked.connect(lambda:self.clear_text_rank(self.toolButton_36,self.comboBox_9))
 
@@ -233,10 +233,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		for info in zip(self.open_pr_market,self.close_pr_market,self.high_pr_market,self.low_pr_market):
 			self.value_list2.append(info)
 
-		self.sma_5 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-180:], 5) #製作MA5
-		self.sma_20 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-180:], 20) #製作MA20
-		self.sma_60 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-180:], 60) #製作MA60
-		self.H_line,self.M_line,self.L_line=talib.BBANDS(np.array(self.close_pr_market,dtype=float)[-180:], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)#製作布林通道
+		self.sma_5 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-480:], 5) #製作MA5
+		self.sma_20 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-480:], 20) #製作MA20
+		self.sma_60 = talib.SMA(np.array(self.close_pr_market,dtype=float)[-480:], 60) #製作MA60
+		self.H_line,self.M_line,self.L_line=talib.BBANDS(np.array(self.close_pr_market,dtype=float)[-480:], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)#製作布林通道
 		
 		self.comboBox_13.setCurrentIndex(0)
 		self.comboBox_12.setCurrentIndex(0)
@@ -697,8 +697,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 	def clear_text_rank(self,toolbutton,combobox):
 		toolbutton.setText('請指定排名條件')
 		combobox.setCurrentIndex(0)
-	def clear_text_special(self,toolbutton,checkbox):
-		toolbutton.setText('請指定選股條件')
+	def clear_text_special(self,toolbutton1,toolbutton2,checkbox):
+		toolbutton1.setText('請指定選股條件')
+		toolbutton2.setText('請先選擇條件')
 		checkbox.setChecked(False)
 
 	def create_AC(self,label,combobox,dateedit,hlayout,spacer,day,week,month,season,select_date_list,T_text,T_list,action_text): #判斷日、周、月來決定放入哪些元件
@@ -1423,10 +1424,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 	def market_kline(self):
 		self.kline = (
 			Kline(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				"kline", 
-				self.value_list2[-180:], 
+				self.value_list2[-480:], 
 				itemstyle_opts=opts.ItemStyleOpts(
 					color="#ec0000",
 					color0="#00da3c",
@@ -1486,10 +1487,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為布林通道K線##########################################
 		self.kline_bool = (
 			Kline(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				"kline_bool", 
-				self.value_list2[-180:], 
+				self.value_list2[-480:], 
 				itemstyle_opts=opts.ItemStyleOpts(
 					color="#ec0000",
 					color0="#00da3c",
@@ -1526,7 +1527,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為均線################################################
 		self.line_average_MA5 = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="MA5",
 				y_axis=self.sma_5,
@@ -1538,7 +1539,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		)
 		# line_average_MA10 = (
 		# 	Line()
-		# 	.add_xaxis(dates[-180:])
+		# 	.add_xaxis(dates[-480:])
 		# 	.add_yaxis(
 		# 		series_name="MA10",
 		# 		y_axis=sma_10,
@@ -1550,7 +1551,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		# )
 		self.line_average_MA20 = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="MA20",
 				y_axis=self.sma_20,
@@ -1562,7 +1563,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		)
 		self.line_average_MA60 = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="MA60",
 				y_axis=self.sma_60,
@@ -1577,10 +1578,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為RSI指標##############################################
 		self.line_RSI = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="RSI",
-				y_axis=self.rsi_market[-180:],
+				y_axis=self.rsi_market[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -1605,10 +1606,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為KD指標################################################
 		self.line_K = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="K",
-				y_axis=self.k_value_market[-180:],
+				y_axis=self.k_value_market[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -1631,10 +1632,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 
 		self.line_D = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="D",
-				y_axis=self.d_value_market[-180:],
+				y_axis=self.d_value_market[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -1653,7 +1654,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為布林通道##############################################
 		self.line_bool_H = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="bool",
 				y_axis=self.H_line,
@@ -1673,7 +1674,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 
 		self.line_bool_M = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="bool",
 				y_axis=self.M_line,
@@ -1693,7 +1694,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 
 		self.line_bool_L = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="bool",
 				y_axis=self.L_line,
@@ -1715,10 +1716,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為成交量################################################
 		self.bar_macd = (
 			Bar()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="OSC", 
-				y_axis=self.osc_market[-180:],
+				y_axis=self.osc_market[-480:],
 				label_opts=opts.LabelOpts(is_show=False),
 				itemstyle_opts=opts.ItemStyleOpts(
 					color=JsCode(
@@ -1755,10 +1756,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 #################################以下為MACD & DIF################################################
 		self.macd_line = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="macd_line",
-				y_axis=self.macd_market[-180:],
+				y_axis=self.macd_market[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(color="#006000"),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -1775,10 +1776,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 
 		self.dif = (
 			Line()
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="DIF",
-				y_axis=self.dif_market[-180:],
+				y_axis=self.dif_market[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(color="#3A006F"),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -1794,10 +1795,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		)
 		self.bar = (
 			Bar(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(self.dates_market[-180:])
+			.add_xaxis(self.dates_market[-480:])
 			.add_yaxis(
 				series_name="vol_market", 
-				y_axis=self.vols_market[-180:],
+				y_axis=self.vols_market[-480:],
 				label_opts=opts.LabelOpts(is_show=False),
 				itemstyle_opts=opts.ItemStyleOpts(
 					color=JsCode(
@@ -1874,9 +1875,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				grid_chart = Grid(init_opts=opts.InitOpts(width=str(self.webEngineView.geometry().width()) + "px", height=str(self.webEngineView.geometry().height()-50) + "px"))
 			opendata = list()
 			closedata = list()
-			for opens in self.open_pr_market[-180:]:
+			for opens in self.open_pr_market[-480:]:
 				opendata.append(float(opens))
-			for close in self.close_pr_market[-180:]:
+			for close in self.close_pr_market[-480:]:
 				closedata.append(float(close))
 			grid_chart.add_js_funcs("var openData = {}".format(opendata))
 			grid_chart.add_js_funcs("var closeData = {}".format(closedata))
@@ -1916,9 +1917,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			else:
 				opendata = list()
 				closedata = list()
-				for opens in self.open_pr_market[-180:]:
+				for opens in self.open_pr_market[-480:]:
 					opendata.append(float(opens))
-				for close in self.close_pr_market[-180:]:
+				for close in self.close_pr_market[-480:]:
 					closedata.append(float(close))
 				grid_chart.add_js_funcs("var openData = {}".format(opendata))
 				grid_chart.add_js_funcs("var closeData = {}".format(closedata))
@@ -2018,7 +2019,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		self.cursor = db.cursor()
 
 		self.market_close = '''SELECT ClosingIndex FROM TAIEX WHERE TradeDate=%s'''
-		self.cursor.execute(self.market_close,'2021-01-27')
+		self.cursor.execute(self.market_close,'2021-04-14')
 		close = self.cursor.fetchone()
 		self.label_1000.setText('加 權 指 數：' + str(close[0]))
 	
@@ -2357,6 +2358,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		date_status = str()
 		select.hide()
 		PcWin.show()
+		PcWin.showMaximized()
 		self.lineEdit_100.setText(stock_text)
 		self.base_company(stock_text)
 		self.legal_entities(stock_text,0,0)
@@ -2437,19 +2439,19 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			osc.append(float(dif[ma_dif])-float(macd[ma_dif]))
 		for info in zip(open_pr,close_pr,high_pr,low_pr):
 			values.append(info)
-		sma_5 = talib.SMA(np.array(close_pr,dtype=float)[-180:], 5) #製作MA5
-		sma_20 = talib.SMA(np.array(close_pr,dtype=float)[-180:], 20) #製作MA20
-		sma_60 = talib.SMA(np.array(close_pr,dtype=float)[-180:], 60) #製作MA60
-		H_line,M_line,L_line=talib.BBANDS(np.array(close_pr,dtype=float)[-180:], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)#製作布林通道
+		sma_5 = talib.SMA(np.array(close_pr,dtype=float)[-480:], 5) #製作MA5
+		sma_20 = talib.SMA(np.array(close_pr,dtype=float)[-480:], 20) #製作MA20
+		sma_60 = talib.SMA(np.array(close_pr,dtype=float)[-480:], 60) #製作MA60
+		H_line,M_line,L_line=talib.BBANDS(np.array(close_pr,dtype=float)[-480:], timeperiod=20, nbdevup=2, nbdevdn=2, matype=0)#製作布林通道
 
 ##########################################################################################
 #################################以下為均線K線###########################################     
 		kline = (
 			Kline(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				"kline", 
-				values[-180:], 
+				values[-480:], 
 				itemstyle_opts=opts.ItemStyleOpts(
 					color="#ec0000",
 					color0="#00da3c",
@@ -2512,10 +2514,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為布林通道K線##########################################
 		kline_bool = (
 			Kline(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				"kline_bool", 
-				values[-180:], 
+				values[-480:], 
 				itemstyle_opts=opts.ItemStyleOpts(
 					color="#ec0000",
 					color0="#00da3c",
@@ -2552,7 +2554,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為均線################################################
 		line_average_MA5 = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="MA5",
 				y_axis=sma_5,
@@ -2564,7 +2566,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		)
 		# line_average_MA10 = (
 		# 	Line()
-		# 	.add_xaxis(dates[-180:])
+		# 	.add_xaxis(dates[-480:])
 		# 	.add_yaxis(
 		# 		series_name="MA10",
 		# 		y_axis=sma_10,
@@ -2576,7 +2578,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		# )
 		line_average_MA20 = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="MA20",
 				y_axis=sma_20,
@@ -2588,7 +2590,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		)
 		line_average_MA60 = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="MA60",
 				y_axis=sma_60,
@@ -2603,10 +2605,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為RSI指標##############################################
 		line_RSI = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="RSI",
-				y_axis=rsi[-180:],
+				y_axis=rsi[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -2631,10 +2633,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為KD指標################################################
 		line_K = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="K",
-				y_axis=k_value[-180:],
+				y_axis=k_value[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -2657,10 +2659,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 
 		line_D = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="D",
-				y_axis=d_value[-180:],
+				y_axis=d_value[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(opacity=0.5),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -2679,7 +2681,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為布林通道##############################################
 		line_bool_H = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="bool",
 				y_axis=H_line,
@@ -2699,7 +2701,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 
 		line_bool_M = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="bool",
 				y_axis=M_line,
@@ -2719,7 +2721,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 
 		line_bool_L = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="bool",
 				y_axis=L_line,
@@ -2741,10 +2743,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為成交量################################################
 		bar_macd = (
 			Bar()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="OSC", 
-				y_axis=osc[-180:],
+				y_axis=osc[-480:],
 				label_opts=opts.LabelOpts(is_show=False),
 				itemstyle_opts=opts.ItemStyleOpts(
 					color=JsCode(
@@ -2781,10 +2783,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 #################################以下為MACD & DIF################################################
 		macd_line = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="macd_line",
-				y_axis=macd[-180:],
+				y_axis=macd[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(color="#006000"),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -2801,10 +2803,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 
 		dif = (
 			Line()
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="DIF",
-				y_axis=dif[-180:],
+				y_axis=dif[-480:],
 				is_smooth=True,
 				linestyle_opts=opts.LineStyleOpts(color="#3A006F"),
 				label_opts=opts.LabelOpts(is_show=False),
@@ -2821,10 +2823,10 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 
 		bar = (
 			Bar(init_opts=opts.InitOpts(width="1300px", height="300px"))
-			.add_xaxis(dates[-180:])
+			.add_xaxis(dates[-480:])
 			.add_yaxis(
 				series_name="vol", 
-				y_axis=vols[-180:],
+				y_axis=vols[-480:],
 				label_opts=opts.LabelOpts(is_show=False),
 				itemstyle_opts=opts.ItemStyleOpts(
 					color=JsCode(
@@ -2899,9 +2901,9 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				grid_chart = Grid(init_opts=opts.InitOpts(width=str(self.webEngineView.geometry().width()) + "px", height=str(self.webEngineView.geometry().height()-50) + "px"))
 			opendata = list()
 			closedata = list()
-			for opens in open_pr[-180:]:
+			for opens in open_pr[-480:]:
 				opendata.append(float(opens))
-			for close in close_pr[-180:]:
+			for close in close_pr[-480:]:
 				closedata.append(float(close))
 			grid_chart.add_js_funcs("var openData = {}".format(opendata))
 			grid_chart.add_js_funcs("var closeData = {}".format(closedata))
@@ -2941,9 +2943,9 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			else:
 				opendata = list()
 				closedata = list()
-				for opens in open_pr[-180:]:
+				for opens in open_pr[-480:]:
 					opendata.append(float(opens))
-				for close in close_pr[-180:]:
+				for close in close_pr[-480:]:
 					closedata.append(float(close))
 				grid_chart.add_js_funcs("var openData = {}".format(opendata))
 				grid_chart.add_js_funcs("var closeData = {}".format(closedata))
@@ -3056,6 +3058,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					newItem = QTableWidgetItem(FinDetail[0][a][k])
 					textFont = QFont("song", 10, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+					newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 					newItem.setFont(textFont)	
 					if a == 0:	
 						self.tableWidget_3.setItem(count,0,newItem)	
@@ -3075,6 +3078,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			newItem.setBackground(QColor('#2894FF'))  
 			newItem.setForeground(QBrush(QColor(255, 255, 255)))
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(i,0,newItem)				
 		for j in range(0,8):
@@ -3084,6 +3088,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			newItem.setBackground(QColor('#2894FF'))  
 			newItem.setForeground(QBrush(QColor(255, 255, 255)))
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(j,5,newItem)		
 		for a in range(0,8):
@@ -3109,6 +3114,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
+					newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
@@ -3120,6 +3126,8 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
+				newItem1.setFlags(QtCore.Qt.ItemIsEnabled)
+				newItem2.setFlags(QtCore.Qt.ItemIsEnabled)
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem1.setFont(textFont)
 				newItem2.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3137,6 +3145,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
+					newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
@@ -3148,6 +3157,8 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
+				newItem1.setFlags(QtCore.Qt.ItemIsEnabled)
+				newItem2.setFlags(QtCore.Qt.ItemIsEnabled)
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem1.setFont(textFont)
 				newItem2.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3164,6 +3175,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			textFont = QFont("song", 20, QFont.Bold)  
 			newItem.setBackground(QColor('#2894FF')) 
 			newItem.setForeground(QBrush(QColor(255, 255, 255))) 
+			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(i,0,newItem)				
@@ -3173,6 +3185,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 			textFont = QFont("song", 20, QFont.Bold)  
 			newItem.setBackground(QColor('#2894FF')) 
 			newItem.setForeground(QBrush(QColor(255, 255, 255))) 
+			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 			newItem.setFont(textFont)
 			self.tableWidget_6.setItem(j,5,newItem)		
@@ -3197,6 +3210,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
+					newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
@@ -3208,6 +3222,8 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
+				newItem1.setFlags(QtCore.Qt.ItemIsEnabled)
+				newItem2.setFlags(QtCore.Qt.ItemIsEnabled)
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem1.setFont(textFont)
 				newItem2.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3225,6 +3241,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					if st_len in count_plus:
 						count += 1
 					newItem = QTableWidgetItem(stock_list[0][st_len])
+					newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 					textFont = QFont("song", 20, QFont.Bold)  
 					newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 					newItem.setFont(textFont)
@@ -3236,6 +3253,8 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 				textFont = QFont("song", 20, QFont.Bold)  
 				newItem1 = QTableWidgetItem(stock_list[0][17])
 				newItem2 = QTableWidgetItem(stock_list[0][18])
+				newItem1.setFlags(QtCore.Qt.ItemIsEnabled)
+				newItem2.setFlags(QtCore.Qt.ItemIsEnabled)
 				newItem1.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem1.setFont(textFont)
 				newItem2.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -3259,6 +3278,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							newItem.setFont(textFont)					
 							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
 				else:
@@ -3272,6 +3292,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						for st_list in range(1,len(stock_list_date[st_len])):
 							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
@@ -3288,6 +3309,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						for st_list in range(1,len(stock_list[st_len])):
 							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
@@ -3305,6 +3327,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							newItem.setFont(textFont)					
 							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
 
@@ -3324,6 +3347,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						for st_list in range(1,len(stock_list[st_len])):
 							input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
@@ -3339,6 +3363,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						for st_list in range(1,len(stock_list_date[st_len])):
 							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
@@ -3354,6 +3379,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						for st_list in range(1,len(stock_list[st_len])):
 							input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
@@ -3369,6 +3395,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 						for st_list in range(1,len(stock_list_date[st_len])):
 							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
+							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
@@ -3388,6 +3415,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7]
 						newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+						newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -3402,6 +3430,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7]
 						newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+						newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -3420,6 +3449,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
 						newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+						newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -3434,6 +3464,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
 						newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+						newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -3452,6 +3483,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
 						newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+						newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -3466,6 +3498,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 					for st_list in range(1,len(stock_list[st_len])):
 						input_table = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
 						newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
+						newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -3513,7 +3546,7 @@ if __name__=="__main__":
 		f.truncate() 
 	PcWin = PyechartsMainWindow() #Pyecharts
 	select = SelectMainWindow()
-	#smart = SmartMainWindow()
+	select.showMaximized()
 	channel = QWebChannel()
 	channel123 = QWebChannel()
 	share = PyechartsMainWindow()

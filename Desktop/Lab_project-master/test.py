@@ -1,53 +1,36 @@
-# -*- coding: utf-8 -*-
-
-#引入pyqt5需要的模組
-import sys 	
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.QtWebChannel import *
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-#引入UI檔
-from ui_to_py.PyechartsPages import *
-from ui_to_py.page import *
-from ui_to_py.uilogin import *
-from ui_to_py.MA_Menu import *
-from ui_to_py.KD_Menu import *
-from ui_to_py.MACD_Menu import *
-from ui_to_py.RSI_Menu import *
-from ui_to_py.filter import *
-from ui_to_py.stock_class import *
-from ui_to_py.smart_stock import *
-from ui_to_py.history import *
-from ui_to_py.market import *
-#引入pyecharts模組
-from pyecharts.charts import Kline,Line,Bar,Grid
-from pyecharts import options as opts
-from pyecharts.commons.utils import JsCode
-#引入其他輔助模組
-from other_file import filter8
-from datetime import datetime,date
-from dateutil.rrule import rrule,DAILY,WEEKLY,MONTHLY
-import threading
-import time
-import pandas as pd
-from bs4 import BeautifulSoup
-import talib
-import numpy as np
-import pymysql
-import re
-import csv
-#引入UI檔
-from ui_folder.filter import *
-
-
-class MA_Menu_Window(QWidget, Ui_MainWindow):
-	def __init__(self, parent=None): 
-		super(MA_Menu_Window, self).__init__(parent)
-		self.setupUi(self)
-
-if __name__=="__main__":  
-    app = QApplication(sys.argv)  
-    abc = MA_Menu_Window() #Pyecharts
-    abc.show()
-    sys.exit(app.exec_())   
+		if self.toolButton_38.text() != "請指定選股條件":
+			if self.toolButton_38.text() in ['(日)K線','(週)K線','(月)K線']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousWeek(),filter8.IsLastWeek(), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousMonth(),filter8.IsLastMonth(), ''])
+			elif self.toolButton_38.text() in ['(日)RSI(6)/RSI(9)','(週)RSI(6)/RSI(9)','(月)RSI(6)/RSI(9)']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousWeek(),filter8.IsLastWeek(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousMonth(),filter8.IsLastMonth(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+			elif self.toolButton_38.text() in ['(日)K(9)/D(9)','(週)K(9)/D(9)','(月)K(9)/D(9)']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousWeek(),filter8.IsLastWeek(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_10.text())]).split('|')[1],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],str(sql_table_name[input_name.index(self.toolButton_38.text())]),'Y8',filter8.IsPreviousMonth(),filter8.IsLastMonth(),tuple(str(sql_field_name[input_name.index(self.toolButton_10.text())]).split('|')), ''])
+			elif self.toolButton_38.text() in ['(日)MACD/DIF','(週)MACD/DIF','(月)MACD/DIF']:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastDay()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastWeek()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[0],str(sql_field_name[input_name.index(self.toolButton_38.text())]).split('|')[1],'',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastMonth()])
+			else:
+				if str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'DayStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastDay()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'WeekStockInformation':
+					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastWeek()])
+				elif str(sql_table_name[input_name.index(self.toolButton_38.text())]) == 'MonthStockInformation':
+	 				total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),'NOT',(sql_table_name[input_name.index(self.toolButton_10.text())],sql_field_name[input_name.index(self.toolButton_10.text())]), filter8.IsLastMonth()])

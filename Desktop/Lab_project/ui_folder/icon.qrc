@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>enter.png</file>
+    <file>iconfinder_restart-1_18209.png</file>
+    <file>iconfinder_restart-1_18208.png</file>
+    <file>house.png</file>
+  </qresource>
+</RCC>

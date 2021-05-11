@@ -1,0 +1,585 @@
+{% extends "base.html" %}
+{% block page-title %}
+自訂唐詩選集
+{% endblock %}
+{% block content %}
+{% load static  %}
+<style>
+input[type=checkbox],input[type=radio]
+{
+    width: 30px; height: 30px;
+    vertical-align:middle;
+    margin-right: 5px;
+}
+div#author_input_div,div#poem_name_input_div,div#book_input_div
+{
+    position: relative;
+}
+#author_check, #poem_check_good, #author_check_no_data, #poem_check_no_data, #poem_check_data_exist, #poem_check_new_data
+{
+    position: absolute;
+    top: 50%;
+    right: 1.5%;
+    width: 30px;
+    height: 30px;
+    transform: translateY(-50%);
+}
+div .add_img
+{
+    position: absolute;
+    top: 50%;
+    right: -3%;
+    width: 30px;
+    height: 30px;
+    transform: translateY(-50%);
+}
+label{
+    margin-top: 5px;
+}
+hr {
+    border-top:1px dotted #000;
+    /*Rest of stuff here*/
+}
+h5{
+    display: block;
+    margin-top: 10px;
+}
+</style>
+<h2>
+    新增唐詩
+</h2>
+<div>
+    <div class="form">
+        {% csrf_token %}
+        <h5 class="d-inline mr-3" >語言: </h5>
+        <div class="radio d-inline mr-3">
+            <label ><input type="radio" id="poem_radio_chi" checked>中文</label>
+        </div>
+        <div class="radio d-inline mr-3">    
+            <label ><input type="radio" id="poem_radio_eng">英文</label>
+        </div>
+        <div class="radio d-inline">    
+            <label ><input type="radio" id="poem_radio_jpa">日文</label>
+        </div><br>
+        
+            
+            
+            <h5 >詩人(中文):</h5>
+            <div id="author_input_div">
+                <input type="text" class="form-control" id="author" >
+                
+                <img id="author_check" style="display: none;" src="{% static 'imgs/thumb-up2.png' %}" data-toggle="popover" data-placement="right"data-content="成功找尋!! 請繼續輸入"/>
+                <a href="/set_newAuthor/"><img id="author_check_no_data" style="display: none;" src="{% static 'imgs/error.png' %}" data-toggle="popover" data-placement="right"data-content="資料庫中未有這位作者，請檢查拼字是否正確，如確認無誤請點我直接新增"/></a>
+            </div>
+            <h5 >詩名(中文):</h5>
+            
+            <div id="poem_name_input_div">
+                <input type="text" class="form-control " id="poem_name">
+                <img id="poem_check_no_data" style="display: none;" src="{% static 'imgs/error.png' %}" data-toggle="popover" data-placement="right"data-content="資料庫中未有這首詩，請先新增(按我可前往新增)或檢察拼字是否正確" onclick="location.reload();"/>
+                <img id="poem_check_data_exist" style="display: none;" src="{% static 'imgs/error.png' %}" data-toggle="popover" data-placement="right"data-content="資料庫已有此詩，無須輸入" onclick="location.reload();"/>
+                <img id= "poem_check_new_data" style="display: none;"src="{% static 'imgs/thumb-up2.png' %}" data-toggle="popover" data-placement="right"data-content="全新詩，請繼續輸入"/>
+                <img id= "poem_check_good" style="display: none;" src="{% static 'imgs/thumb-up2.png' %}" data-toggle="popover" data-placement="right"data-content="成功找尋!! 請繼續輸入"/>
+
+            </div>
+            <h5 class="poem">詩體:</h5>
+            <input type="text" class="form-control poem" id="style">
+            <h5 for="usr" class='origin'>內容:</h5>
+            <textarea class='form-control origin poem' name='collection' cols=80 rows=5 id="original_content"></textarea>
+            <h5 class='translate'>書名:</h5>
+            <div id="book_input_div">
+                <select class="translate custom-select " aria-label="Default select example" id="book_name">
+                    <option style="color:gray" selected value="選擇...">選擇...</option>
+                    {% for a in eng_book %}
+                    <option class="eng_book" value="{{ a.title }}">{{ a.title }}    作者:{{ a.author }}</option>
+                    {% endfor %}
+                    {% for a in jpn_book %}
+                    <option class="jpn_book" value="{{ a.title }}">{{ a.title }}    作者:{{ a.author }}</option>
+                    {% endfor %}
+                </select>
+                <a href="/set_newbook/" ><img class= "add_img" src="{% static 'imgs/add.png' %}" data-toggle="popover" data-placement="top"data-content="未找到譯本? 點我新增"/></a>
+            </div>
+            <!--
+            <h5 class='translate'>年分:</h5>
+            <input type="text" class="translate form-control" id="year">
+            -->
+            <h5 class='translate'>譯者:</h5>
+            <input type="text" class="translate form-control" id="translator">
+            <h5 class='translate'>譯詩名:</h5>
+            <input type="text" class="translate form-control" id="translate_title">
+            <h5 class='translate'>頁數:</h5>
+            <input type="text" placeholder="請輸入羅馬數字" class="translate form-control" id="book_page">
+            
+            <div class="mt-2 translate">
+            <h5 class="d-inline" >特徵:</h5><br>
+            <div class="form-check-inline" >
+                
+                <label class="form-check-label"  >
+                    <input id='feature_checkbox_1' type="checkbox" class="translate" value="1"  data-toggle="popover" data-trigger="focus" data-placement="top"  data-content="請於輸入時斷句" onclick="translate_input_check_formated();">一行對應一行、重新排列</input>
+                </label>
+                
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_2'type="checkbox" class="translate" value="2" data-toggle="popover"  data-placement="top"  data-content="請在增譯處加上 $增譯內容$，上下翻譯都要輸入。" onclick="translate_input_check_formated();">增譯、多譯
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_3' type="checkbox" class="translate" value="3" data-toggle="popover" data-placement="top"data-content="請增漏處加上 0 (數字零)" onclick="translate_input_check_formated();">減譯、漏譯
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_4' type="checkbox" class="translate" value="4" data-toggle="popover" data-placement="top"  data-content="無須打出註腳內容 & formatted translation">有註腳
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_5' type="checkbox" class="translate" value="5" data-toggle="popover" data-placement="top"  data-content="無須打出前言內容 & formatted translation">有前言
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_6' type="checkbox" class="translate" value="6" data-toggle="popover"   data-placement="top"  data-content="無須打出 formatted translation">語序(順序、內容)與原文不一致高達80%以上
+                </label>
+            </div>
+            </div>
+            <h5 class='translate'>譯文內容:</h5>
+            <textarea class='form-control translate' name='collection' cols=80 rows=5 id="translated_content"></textarea>
+
+            <h5 class='translate formatted_translate_textarea' >整理排版後的譯文(formatted translation):</h5>
+            <textarea class='form-control translate formatted_translate_textarea' cols=80 rows=5 id="translated_feature_content"></textarea>
+           
+           
+        
+        <br>
+        <input id="commit" value='送出'  class="btn btn-primary">
+        </div>
+</div>
+<script>
+$(document).ready(function(){
+        $(".origin").show();
+        $(".translate").hide();
+        $("#poem_radio_chi").prop('checked', true);
+        $("#poem_radio_eng").prop('checked', false);
+        $("#poem_radio_jpa").prop('checked', false);
+        $('[data-toggle="popover"]').popover({ trigger: "hover" });   
+        $(".add_img").hide();
+        $(".translate").prop("disabled", true);
+        $("#commit").prop("disabled", true);
+        $(".poem").prop("disabled", true);
+        $("#poem_name").prop("disabled", true);
+        $("#commit").prop("disabled", true);
+
+
+
+        $("#poem_radio_chi").click(function(){
+            $(".origin").show();
+            $(".translate").hide();
+            $(".add_img").hide();
+            $(".poem").show();
+            $("#poem_name").prop("disabled", false);
+            $("#poem_radio_eng").prop('checked', false);
+            $("#poem_radio_jpa").prop('checked', false);
+            
+        });
+        $("#poem_radio_eng").click(function(){
+        
+        $(".translate").show();
+            $(".origin").hide();
+            $(".eng_book").show();
+            $(".jpn_book").hide();
+            $(".add_img").show();
+            $(".poem").hide();
+            $(".formatted_translate_textarea").hide();
+            $("#poem_radio_chi").prop('checked', false);
+            $("#poem_radio_jpa").prop('checked', false);
+            $("#poem_name").prop("disabled", true);
+            $("#commit").prop("disabled", true);
+
+        });
+        $("#poem_radio_jpa").click(function(){
+            $(".poem").hide();
+            $(".translate").show();
+            $(".origin").hide();
+            $(".add_img").show();
+            $(".eng_book").hide();
+            $(".jpn_book").show();
+            $(".formatted_translate_textarea").hide();
+            $("#poem_radio_chi").prop('checked', false);
+            $("#poem_radio_eng").prop('checked', false);
+            $("#poem_name").prop("disabled", true);
+            $("#commit").prop("disabled", true);
+
+        });
+        $("#author").keyup(function(){
+            var user_input = $(this).val();
+            if( user_input != "")
+            {
+                $.ajaxSetup({
+                    data:{
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                });
+                $.ajax({
+                        type:"POST",
+                        url: "{% url 'set_newpoem' %}",
+                        data:
+                        {
+                            action: "user_input_author",
+                            user_input: user_input,
+                        },
+                        dataType: 'json',
+                        success: function(data)
+                        {
+                            
+                            if ( data.length != 0 ) {
+                                console.log(data[0].fields.name);
+                                console.log($('input[id="poem_radio_chi"]:checked').val());
+                                if($('input[id="poem_radio_eng"]:checked').val() || $('input[id="poem_radio_jpa"]:checked').val() || $('input[id="poem_radio_chi"]:checked').val())
+                                {
+
+                                    $("#author_check").show();
+                                    $("#poem_name").prop("disabled", false);
+                                    $("#author_check_no_data").hide();
+                                    if($('input[id="poem_radio_chi"]:checked').val())
+                                        {
+                                            //$("#commit").prop("disabled", false);
+                                            $(".poem").prop("disabled", false);
+                                        }
+                                }
+                                else
+                                {
+                                    
+                                    $("#author_check").hide();
+                                    
+                                }
+                                }
+                            else
+                            {
+                                $("#author_check").hide();
+                                $("#author_check_no_data").show();
+                                if($('input[id="poem_radio_eng"]:checked').val() || $('input[id="poem_radio_jpa"]:checked').val())
+                                {
+                                
+                                $("#poem_name").prop("disabled", true);
+                                $(".translate").prop("disabled", true);
+                                $("#commit").prop("disabled", true);
+                                $("#poem_check").hide();
+                                }
+                                if($('input[id="poem_radio_chi"]:checked').val())
+                                {
+                                    $("#commit").prop("disabled", true);
+                                    $(".poem").prop("disabled", true);
+                                    $("#poem_name").prop("disabled", true);
+                                }
+                            }
+                        },
+                        error: function()
+                        {
+                            alert("查看作者時 出錯");
+                        }
+                    });
+            }
+        });
+        $("#poem_name").keyup(function(){
+            var user_input = $(this).val();
+            var author = $("#author").val();
+            if( user_input != "")
+            {
+                $.ajaxSetup({
+                    data:{
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    }
+                });
+                $.ajax({
+                        type:"POST",
+                        url: "{% url 'set_newpoem' %}",
+                        data:
+                        {
+                            action: "user_input_poem_title",
+                            user_input: user_input,
+                            author: author
+                        },
+                        dataType: 'json',
+                        success: function(data)
+                        {
+                            
+                            if ( data.length != 0 ) //如果title有找到資料
+                            {
+                                //console.log(data[0].fields.title);
+                                if($('input[id="poem_radio_eng"]:checked').val() || $('input[id="poem_radio_jpa"]:checked').val())
+                                {   //讓使用者繼續輸入(翻譯)
+                                    if ( data.length == 1 )
+                                    {
+                                    $("#poem_check_good").show();
+                                    $("#poem_check_no_data").hide();
+                                    $(".translate").prop("disabled", false);
+                                    $("#commit").prop("disabled", false);
+                                    }
+                                    else
+                                    {//同詩名同作者例外處理
+                                        var num = data.length
+                                        if($('input[id="poem_radio_eng"]:checked').val())
+                                        {
+                                        var link = '/multiple_poem_check/'+ author +'/'+ user_input+'/'+ 'eng'
+                                        }
+                                        else if($('input[id="poem_radio_jpa"]:checked').val())
+                                        {
+                                        var link = '/multiple_poem_check/'+ author +'/'+ user_input+'/'+ 'jpn'
+                                        }
+                                        alert("同詩名同作者" + String(num) + "首，請點確認進行例外處理");
+                                        window.location.assign(link);
+
+                                    }
+
+                                }
+                                else if($('input[id="poem_radio_chi"]:checked').val())
+                                {   //中文有過資料不須要再輸入
+                                    $("#poem_check_data_exist").show();
+                                    $("#poem_check_new_data").hide();
+                                    $("#commit").prop("disabled", true);
+                                }   
+                                else
+                                {
+                                    $("#poem_check_good").hide();
+                                }
+                            }
+                            else //
+                            {
+                                if($('input[id="poem_radio_eng"]:checked').val() || $('input[id="poem_radio_jpa"]:checked').val())
+                                {
+                                    $("#poem_check_no_data").show();
+                                    $("#poem_check_good").hide();
+                                    $(".translate").prop("disabled", true);
+                                    $("#commit").prop("disabled", true);
+                                    $("#poem_check_new_data").hide();
+                                }
+                                else if($('input[id="poem_radio_chi"]:checked').val())
+                                {
+                                    $("#poem_check_data_exist").hide();
+                                    $("#poem_check_new_data").show();
+                                    $("#commit").prop("disabled", false);
+                                }   
+                                
+                            }
+                        },
+                        error: function()
+                        {
+                            alert("查詢詩名時 錯誤");
+                        }
+                    });
+            }
+        });
+        $("#commit").click(function(){
+            if($("#poem_radio_chi") .is(":checked"))
+            {
+                get_data_send("chi");
+            }
+            if($("#poem_radio_eng") .is(":checked"))
+            {
+                get_data_send("eng");
+            }
+            if($("#poem_radio_jpa") .is(":checked"))
+            {
+                get_data_send("jpa");
+            }
+            
+        });
+        function get_data_send(choices)
+        {
+            var user_input_author = $("#author").val();
+            var user_input_poem_title = $("#poem_name").val();
+            var poem_style = $("#style").val();
+            var poem_original_content = $("#original_content").val();
+            var poem_year = $("#year").val();
+            var poem_book_name = $("#book_name").val();
+            var poem_translator = $("#translator").val();
+            var poem_translate_title = $("#translate_title").val();
+            var poem_book_page = $("#book_page").val();
+            var feature_checkbox = "";
+            for( var i = 1 ; i <= 6 ; i++)
+            {
+                if($("#feature_checkbox_" + i.toString()) .is(":checked"))
+                {
+                    feature_checkbox += "1";
+                }
+                else
+                {
+                    feature_checkbox += "0";
+                }
+            }
+            var translated_content = $("#translated_content").val();
+            var translated_feature_content = $("#translated_feature_content").val();
+                console.log(translated_feature_content);
+                if (($('#feature_checkbox_1').is(':checked') || $('#feature_checkbox_2').is(':checked') || $('#feature_checkbox_3').is(':checked')) && translated_feature_content == "") 
+                {
+                    alert("整理排版後的譯文(formatted translation) ")
+                }
+                else
+                {
+
+                if(choices == "chi")
+                {
+                    $.ajaxSetup({
+                        data:{
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
+                    });
+                    $.ajax({
+                            type:"POST",
+                            url: "{% url 'set_newpoem' %}",
+                            data:
+                            {
+                                action: "user_commit_chi",
+                                author: user_input_author,
+                                title: user_input_poem_title,
+                                style: poem_style,
+                                content: poem_original_content,
+                                created_by: "{{ user }}",
+                            },
+                            dataType: 'json',
+                            success: function(data)
+                            {
+                                alert("成功輸入，請輸入下一筆");
+                                console.log(data);
+                                location.reload();
+                            },
+                            error: function()
+                            {
+                                alert("拍謝 請回報");
+                            }
+                        });
+                }
+                if(choices == "eng")
+                {
+                    if(!Number.isInteger(parseInt(poem_book_page, 10)))
+                    {
+                        alert("頁碼請輸入羅馬數字");
+                    }
+                    else{
+                    if(check_user_book_select())
+                    {
+                    $.ajaxSetup({
+                        data:{
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
+                    });
+                    $.ajax({
+                            type:"POST",
+                            url: "{% url 'set_newpoem' %}",
+                            data:
+                            {
+                                action: "user_commit_eng",
+                                title: user_input_poem_title,
+                                book: poem_book_name,
+                                author: user_input_author,
+                                translator: poem_translator,
+                                translate_title: poem_translate_title,
+                                page: poem_book_page,
+                                feature_checkbox: feature_checkbox,
+                                translated_content: translated_content,
+                                translated_feature_content: translated_feature_content,
+                                created_by: "{{ user }}",
+
+                            },
+                            dataType: 'json',
+                            success: function(data)
+                            {
+                                
+                                alert("成功輸入，請輸入下一筆");
+
+                                location.reload();
+                            },
+                            error: function()
+                            {
+                                alert("拍謝 請回報");
+                            }
+                        });
+                    }
+                    }
+                }
+                if(choices == "jpa")
+                {
+                    if( !Number.isInteger(parseInt(poem_book_page, 10)))
+                    {
+                        alert("頁碼請輸入羅馬數字");
+                    }
+                    else
+                    {
+                    if(check_user_book_select())
+                    {
+                    $.ajaxSetup({
+                        data:{
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
+                    });
+                    $.ajax({
+                            type:"POST",
+                            url: "{% url 'set_newpoem' %}",
+                            data:
+                            {
+                                action: "user_commit_jpa",
+                                title: user_input_poem_title,
+                                book: poem_book_name,
+                                author: user_input_author,
+                                translator: poem_translator,
+                                translate_title: poem_translate_title,
+                                page: poem_book_page,
+                                feature_checkbox: feature_checkbox,
+                                translated_content: translated_content,
+                                translated_feature_content: translated_feature_content,
+                                created_by: "{{ user }}",
+
+                            },
+                            dataType: 'json',
+                            success: function(data)
+                            {
+                                alert("成功輸入，請輸入下一筆");
+
+                                location.reload();
+                            },
+                            error: function()
+                            {
+                                alert("拍謝 請回報");
+                            }
+                        });
+                    }
+                    }
+                }
+                }
+            
+            
+                
+            
+
+        }
+
+
+        function check_user_book_select()
+        {
+            if($("#book_name").val() == "選擇...")
+            {
+                alert("請選擇書名，如未有欲選書籍，請新增");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        });
+
+        function translate_input_check_formated()
+{
+    if ($('#feature_checkbox_1').is(':checked') || $('#feature_checkbox_2').is(':checked') || $('#feature_checkbox_3').is(':checked')) 
+    {
+        $(".formatted_translate_textarea").show();
+    }
+    else
+    {
+        $(".formatted_translate_textarea").hide();
+    }
+}
+</script>
+{% endblock %}

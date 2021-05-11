@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block page-title %}
+唐詩平行語料庫
+{% endblock %}
+{% block content %}
+<h3>本站統計資訊</h3>
+<hr>
+	<table class="table table-striped" width=100%>
+	<tr>
+		<td width=150>收錄唐詩：</td><td>{{poem_count}}首</td>
+	</tr>
+	<tr>
+		<td>已斷詞唐詩：</td><td>{{cutted_count}}首</td>
+	</tr>
+	<tr>
+		<td>英譯唐詩：</td><td>{{eng_poem_count}}首</td>
+	</tr>
+	<tr>
+		<td>唐詩翻譯著作：</td><td>{{book_count}}冊</td>
+	</tr>
+	</table>
+<hr>
+{% endblock %}

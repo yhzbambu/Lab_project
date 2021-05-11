@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block page-title %}
+全唐詩檢索
+{% endblock %}
+{% block content %}
+
+<h3>
+目前選集為：{{ album }}
+</h3>
+<div>
+    <hr>
+    原始資料：<br>
+    <p>{{ album.anthology }}</p>
+    <hr>
+    {% for p in found_poem %}
+        <i>作者：{{ p.authorname }}</i><br>   
+        題名：【<b><a href='/edit/{{ p.id }}'>{{ p.title }}</a></b>】
+        {% if user.is_authenticated %}
+        (<a href='/update/{{ p.id }}'>編輯</a>) 
+        {% endif %}
+        <br/>
+        {{ p.content }} 
+        <hr>
+    {% endfor %}
+</div>
+{% endblock %}

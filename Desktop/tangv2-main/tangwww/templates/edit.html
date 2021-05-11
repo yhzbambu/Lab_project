@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block page-title %}
+{{ target.title }}
+{% endblock %}
+{% block content %}
+<script>
+	function changeID(value) {
+		var bookid = value.split(":")[0]
+		var booktitle = value.split(":")[1];
+		$('#book_id').html(bookid);
+		$('#book_title').html(booktitle);
+	}
+
+	function saveEng(pid) {
+		var bookid = $('#book_id').text();
+		var engversion_title = engtitle.value;
+		var engversion_text = engversion.value;
+		if (bookid!="未選擇" && engversion_text!="" && engversion_title!="") {
+			var target_url = "/api/saveeng/" + bookid + "/" + pid + "/" + engversion_title + "/" + engversion_text + "/";
+	        $.ajax({
+	            type:"GET",
+	            url: target_url,
+	            dataType: "json",
+	            success: function (response) {
+	                $('#save-result-message').html(response['result']);
+	            },
+	            error: function(error) {
+	                console.log(error);
+	                $('#save-result-message').html("資料儲存API出了一些錯誤，請稍候再試。");
+	            }
+        });
+		} else {
+			alert("你必須先選擇想要存入的英文書籍名稱，或是填入正確的英文譯本內容");
+		}
+	}
+</script>
+<h3>
+「{{ chi_poem.title }}」，<small>{{ chi_poem.author }}</small>
+</h3>
+{{ message }}
+	<table class="table">
+		<tr>
+			<td width="150">
+				<p style="font-family:標楷體;font-size:1.5rem;">中文原詩</p>
+			</td>
+			<td bgcolor=#aaaaff>
+				<p style="font-family:標楷體;font-size:1.5rem;color:#ffffff">{{chi_poem.content}}</p>
+			</td>
+		</tr>
+		<tr>
+			<td width=150>
+				<p style="font-family:標楷體;font-size:1.5rem;">英文譯本</p>
+			</td>
+			<td>
+				<table class="table table-striped">
+				{% for p in eng_poem %}
+					<tr>
+						<td>
+							<div style='font-family:"Times New Roman";font-size:1.2rem;'>
+							<b>{{ p.title}}</b><br>
+							{{ p.book }}/{{p.pub_year}}<br/>
+							{{ p.content}}
+							</div>
+						</td>
+					</tr>
+				{% empty %}
+					<tr><td>本詩目前沒有對應的英文譯本</td></tr>
+				{% endfor %}
+				</table>
+				<table>
+					<tr>
+						<td>書名</td>
+						<td>
+							<select onchange="changeID(this.options[this.options.selectedIndex].value)">
+								<option value=0>請選擇欲儲存的英文譯本</option>
+								{% for book in books %}
+								<option value='{{book.id}}:{{book.title}}'>{{book.title}}({{book.author}}, {{book.pub_year}})</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>儲存書名：</td>
+						<td>
+							書籍ID:<span id="book_id" style="color:black;background-color:lightgray;">未選擇</span>, 書名：<span id="book_title" style="color:black;background-color:lightgray;">未選擇</span>
+						</td>
+					</tr>
+					<tr>
+						<td>英文詩名：</td><td>
+							<textarea id="engtitle" name="engtitle" style="width:100%;" rows=1></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>英文翻譯</td>
+						<td>
+							<textarea id='engversion' name='engversion' style="width:100%;" rows=4></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan=2 align=right>
+							<a class="btn btn-primary" style="color:#ffffff;" onclick="saveEng({{chi_poem.id}});">新增英文譯本</a>
+							<br/>
+							<span id="save-result-message"></span>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td width=150>
+				<p style="font-family:標楷體;font-size:1.5rem;">日文譯本</p>
+			</td>
+			<td>
+				<table class="table table-striped">
+				{% for p in jpn_poem %}
+					<tr>
+						<td>
+					<div style='font-family:"Times New Roman";font-size:1.2rem;'>
+					<b>{{ p.title}}</b><br>
+					{{ p.book }}/{{p.pub_year}}<br/>
+					{{ p.content}}
+					</div>
+						</td>
+					</tr>
+				{% empty %}
+					<tr><td>本詩目前沒有對應的日文譯本</td></tr>
+				{% endfor %}
+				</table>
+				<button>新增日文譯本</button>	
+			</td>
+		</tr>
+	</table>
+<div>
+</div>
+{% endblock %}

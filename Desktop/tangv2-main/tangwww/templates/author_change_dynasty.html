@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block page-title %}
+自訂唐詩選集
+{% endblock %}
+{% block content %}
+<h3>
+作者朝代更改 
+</h3>
+<div>
+    <form class="form-albumsetting" action="/change_dynasty/" method="POST" name="change_dynasty">
+        {% csrf_token %}
+        作者名稱：<input type='text' name='change_name'><br><br>
+        朝代：
+        <select name = "dynasty" >
+            {% for dy in dynasty %}
+                <option>{{ dy.author_dynasty }}</option>
+            {% endfor %}
+        </select>
+        <input type=submit value='送出'>
+    </form>
+    {% if no_found_name %}
+        <p>no found name</p>
+    {% endif %}
+</div>
+{% endblock %}

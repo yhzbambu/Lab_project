@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block page-title %}
+全唐詩檢索
+{% endblock %}
+{% block content %}
+<h2>{{book.title}}</h2>
+<h4>{{book.author}}:{{book.pub_year}}/{{book.desc}}</h4>
+<div>
+    <hr>
+    <table class="table table-sm table-striped">
+        <tr><th align=center>詩</th><th>管理</th></tr>
+    {% for content in eng_poem %}
+        <tr><td style="padding-left:15px;">
+        <a href='/show-eng-poem/{{ content.id }}/' style="font-family:標楷體;font-size:1.2rem;">{{ content.poem }}</a><br/>
+        <span style="font-family:Georgia;font-size:1.1rem;">{{ content.title }}</span>
+        </td><td>
+        {% if user.is_authenticated %}
+        <a href='/engedit/{{content.id}}/'>編輯</a>
+        {% endif %}
+        </td></tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}

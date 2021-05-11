@@ -1,0 +1,44 @@
+{% load static %} 
+<head>
+    <link href="/static/css/login.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if message %}
+            <div class="alert alert-warning">{{ message }}</div>
+        {% endif %}
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-6 mx-auto">
+                <div class="card card-signin my-5" style="background-color: rgba(197, 212, 199, 1.0);">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" style="font-family: Microsoft JhengHei;">請先登入</h5>
+                        <form class="form-signin" action="/login/" method="POST" name="my_login">
+                            {% csrf_token %}
+                            <div class="form-label-group">
+                                <input type="email" id="inputEmail" name="username" class="form-control" placeholder="Email address" required autofocus>
+                                <label for="inputEmail" style="font-family: Microsoft JhengHei;">電子郵件</label>
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+                                <label for="inputPassword" style="font-family: Microsoft JhengHei;">密碼</label>
+                            </div>
+                            <br/>
+
+                            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">登入</button>
+                            <hr class="my-4">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

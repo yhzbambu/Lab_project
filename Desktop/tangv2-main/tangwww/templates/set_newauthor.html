@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block page-title %}
+自訂唐詩選集
+{% load static  %}
+{% endblock %}
+{% block content %}
+<style>
+input[type=checkbox],input[type=radio]
+{
+    width: 30px; height: 30px;
+    vertical-align:middle;
+    margin-right: 5px;
+}
+
+h5{
+    display: block;
+    margin-top: 10px;
+}
+div#author_input
+{
+    position: relative;
+}
+#author_check_good ,#author_check_duplicated_data
+{
+    position: absolute;
+    top: 50%;
+    right: 1.5%;
+    width: 30px;
+    height: 30px;
+    transform: translateY(-50%);
+}
+</style>
+
+<h3>
+創建新作者
+</h3>
+<div>
+        
+        <h5 >作者:</h5>
+        <div id="author_input">
+            <input type="text" class="form-control" id="name" >
+            
+            <img id="author_check_good" style="display: none;" src="{% static 'imgs/thumb-up2.png' %}" data-toggle="popover" data-placement="right"data-content="無重複作者! 可繼續輸入"/>
+            <img id="author_check_duplicated_data" style="display: none;" src="{% static 'imgs/error.png' %}" data-toggle="popover" data-placement="right"data-content="資料庫中已有這位作者，可離開直接輸入新詩資料"/>
+        </div>
+        <h5 >作者說明:</h5>
+        <textarea class='form-control'  cols=80 rows=5 id="desc"></textarea>
+        <br>
+        <input id="commit" value='送出' onclick="commit();" class="btn btn-primary mt-3">
+
+</div>
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover({ trigger: "hover" });   
+    $("#desc").prop("disabled", true);
+    $("#commit").prop("disabled", true);
+    $("#name").keyup(function()
+    {
+        var user_input = $(this).val();
+        $.ajaxSetup({data: { csrfmiddlewaretoken: '{{ csrf_token }}'}});
+        $.ajax({
+            type:"POST",
+            url: "{% url 'set_newauthor' %}",
+            data:
+                    {
+                        action: "check_data",
+                        user_input: user_input,
+                    },
+            dataType: 'json',
+            success: function(data)
+            {
+                if( data.status == "good")
+                {
+                    $("#desc").prop("disabled", false);
+                    $("#commit").prop("disabled", false);
+                    $("#author_check_good").show();
+                    $(" #author_check_duplicated_data").hide();
+                }
+                else
+                {
+                    $("#desc").prop("disabled", true);
+                    $("#commit").prop("disabled", true);
+                    $("#author_check_good").hide();
+                    $(" #author_check_duplicated_data").show();
+                }
+            },
+            error: function()
+            {
+                alert("dead");
+            }
+        });
+    });
+});
+function commit()
+{
+        var name = $("#name").val();
+        var desc = $("#desc").val();
+        $.ajaxSetup({data: { csrfmiddlewaretoken: '{{ csrf_token }}'}});
+        $.ajax({
+            type:"POST",
+            url: "{% url 'set_newauthor' %}",
+            data:
+                    {
+                        action: "commit",
+                        name: name,
+                        desc: desc,
+                    },
+            dataType: 'json',
+            success: function(data)
+            {
+                alert("輸入成功，請輸入下一筆");
+                location.reload();
+            },
+            error: function()
+            {
+                alert("dead");
+            }
+        });
+} 
+</script>
+{% endblock %}

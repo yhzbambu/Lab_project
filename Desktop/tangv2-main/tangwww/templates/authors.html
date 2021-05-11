@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block page-title %}
+唐詩作者檢索
+{% endblock %}
+{% block content %}
+<div class='row'>
+    <div class='col-md-4'>
+        <h3>
+            全唐詩作者列表--{{ dynasty_res }}
+        </h3>
+    </div>
+    <div class='col-md-4'>
+        <h4>
+            <form action="/authors/" method="GET">
+                查詢：
+                <select name = "dynasty" >
+                    {% for dy in dynasty %}
+                        <option>{{ dy.author_dynasty }}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="提交">
+            </form>
+        </h4>
+    </div>
+    <div class='col-md-4'>
+        <form class="form-albumsetting" action="/authors/" method="POST" name="change_dynasty" onsubmit="window.mytest()">
+            {% csrf_token %}
+            更改作者朝代：<input type='text' name='change_name' size="10">
+
+            <select name = "dynastysss" >
+                {% for dy in dynasty %}
+                    <option>{{ dy.author_dynasty }}</option>
+                {% endfor %}
+            </select>
+            <input type=submit value='送出'>
+        </form>
+        <script type="text/javascript">window.mytest = function() { var isValid = confirm('確定要更改詩人朝代嗎？');if (!isValid) { event.preventDefault(); alert("已取消");}}</script>
+        
+        {% if no_found_name %}
+            <script>window.alert("找不到人名")</script>
+        {% endif %}
+    </div>
+</div>
+<hr>
+<div>
+    {% if filter_author %}
+        {% for filter in filter_author %}
+            <a href='/poetry/{{ filter.id }}'>{{ filter.name }}</a>, 
+        {% endfor %}
+    {% else %}
+        <p>none</p>
+    {% endif %}
+</div>
+{% endblock %}

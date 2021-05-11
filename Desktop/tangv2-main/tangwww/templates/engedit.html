@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block page-title %}
+{{ target.title }}
+{% endblock %}
+{% block content %}
+<form action="/engedit/" method=POST>
+	{% csrf_token %}
+<table class="table">
+	<input type=hidden name=poemengid value='{{ target.id }}'>
+	<tr><td width=150>原作：</td>
+		<td><input type=text name=poemname value='{{ target.poem }}'></td>
+	</tr>
+	<tr><td>英譯詩名：</td>
+		<td><input type=text name=engtitle value='{{ target.title }}'></td>
+	</tr>
+	<tr><td>英譯詩句：</td>
+		<td style="font-family:Georgia;font-size:1.4rem;">
+		<textarea name=engcontent rows=8 style="width:100%;">{{ target.content }}</textarea>
+		</td>
+	</tr>
+	<tr><td>英譯本書名：</td>
+		<td>
+			<select name=engbookid>
+			<option value="0">{{ target.book}}</option>
+			{% for item in books %}
+				<option value="{{item.id}}">{{item.title}}/{{item.author}}/{{item.pub_year}}</option>
+			{% endfor %}
+			</select>
+			<br><br>
+			<input type=submit value="修正">
+		</td>
+	</tr>
+</table>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block page-title %}
+全唐詩查找斷詞主頁
+{% endblock %}
+{% block content %}
+<h2 style="font-family:標楷體;background-color:#ee8888;color:#ffffff;padding:5px;">全唐詩查找斷詞比較</h2><hr>
+<form method=POST action='/cut-main/'>
+    {% csrf_token %}
+    唐詩關鍵字：<input type=text size=40 name='keyword'>
+    <input type=submit value="搜尋">
+</form>
+<script>
+    function copy2right(value) {
+        text2cut.value = value;
+        document.all.sel.options[0].selected=true;
+    }
+</script>
+{% if numbers %}
+ <h3>
+    檢索結果--「{{ keyword }}」（共{{ numbers }}首）
+    </h3>
+    {% if numbers < 50 %}
+    <div>
+        <table class="table">
+            <tr><td>
+            選擇斷詞對象：<select name=sel onchange="copy2right(this.options[this.options.selectedIndex].value)">
+                    <option value="0">請下拉並選擇欲斷詞之詩作</option>
+                    {% for p in selected_poetry %}
+                        <option value="{{p.content}}">{{p.title}}({{p.author}})</option>
+                    {% endfor %}
+                </select>
+                <br/><br/>
+                <form action="/cut-main-result/" method=POST>
+                    {% csrf_token %}
+                    <textarea name='text2cut' id="text2cut" style="width:100%;height:100%;" rows=8>尚未選取</textarea>
+                    <input type="submit" value="開始斷詞">
+                    目前支持之斷詞方法：N-Gram、CKIP、結巴斷詞
+                </form>
+            </td>
+            </tr>
+        </table>
+    </div>    
+    {% else %}
+        <div>
+            <h4>檢索結果太多，敬請縮小檢索之範圍</h4>
+        </div>
+    {% endif %}
+{% else %}
+<br>
+{% endif %}
+{% if jieba_results %}
+<table class="table">
+    <tr>
+        <td colspan=2>
+            <h3>原詩作</h3>
+            {{ raw }}
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2><h3>以下是斷詞之結果</h3></td>
+    </tr>
+    <tr bgcolor=aliceblue><td>斷詞方法</td><td>斷詞結果</td></tr>
+    <tr>
+        <td width=20%>
+                    <b>結巴</b>
+        </td>
+        <td>
+                    {% for item in jieba_results %}
+                        {{ item }} <br>
+                    {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+                    <b>n-Gram</b>
+        </td>
+        <td>
+                    {% for item in ngram_results %}
+                        {{ item }} <br>
+                    {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>CKIP</b>
+        </td>
+        <td>
+            {{ ckip_results }}
+        </td>
+    </tr>
+</table>
+{% endif %}
+{% endblock %}

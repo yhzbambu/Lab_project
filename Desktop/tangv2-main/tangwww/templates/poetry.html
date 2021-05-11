@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block page-title %}
+全唐詩檢索
+{% endblock %}
+{% block content %}
+<p>
+<button><a href='/authors/'>所有作者列表</a></button>    
+名詩人：
+<button><a href='/poetry/105'>李白</a></button>
+<button><a href='/poetry/138'>杜甫</a></button>
+<button><a href='/poetry/161'>白居易</a></button>
+<button><a href='/poetry/260'>杜牧</a></button>
+<button><a href='/poetry/125'>王維</a></button>
+<button><a href='/poetry/250'>孟浩然</a></button>
+<button><a href='/poetry/139'>王之渙</a></button>
+<button><a href='/poetry/251'>賀知章</a></button>
+</p>
+<p>
+    Top 10：
+    {% for item in top10 %}
+    <button><a href='/poetry/{{ item.id }}'>{{ item.name }}</a></button>
+    {% endfor %}
+</p>
+<h3>
+全唐詩檢索--{{ selected_author }}（共{{ numbers }}首）
+</h3>
+<div>
+    {% for p in selected_poetry %}
+    <hr>
+    <i>作者：{{ p.author }}</i><br>   
+    題名：【<b><a href='/edit/{{ p.id }}'>{{ p.title }}</a></b>】
+    {% if user.is_authenticated %}
+    (<a href='/pinyin/{{ p.id }}/'>拼音檢視</a>) 
+    (<a href='/update/{{ p.id }}/'>編輯</a>) 
+    (<a href='/delete/{{ p.id }}/{{selected_author}}/'>刪除</a>) 
+    {% endif %}
+    <br/>
+    {{ p.content }} 
+    {% endfor %}
+</div>
+{% endblock %}

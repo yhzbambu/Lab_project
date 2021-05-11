@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block page-title %}
+唐詩平行語料庫
+{% endblock %}
+{% block content %}
+<h3>隨機詩作賞析</h3>
+<div class="jumbotron">
+  <h1 style="padding:10px;color:white;background-color:#88ccff;font-family:標楷體;">{{ lucky.title }} </h1>
+  <h5 style="font-family:標楷體;text-align:right;">作者：{{ lucky.author }}</h5>
+  <p class="lead">
+               <h3 style="width:100%;padding:10px;letter-spacing:4px;color:black;background-color:#88ccff;font-family:標楷體;"> {{ content | linebreaksbr }} </h3>
+  </p>
+  <hr class="my-4">
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block page-title %}
+唐詩斷詞比較--n-gram斷詞
+{% endblock %}
+{% block content %}
+<h3>n-gram斷詞結果</h3>
+<table>
+    <tr>
+        <td valign="top">
+<form method=POST action='/ngram-cut/'>
+    {% csrf_token %}
+    請填入欲進行斷詞之詩句：<br>
+    <textarea name="sentences" cols=60 rows=8>{{raw}}</textarea><br>
+    <input type=submit value="開始斷詞">
+</form>
+        </td>
+        <td valign="top">
+{% if results %}
+<h3>以下是斷詞之結果</h3>
+    <div>
+        {% for item in results %}
+            {{ item }} <br>
+        {% endfor %}
+    </div>    
+{% else %}
+<br>
+<h4>
+    尚未執行斷詞，無結果可顯示
+</h4>
+{% endif %}
+</td>
+</tr>
+</table>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block page-title %}
+全唐詩檢索
+{% endblock %}
+{% block content %}
+<h3>
+唐詩譯文列表，共（{{ numbers }}首）
+</h3>
+{% if user.is_authenticated %}
+<div>
+    {% for p in selected_poetry %}
+    <hr>
+    <b>原詩：</b>{{ p.poem }}<br>   
+    <b>題名：</b><a href='/show-eng-poem/{{p.id}}/'>{{ p.title }}</a><br>
+    <b>譯本：</b>{{ p.book }}
+    (<a href='/engedit/{{p.id}}/'>編輯</a>) 
+    <br/>
+    {{ p.content }}
+    {% endfor %}
+</div>
+{% else %}
+    需要登入才能看到內容喔。
+{% endif %}
+{% endblock %}

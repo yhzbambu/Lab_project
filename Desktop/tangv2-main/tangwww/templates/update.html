@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block page-title %}
+    {{ target.title }}
+{% endblock %}
+{% block content %}
+    <h3>
+        「{{ target.title }}」，<small>{{ target.author }}</small>
+    </h3>
+    {% if user.is_staff or user.is_superuser %}
+        <form action="/update/{{target.id}}/" method=POST>
+            {% csrf_token %}
+            <textarea name=content cols=60 rows=10>
+                {{ target.content }}
+            </textarea><br>
+            <input type=hidden name=authorname value='{{target.authorname}}'>
+            <input type=hidden name=title value='{{target.title}}'>
+            <input type=submit value='修改'>
+        </form>
+    {% else %}
+        <textarea cols=60 rows=10 readonly="readonly">{{ target.content }}'</textarea>
+    {% endif %}
+{% endblock %}

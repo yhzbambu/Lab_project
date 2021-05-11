@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block page-title %}
+自訂唐詩選集
+{% endblock %}
+{% block content %}
+<h3>
+唐詩選集編輯作業 
+</h3>
+<div>
+    <form class="form-albumsetting" action="/albumsetting/" method="POST" name="my_album">
+        {% csrf_token %}
+        自定選集：<input type='text' name='title'><br>
+        唐詩列表：<br>
+        <textarea class='form-control' name='collection' cols=80 rows=20>作者,詩名</textarea><br>
+        <input type=reset value='清除重來'>
+        <input type=submit value='送出'>
+    </form>
+</div>
+{% endblock %}

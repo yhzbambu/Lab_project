@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block page-title %}
+唐詩斷詞比較--斷詞綜合比較
+{% endblock %}
+{% block content %}
+<h3>綜合比較斷詞結果</h3>
+<table class="table" width=100%>
+    <tr>
+        <td  colspan=2 valign="top">
+            <form method=POST action='/compare-cut/'>
+                {% csrf_token %}
+                請填入欲進行斷詞之詩句：<br>
+                <textarea name="sentences" rows=8 cols=120 style="width:100%;">{{raw}}</textarea><br>
+                <input type=submit value="開始斷詞">
+            </form>
+        </td>
+    </tr>
+{% if results_jieba %}
+    <tr>
+        <td colspan=2><h3>以下是斷詞之結果</h3></td>
+    </tr>
+    <tr bgcolor=aliceblue><td>斷詞方法</td><td>斷詞結果</td></tr>
+    <tr>
+        <td width=20%>
+                    <b>結巴</b>
+        </td>
+        <td>
+                    {% for item in results_jieba %}
+                        {{ item }} <br>
+                    {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+                    <b>n-Gram</b>
+        </td>
+        <td>
+                    {% for item in results_ngram %}
+                        {{ item }} <br>
+                    {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>CKIP</b>
+        </td>
+        <td>
+            {{ results_ckip }}
+        </td>
+    </tr>
+{% else %}
+<tr colspan=2>
+    <td>
+<h4>
+    尚未執行斷詞，無結果可顯示
+</h4>
+</td>
+</tr>
+{% endif %}
+</table>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block page-title %}
+自訂唐詩選集
+{% load static  %}
+{% endblock %}
+{% block content %}
+<style>
+input[type=checkbox],input[type=radio]
+{
+    width: 30px; height: 30px;
+    vertical-align:middle;
+    margin-right: 5px;
+}
+
+h5{
+    display: block;
+    margin-top: 10px;
+}
+</style>
+
+<h3>
+創建新譯本
+</h3>
+<div>
+    <h5 class="d-inline-block mr-3" >譯本語言: </h5>
+        <div class="radio d-inline-block mr-3">    
+            <label ><input type="radio" id="book_radio_eng" checked>英文</label>
+        </div>
+        <div class="radio d-inline-block">    
+            <label ><input type="radio" id="book_radio_jpa">日文</label>
+        </div><br>
+        <h5 >譯本標題:</h5>
+        <div >
+        <input type="text" class="form-control" id="title" >
+        </div>
+        <h5 >譯本作者:</h5>
+        <input type="text" class="form-control" id="author">
+        <h5>出版年月:</h5>
+        <input type="text" class="form-control" id="pub_date" placeholder="請輸入西元(e.g 2xxx)">
+        <h5>說明:</h5>
+        <textarea class='form-control origin' name='collection' cols=80 rows=5 id="des"></textarea>
+        <input id="commit" value='送出' class="btn btn-primary mt-3">
+
+</div>
+<script>
+$("#book_radio_eng").click(function(){
+   $("#book_radio_jpa").prop('checked', false);
+});
+$("#book_radio_jpa").click(function(){
+  $("#book_radio_eng").prop('checked', false);
+});
+
+$("#commit").click(function(){
+    var action = "";
+    if($("#book_radio_eng").is(":checked"))
+    {
+        action = "book_eng"
+    }
+    if($("#book_radio_jpa").is(":checked"))
+    {
+        action = "book_jpa"
+    }
+    if(!Number.isInteger(parseInt($("#pub_date").val(), 10)))
+    {
+        alert("請輸入西元");
+    }
+    else
+    {
+    $.ajaxSetup(
+        {
+            data:{
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }
+        }
+    );
+    $.ajax(
+        {
+            type: "POST",
+            url: "{% url 'set_newbook' %}",
+            data:
+            {
+                action: action,
+                title: $("#title").val(),
+                author: $("#author").val(),
+                pub_year: $("#pub_date").val(),
+                des: $("#des").val(),
+            },
+            dataType: 'json',
+            success: function(data)
+            {
+                console.log(data.good);
+                alert("輸入成功，請輸入下一筆");
+                location.reload();
+            },
+            error: function(data)
+            {
+                console.log(data);
+            }
+
+        }
+    )
+    }
+});
+</script>
+{% endblock %}

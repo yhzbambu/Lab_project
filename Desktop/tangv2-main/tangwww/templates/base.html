@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            h1, h2, h3, h4, h5, h6, p, div, body {
+                font-family:微軟正黑體;
+            }
+        </style>
+        <title>{% block page-title %}{% endblock %}</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% load static %}
+        <link href="{% static 'imgs/nkust.png' %}" rel=icon>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+            <style>
+            h1, h2, h3, h4, h5, h6, p, div, body {
+                font-family:微軟正黑體;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div class='container'>
+            {% include "header.html" %}
+            {% block content %}{% endblock %}
+            {% include "footer.html" %}
+        </div>
+    </body>
+</html>

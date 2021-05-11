@@ -1,0 +1,8 @@
+*.pyc
+__pycache__
+tangwww/media/
+tangwww/staticfiles/
+.vscode
+tangwww/data/
+media
+staticfiles

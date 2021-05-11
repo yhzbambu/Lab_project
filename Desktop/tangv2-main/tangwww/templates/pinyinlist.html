@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block page-title %}
+    {{ modify_content }}
+{% endblock %}
+{% block content %}
+    <h3>
+        {{ poem.title }}
+    </h3>
+    <br/>
+    <table class="table">
+        <tr><td colspan=2>
+            <table width=100% class="table table-striped">
+                <tr>
+                    <td width=50% align=center>原詩</td>
+                    <td align=center>拼音</td>
+                </tr>
+                {% for item in data %}
+                <tr>
+                    <td style="font-family:標楷體;font-size:1.5rem;letter-spacing:15pt;">
+                        {{ item.0 }}<br/>
+                        <span style="font-size:0.8rem;letter-spacing:0px;">{{ item.2 }}</span>
+                    </td>
+                    <td style="font-family:Times New Roman;font-size:1.5rem;">
+                            {{ item.1 }} 
+                    </td>
+                </tr>
+                {% endfor%}
+            </table>
+            </td>
+        </tr>
+    </table>
+{% endblock %}

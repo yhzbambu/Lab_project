@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% block page-title %}
+自訂唐詩選集
+{% endblock %}
+{% load static  %}
+{% block content %}
+<style type="text/css">
+input[type=checkbox],input[type=radio]
+{
+    width: 30px; height: 30px;
+    vertical-align:middle;
+    margin-right: 5px;
+}
+div .add_img
+{
+    position: absolute;
+    top: 50%;
+    right: -3%;
+    width: 30px;
+    height: 30px;
+    transform: translateY(-50%);
+}
+div#author_input_div,div#poem_name_input_div,div#book_input_div
+{
+    position: relative;
+}
+</style>
+<h2>
+    同詩名作者-例外處裡({{ author }}, {{ title }}, 語言:{{ lang }})
+</h2>
+<h5>請依內容選擇詩:</h5>
+<div>
+    <select class="translate custom-select " aria-label="Default select example" id="content">
+        <option style="color:gray" selected value="選擇...">選擇...</option>
+        {% for a in poem_founded %}
+        <option value="{{ a.content }}" >{{ a.content }}</option>
+        {% endfor %}
+    </select>
+    <h5>書名:</h5>
+            <div id="book_input_div">
+                <select class="translate custom-select " aria-label="Default select example" id="book_name">
+                    <option style="color:gray" selected value="選擇...">選擇...</option>
+                    {% for a in book %}
+                    <option class="eng_book" value="{{ a.title }}">{{ a.title }}    作者:{{ a.author }}</option>
+                    {% endfor %}
+                </select>
+                <a href="/set_newbook/" ><img class= "add_img" src="{% static 'imgs/add.png' %}" data-toggle="popover" data-placement="top"data-content="未找到譯本? 點我新增"/></a>
+            </div>
+            <h5 class='translate'>譯詩名:</h5>
+            <input type="text" class="translate form-control" id="translate_title">
+            <h5 class='translate'>頁數:</h5>
+            <input type="text" placeholder="請輸入羅馬數字" class="translate form-control" id="book_page">
+            {% if is_jpn %}
+            <div class="foreign" id = "Jpn_style">
+                <h5 >文體:</h5>
+                <select class="custom-select Jpn" id="jpn_style">
+                    <option value="現代文有假名">現代文有假名</option>
+                    <option value="現代文無假名">現代文無假名</option>
+                    <option value="漢文有假名">漢文有假名</option>
+                    <option value="漢文無假名">漢文無假名</option>
+                </select>   <!--文體輸入-->
+            </div>
+            {% endif %}
+            <div class="mt-2 translate">
+            <h5 class="d-inline" >特徵:</h5><br>
+            <div class="form-check-inline" >
+                
+                <label class="form-check-label"  >
+                    <input id='feature_checkbox_1' type="checkbox" class="translate" value="1"  data-toggle="popover" data-trigger="focus" data-placement="top"  data-content="請於輸入時斷句" onclick="translate_input_check_formated();">一行對應一行、重新排列
+                </label>
+                
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_2'type="checkbox" class="translate" value="2" data-toggle="popover"  data-placement="top"  data-content="請在增譯處加上 $增譯內容$，上下翻譯都要輸入。" onclick="translate_input_check_formated();">增譯、多譯
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_3' type="checkbox" class="translate" value="3" data-toggle="popover" data-placement="top"data-content="請增漏處加上 0 (數字零)" onclick="translate_input_check_formated();">減譯、漏譯
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_4' type="checkbox" class="translate" value="4" data-toggle="popover" data-placement="top"  data-content="無須打出註腳內容 & formatted translation">有註腳
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_5' type="checkbox" class="translate" value="5" data-toggle="popover" data-placement="top"  data-content="無須打出前言內容 & formatted translation">有前言
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input id = 'feature_checkbox_6' type="checkbox" class="translate" value="6" data-toggle="popover"   data-placement="top"  data-content="無須打出 formatted translation">語序(順序、內容)與原文不一致高達80%以上
+                </label>
+            </div>
+            </div>
+            <h5 class='translate'>譯文內容:</h5>
+            <textarea class='form-control translate' name='collection' cols=80 rows=5 id="translated_content"></textarea>
+
+            <h5 class='translate formatted_translate_textarea' style="display: none;">整理排版後的譯文(formatted translation):</h5>
+            <textarea class='form-control translate formatted_translate_textarea' cols=80 rows=5 id="translated_feature_content" style="display: none;"></textarea>
+           
+           
+        
+        <br>
+        <input onclick="data_send();" value='送出'  class="btn btn-primary">
+        </div>           
+</div>
+<script type="text/javascript">
+	$('[data-toggle="popover"]').popover({ trigger: "hover" });   
+
+	function translate_input_check_formated()
+	{
+    if ($('#feature_checkbox_1').is(':checked') || $('#feature_checkbox_2').is(':checked') || $('#feature_checkbox_3').is(':checked')) 
+    {
+        $(".formatted_translate_textarea").show();
+    }
+    else
+    {
+        $(".formatted_translate_textarea").hide();
+    }
+	}
+	function data_send()
+	{
+		var year = $("#year").val();
+        var book = $("#book_name").val();
+        var translate_title = $("#translate_title").val();
+        var page = $("#book_page").val();
+        var jpn_style = $("#jpn_style").val();
+        var feature_checkbox = "";
+        for( var i = 1 ; i <= 6 ; i++)
+            {
+                if($("#feature_checkbox_" + i.toString()) .is(":checked"))
+                {
+                    feature_checkbox += "1";
+                }
+                else
+                {
+                    feature_checkbox += "0";
+                }
+            } 
+        var original_content    = $("#content").val();
+        console.log(original_content);
+        var translated_content = $("#translated_content").val();
+        var feature_content = $("#translated_feature_content").val();
+        if (($('#feature_checkbox_1').is(':checked') || $('#feature_checkbox_2').is(':checked') || $('#feature_checkbox_3').is(':checked')) && feature_content == "") 
+        	{alert("整理排版後的譯文(formatted translation) 未輸入");}
+     	else if(!Number.isInteger(parseInt(page, 10)))
+                { 
+                	alert("頁碼請輸入羅馬數字");
+                }
+        else 
+        {
+        	$.ajaxSetup({
+                        data:{
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        }
+                    });
+        	$.ajax({
+        		type:"POST",
+                            url: "{% url 'multiple_poem_check_input' %}",
+                            data:
+                            {
+                            	action: "{{ lang }}",
+                                author: "{{ author }}",
+                                title: "{{ title }}",
+                                translate_title:translate_title,
+                                jpn_style : jpn_style,
+                                page: page,
+                                book:book,
+                                content: original_content,
+                                translated_content: translated_content,
+                                feature: feature_checkbox,
+                                feature_content: feature_content,
+                                created_by: "{{ user }}",
+                            },
+                            dataType: 'json',
+                            success: function(data)
+                            {
+                                alert(data.data);
+                                window.location.assign("{% url 'set_newpoem' %}")
+                            },
+                            error: function()
+                            {
+                                alert("multiple_poem_check_input error");
+                            }
+        	});
+        }
+	}
+</script>
+{% endblock %}

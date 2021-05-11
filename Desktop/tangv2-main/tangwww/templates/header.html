@@ -1,0 +1,97 @@
+<h1>唐詩平行語料庫研究計畫</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Tang</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">首頁 <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          斷詞
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/cut-main/">查找斷詞比較</a>
+          <a class="dropdown-item" href="/compare-cut/">輸入斷詞比較</a>
+          <div class="dropdown-divider"></div>          
+          <a class="dropdown-item" href="/ngram-cut/">n-Gram斷詞工具</a>
+          <a class="dropdown-item" href="/ckip-cut/">CKIP斷詞工具</a>
+          <a class="dropdown-item" href="/jieba-cut/">結巴斷詞工具</a>
+          <div class="dropdown-divider"></div>
+          {% if user.is_staff or user.is_superuser %}          
+          <a class="dropdown-item" href="/cut-check/">斷詞檢核</a>
+          {% endif %}
+        </div>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          資料檢索
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/authors/">作者索引</a>
+          <a class="dropdown-item" href="/poetry/">詩作賞析</a>
+          <a class="dropdown-item" href="/album/">選集檢索</a>
+          {% if user.is_staff or user.is_superuser %}          
+          <a class="dropdown-item" href="/album-eng/">英譯本書籍列表</a>          
+          {% endif %}
+          <a class="dropdown-item" href="/search/">詩名檢索</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          統計資訊
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/dbstatus/">資料庫資訊</a>
+          <a class="dropdown-item" href="/chart/">作者作品數排行</a>
+          <a class="dropdown-item" href="/kwchart/">字詞排行統計圖</a>
+        </div>
+      </li>
+      {% if user.is_staff or user.is_superuser %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            編輯作業
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/albumsetting/">建立選集</a>
+            <a class="dropdown-item" href="/englist/">唐詩英譯檢索編輯</a>
+            <a class="dropdown-item" href="/set_newpoem/">新增唐詩</a>
+            <a class="dropdown-item" href="/set_newbook/">新增譯本</a>
+            <a class="dropdown-item" href="/change_dynasty/">更改詩人朝代</a>
+            <!--
+            <a class="dropdown-item" href="#">唐詩編輯紀錄</a>
+            <a class="dropdown-item" href="#">標記</a>
+            <a class="dropdown-item" href="#">檢核</a>
+            <a class="dropdown-item" href="#">新增英譯</a>-->
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/admin" tabindex="-1" aria-disabled="true">管理頁面</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">登出</a>
+        </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/login">登入</a>
+      </li>
+      {% endif %}
+    </ul>
+    <form class="form-inline my-2 my-lg-0" method=POST action="/kwsearch/">
+      {% csrf_token %}
+      <input class="form-control mr-sm-2" type="search" placeholder="關鍵字詞" aria-label="Search" name='kw'>
+      <select name='disp-num' class="form-control mr-sm-2" >
+      <option value='50'>50</option>
+      <option value='100'>100</option>
+      <option value='999999'>Full</option>
+      </select>
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋</button>
+    </form>
+  </div>
+</nav>
+<hr>

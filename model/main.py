@@ -135,21 +135,19 @@ def writeToFile(datas, csv_file):
         print("I/O error")
 
 def callCFunc():
-    import ctypes
-    func = ctypes.CDLL("model/libfunc.so")
+    from ctypes import cdll
+    func = cdll.LoadLibrary("model/MyDLL.dll")
     func.main()
 
 def getFinalResult():
     with open("stocklist.txt", 'r') as f:
-        ret = [[], []]
+        ret = []
         contents = f.read()
         data = contents.split("\n")
         data.pop()
         for i in data:
-            print(i)
             s = i.split()
-            ret[0].append(s[0])
-            ret[1].append(s[1])
+            ret.append(s[0])
         return ret
 def main(submit):
     with open("reverse.txt", 'w') as f:

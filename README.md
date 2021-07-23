@@ -7,4 +7,6 @@
 ![image](https://github.com/yhzbambu/Lab_project/blob/windows/2.PNG)
 3. 輸入pip install PyQt5(或其他不存在的庫)
 ![image](https://github.com/yhzbambu/Lab_project/blob/windows/3.PNG)
-4. 運行Kline_Pycharts.py
+4. 將DLL中的檔案放進anaconda3/Library/bin裡
+![image](https://github.com/yhzbambu/Lab_project/blob/windows/4.PNG)
+5. 運行Kline_Pycharts.py

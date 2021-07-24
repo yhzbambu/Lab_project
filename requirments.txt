@@ -1,0 +1,11 @@
+ta-lib
+指令 : conda install -c conda-forge ta-lib
+
+PyQtWebEngine
+指令 : pip install PyQtWebEngine
+
+pyecharts
+指令 : pip install pyecharts
+
+PyQt5
+指令 : pip install PyQt5

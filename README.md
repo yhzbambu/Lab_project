@@ -1,6 +1,6 @@
 # Lab_project
 
-人生苦短，我用python，強烈建議使用anaconda
+人生苦短，我用python，請先下載anaconda
 1. 開啟anaconda prompt
 ![image](https://github.com/yhzbambu/Lab_project/blob/windows/1.PNG)
 

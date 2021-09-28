@@ -1,0 +1,42 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>enter.png</file>
+    <file>iconfinder_restart-1_18209.png</file>
+    <file>iconfinder_restart-1_18208.png</file>
+    <file>house.png</file>
+    <file>semiconductor.png</file>
+    <file>business.png</file>
+    <file>cement.png</file>
+    <file>circuit.png</file>
+    <file>communicate.png</file>
+    <file>computer.png</file>
+    <file>connect.png</file>
+    <file>food.png</file>
+    <file>happy.png</file>
+    <file>panel.png</file>
+    <file>passive.png</file>
+    <file>show.png</file>
+    <file>petrifaction.png</file>
+    <file>textile.png</file>
+    <file>motor.png</file>
+    <file>paper.png</file>
+    <file>steel.png</file>
+    <file>car.png</file>
+    <file>soft.png</file>
+    <file>build.png</file>
+    <file>boat.png</file>
+    <file>money.png</file>
+    <file>department.png</file>
+    <file>oil.png</file>
+    <file>creative.png</file>
+    <file>other.png</file>
+    <file>save_energy.png</file>
+    <file>get_energy.png</file>
+    <file>energy_storage.png</file>
+    <file>smart.png</file>
+    <file>pharmaceutical.png</file>
+    <file>medical_equipment.png</file>
+    <file>food_biotechnology.png</file>
+    <file>regenerative_medicine.png</file>
+  </qresource>
+</RCC>

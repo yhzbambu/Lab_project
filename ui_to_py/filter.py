@@ -822,7 +822,7 @@ class Ui_MainPage(object):
 		self.tableWidget_3.verticalHeader().setVisible(False)
 		self.tableWidget_3.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,9):
-			total = ['股票代碼','日期','成交量','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
+			total = ['股票代碼','股票名稱','日期','成交量','開盤價','最高價','最低價','收盤價','漲跌價差']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
 			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
@@ -988,7 +988,7 @@ class Ui_MainPage(object):
 		self.tableWidget_4.verticalHeader().setVisible(False)
 		self.tableWidget_4.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,9):
-			total = ['股票代碼','日期','成交量','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
+			total = ['股票代碼','股票名稱','日期','開盤價','最高價','最低價','收盤價','漲跌價差','成交量']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_4.setHorizontalHeaderItem(i,newItem)
 			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
@@ -1060,7 +1060,7 @@ class Ui_MainPage(object):
 		self.tableWidget_5.setRowCount(1)
 		self.tableWidget_5.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,9):
-			total = ['股票代碼','日期','成交股數','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
+			total = ['股票代碼','股票名稱','日期','成交量','開盤價','最高價','最低價','收盤價','漲跌價差']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_5.setHorizontalHeaderItem(i,newItem)
 			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
@@ -1523,7 +1523,7 @@ class Ui_MainPage(object):
 		self.tableWidget_11.setRowCount(1)
 		self.tableWidget_11.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		for i in range(0,9):
-			total = ['股票代碼','日期','成交股數','成交金額','開盤價','最高價','最低價','收盤價','漲跌價差']
+			total = ['股票代碼','股票名稱','日期','成交量','開盤價','最高價','最低價','收盤價','漲跌價差']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_11.setHorizontalHeaderItem(i,newItem)
 			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"

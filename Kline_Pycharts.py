@@ -270,6 +270,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		################################達人密技###################################################
 		self.listWidget.itemClicked.connect(lambda:self.master_description_text())
 		self.tableWidget_4.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_4.currentItem().text()))
+		self.tableWidget_11.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_11.currentItem().text()))
 		with open ('stocklist.in','r',encoding='utf-8') as f:
 			self.stock_list = f.readlines()
 			self.prediction_stock = list()
@@ -285,12 +286,18 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.tableWidget_5.setRowCount(len(self.prediction_stock))
 		pd_count = 0
 		for pd_list in self.prediction_stock:
-			self.prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s ORDER BY TradeDate DESC'''
+			self.totalstock_array = list()
+			self.prediction_info = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s ORDER BY TradeDate DESC'''
 			self.cursor.execute(self.prediction_info,pd_list)
 			prediction_list = self.cursor.fetchone()
-			for pd_info in range(0,len(prediction_list)):
+			self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',pd_list)
+			one_stock = self.cursor.fetchone()
+			for i in prediction_list:
+				self.totalstock_array.append(i)
+			self.totalstock_array.insert(1,one_stock[0])
+			for pd_info in range(0,len(self.totalstock_array)):
 				
-				newItem = QTableWidgetItem(str(prediction_list[pd_info]))
+				newItem = QTableWidgetItem(str(self.totalstock_array[pd_info]))
 				textFont = QFont("song", 12, QFont.Bold)  
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 				newItem.setFont(textFont)					
@@ -322,14 +329,16 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.listWidget_7.addItems(self.middlestream)
 		self.listWidget_8.addItems(self.downstream)
 		
-		self.stocknumber_total = '''SELECT * FROM DayStockInformation WHERE TradeDate=%s'''
+		self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
 		self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
 		for i in self.cursor.fetchall():
 			try: 
 				self.industry_stock.index(i[0])
-				self.industry_totalinfo.append([i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8]])
+				self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
+				self.industry_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
 			except:
 				pass
+
 		self.tableWidget_11.setRowCount(len(self.industry_totalinfo))
 		count = 0
 		for info in self.industry_totalinfo:
@@ -351,12 +360,13 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		for i in set(item_list):
 			self.item_stock.append(i[0])
 
-		self.stocknumber_total = '''SELECT * FROM DayStockInformation WHERE TradeDate=%s'''
+		self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
 		self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
 		for i in self.cursor.fetchall():
 			try: 
 				self.item_stock.index(i[0])
-				self.item_totalinfo.append([i[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7],i[8]])
+				self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
+				self.item_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
 			except:
 				pass
 		self.tableWidget_11.setRowCount(len(self.item_totalinfo))
@@ -1490,16 +1500,23 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			self.class_get_sql = '''SELECT sid FROM stock where cid=%s'''
 			self.cursor.execute(self.class_get_sql, str(class_id[0]))
 			class_get_id = self.cursor.fetchall()
+			self.class_getname_sql = '''SELECT s_name FROM stock where cid=%s'''
+			self.cursor.execute(self.class_getname_sql, str(class_id[0]))
+			class_getname_id = self.cursor.fetchall()
 
 			self.tableWidget_3.setRowCount(len(class_get_id))
 			count = 0
 			for cla_id in class_get_id:
-				self.one_stock_sql = '''SELECT * FROM DayStockInformation where sid=%s AND TradeDate=%s'''
+				self.one_stock_sql = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation where sid=%s AND TradeDate=%s'''
 				try:
-					self.cursor.execute(self.one_stock_sql,(str(cla_id[0]),'2021-02-02'))
-					self.one_stock_list = self.cursor.fetchall()
-					for one in range(0,10):
-						newItem = QTableWidgetItem(str(self.one_stock_list[0][one]))
+					self.cursor.execute(self.one_stock_sql,(str(cla_id[0]),filter8.IsLastDay()))
+					self.one_stock_list = self.cursor.fetchone()
+					self.copy_stock = list()
+					for i in self.one_stock_list:
+						self.copy_stock.append(i)
+					self.copy_stock.insert(1,class_getname_id[0][count])
+					for one in range(0,8):
+						newItem = QTableWidgetItem(str(self.copy_stock[one]))
 						textFont = QFont("song", 12, QFont.Bold)  
 						newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 						newItem.setFont(textFont)					
@@ -1510,17 +1527,25 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					pass
 
 	def day_info(self):
-		self.all_stick_sql = '''SELECT * FROM stock'''
+		self.all_stick_sql = '''SELECT s_name FROM stock'''
 		self.cursor.execute(self.all_stick_sql)
 		stock_list = self.cursor.fetchall()
-		count = 0
 		self.tableWidget_3.setRowCount(len(stock_list))
-		self.one_stock_sql = '''SELECT * FROM DayStockInformation where TradeDate=%s'''
+		self.one_stock_sql = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation where TradeDate=%s'''
 		try:
 			self.cursor.execute(self.one_stock_sql,filter8.IsLastDay())
 			one_stock_list = self.cursor.fetchall()
 			count = 0
-			for one_stock in one_stock_list:
+			count_two = 0
+			self.copy_stock = list()
+			for i in one_stock_list:
+				self.copy_array = list()
+				for j in i:
+					self.copy_array.append(j)
+				self.copy_array.insert(1,stock_list[count_two][0])	
+				count_two += 1
+				self.copy_stock.append(self.copy_array)
+			for one_stock in self.copy_stock:
 				for one in range(0,9):
 					newItem = QTableWidgetItem(str(one_stock[one]))
 					textFont = QFont("song", 12, QFont.Bold)  

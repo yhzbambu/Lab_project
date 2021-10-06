@@ -600,7 +600,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)
 			self.get_master_info(7,master_number)
@@ -612,7 +612,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -624,7 +624,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -636,7 +636,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -648,7 +648,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -660,7 +660,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(6,master_number)		
@@ -672,7 +672,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(5,master_number)	
@@ -684,7 +684,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)	
@@ -1015,7 +1015,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','開盤價','最高價','最低價','收盤價','漲跌價差','成交筆數']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '技術指標-RSI':
 				total_output.append(['T0','RSI',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
@@ -1024,7 +1024,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','RSI6(日)','RSI9(日)','RSI6(週)','RSI9(週)','RSI6(月)','RSI9(月)']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '技術指標-KD':
 				total_output.append(['T0','KD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
@@ -1033,7 +1033,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','K(日)','D(日)','K(週)','D(週)','K(月)','D(月)']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '技術指標-MACD':
 				total_output.append(['T0','MACD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
@@ -1042,7 +1042,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','MACD(日)','DIF(日)','MACD(週)','DIF(週)','MACD(月)','DIF(月)']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '法人買賣超-三大法人':
 				total_output.append(['T0','institutional_investors',filter8.IsLastDay()])
@@ -1051,7 +1051,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超' + '\n' + '外資不含自營','法人買賣超' + '\n' + '外資+自營','法人買賣超' + '\n' + '投信','法人買賣超' + '\n' + '自營商' + '\n' + '自行買賣','法人買賣超' + '\n' + '自營商_避險','總和']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			if self.comboBox_4.currentText() == '上市':
 				total_output.append(['T16','market','mid','','1'])
@@ -3195,7 +3195,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							sort_season[season_index+7]+'\n'+'金額',sort_season[season_index+7]+'\n'+'(%)']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white; padding:3px;}"
 			self.tableWidget_3.horizontalHeader().setStyleSheet(stylesheet)		
 
 		try:

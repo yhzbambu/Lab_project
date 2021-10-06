@@ -211,7 +211,7 @@ class Ui_Pyechart(object):
 			total = ['年度/月份','營業收入'+'\n'+'當月營收','營業收入'+'\n'+'上月比較%','營業收入'+'\n'+'去年同月營收','營業收入'+'\n'+'去年同月增減%','累計營業收入'+'\n'+'當月累計營收','累計營業收入'+'\n'+'去年累計營收','累計營業收入'+'\n'+'前期比較%']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_7.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white; padding:3px;}"
 			self.tableWidget_7.horizontalHeader().setStyleSheet(stylesheet)	
 
 		self.verticalLayout_14.addWidget(self.tableWidget_7)
@@ -627,14 +627,14 @@ class Ui_Pyechart(object):
 			'持股比重(%)'+'\n'+'外資','持股比重(%)'+'\n'+'三大法人']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_2.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white; padding:3px;}"
 			self.tableWidget_2.horizontalHeader().setStyleSheet(stylesheet)		
 
 		for i in range(0,15):
 			total = ['日期','融資買進','融資賣出','融資現償','融資餘額','融資增減','融資限額','融資使用率','融券賣出','融券買進','融券券償','融券餘額','融券增減','融券券資比','資券相抵']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_5.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white; padding:3px;}"
 			self.tableWidget_5.horizontalHeader().setStyleSheet(stylesheet)	
 	
 
@@ -645,7 +645,7 @@ class Ui_Pyechart(object):
 					'單季ROA'+'\n'+'(%)','年估ROA'+'\n'+'(%)','EPS(元)'+'\n'+'稅後EPS','EPS(元)'+'\n'+'年增(元)','BPS(元)']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:12px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:12px; color:white; padding:3px;}"
 			self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)		
 				
 
@@ -654,7 +654,7 @@ class Ui_Pyechart(object):
 			'2019Q3'+'\n'+'金額','2019Q3(%)','2019Q2'+'\n'+'金額','2019Q2(%)','2019Q1'+'\n'+'金額','2019Q1(%)','2018Q4'+'\n'+'金額','2018Q4(%)']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white; padding:3px;}"
 			self.tableWidget_3.horizontalHeader().setStyleSheet(stylesheet)		
 
 		for i in range(0,19):
@@ -663,7 +663,7 @@ class Ui_Pyechart(object):
 					'現金股利'+'\n'+'盈餘','現金股利'+'\n'+'公積','現金股利'+'\n'+'合計','股票股利'+'\n'+'盈餘','股票股利'+'\n'+'公積','股票股利'+'\n'+'合併','股利合計']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_4.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:18px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:18px; color:white; padding:3px;}"
 			self.tableWidget_4.horizontalHeader().setStyleSheet(stylesheet)		
 
 		self.retranslateUi(MainWindow)

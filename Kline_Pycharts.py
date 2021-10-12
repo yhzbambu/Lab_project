@@ -200,10 +200,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		###########################################################################################
 
 		#########################################產業鏈的部分########################################
-		self.comboBox_15.activated.connect(lambda:self.change_source(self.comboBox_15.currentText()))
-		self.listWidget_6.itemClicked.connect(lambda:self.item_source(self.listWidget_6.currentItem().text()))
-		self.listWidget_7.itemClicked.connect(lambda:self.item_source(self.listWidget_7.currentItem().text()))
-		self.listWidget_8.itemClicked.connect(lambda:self.item_source(self.listWidget_8.currentItem().text()))
+		# self.comboBox_15.activated.connect(lambda:self.change_source(self.comboBox_15.currentText()))
+		# self.listWidget_6.itemClicked.connect(lambda:self.item_source(self.listWidget_6.currentItem().text()))
+		# self.listWidget_7.itemClicked.connect(lambda:self.item_source(self.listWidget_7.currentItem().text()))
+		# self.listWidget_8.itemClicked.connect(lambda:self.item_source(self.listWidget_8.currentItem().text()))
 
 		###########################################################################################
 
@@ -270,7 +270,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		################################達人密技###################################################
 		self.listWidget.itemClicked.connect(lambda:self.master_description_text())
 		self.tableWidget_4.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_4.currentItem().text()))
-		self.tableWidget_11.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_11.currentItem().text()))
+		# self.tableWidget_11.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_11.currentItem().text()))
 		with open ('stocklist.in','r',encoding='utf-8') as f:
 			self.stock_list = f.readlines()
 			self.prediction_stock = list()
@@ -305,81 +305,81 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
 			pd_count += 1
 
-	def change_source(self,industry):
-		self.upstream = list()
-		self.middlestream = list()
-		self.downstream = list()
-		self.industry_stock = list()
-		self.industry_totalinfo = list()
-		self.industry_info = '''SELECT * FROM Industry WHERE IndustryName=%s'''
-		self.cursor.execute(self.industry_info,industry)
-		industry_list = self.cursor.fetchall()
-		for i in industry_list:
-			self.industry_stock.append(i[0])
-			if i[5] == '上游' and self.upstream.count(i[3]) == 0:
-				self.upstream.append(i[3])
-			elif i[5] == '中游' and self.middlestream.count(i[3]) == 0:
-				self.middlestream.append(i[3])
-			elif i[5] == '下游' and self.downstream.count(i[3]) == 0:
-				self.downstream.append(i[3])
-		self.listWidget_6.clear()
-		self.listWidget_7.clear()
-		self.listWidget_8.clear()
-		self.listWidget_6.addItems(self.upstream)
-		self.listWidget_7.addItems(self.middlestream)
-		self.listWidget_8.addItems(self.downstream)
+	# def change_source(self,industry):
+	# 	self.upstream = list()
+	# 	self.middlestream = list()
+	# 	self.downstream = list()
+	# 	self.industry_stock = list()
+	# 	self.industry_totalinfo = list()
+	# 	self.industry_info = '''SELECT * FROM Industry WHERE IndustryName=%s'''
+	# 	self.cursor.execute(self.industry_info,industry)
+	# 	industry_list = self.cursor.fetchall()
+	# 	for i in industry_list:
+	# 		self.industry_stock.append(i[0])
+	# 		if i[5] == '上游' and self.upstream.count(i[3]) == 0:
+	# 			self.upstream.append(i[3])
+	# 		elif i[5] == '中游' and self.middlestream.count(i[3]) == 0:
+	# 			self.middlestream.append(i[3])
+	# 		elif i[5] == '下游' and self.downstream.count(i[3]) == 0:
+	# 			self.downstream.append(i[3])
+	# 	self.listWidget_6.clear()
+	# 	self.listWidget_7.clear()
+	# 	self.listWidget_8.clear()
+	# 	self.listWidget_6.addItems(self.upstream)
+	# 	self.listWidget_7.addItems(self.middlestream)
+	# 	self.listWidget_8.addItems(self.downstream)
 		
-		self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
-		self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
-		for i in self.cursor.fetchall():
-			try: 
-				self.industry_stock.index(i[0])
-				self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
-				self.industry_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
-			except:
-				pass
+	# 	self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
+	# 	self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
+	# 	for i in self.cursor.fetchall():
+	# 		try: 
+	# 			self.industry_stock.index(i[0])
+	# 			self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
+	# 			self.industry_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
+	# 		except:
+	# 			pass
 
-		self.tableWidget_11.setRowCount(len(self.industry_totalinfo))
-		count = 0
-		for info in self.industry_totalinfo:
-			for i in range(0,int(self.tableWidget_11.columnCount())):
-				newItem = QTableWidgetItem(str(info[i]))
-				textFont = QFont("song", 12, QFont.Bold)  
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)
-				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_11.setItem(count,i,newItem)		
-			count += 1
+	# 	self.tableWidget_11.setRowCount(len(self.industry_totalinfo))
+	# 	count = 0
+	# 	for info in self.industry_totalinfo:
+	# 		for i in range(0,int(self.tableWidget_11.columnCount())):
+	# 			newItem = QTableWidgetItem(str(info[i]))
+	# 			textFont = QFont("song", 12, QFont.Bold)  
+	# 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+	# 			newItem.setFont(textFont)
+	# 			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
+	# 			self.tableWidget_11.setItem(count,i,newItem)		
+	# 		count += 1
 
-	def item_source(self,item_text):
-		self.item_totalinfo = list()
-		self.item_info = '''SELECT sid FROM Industry WHERE ServiceName=%s'''
-		self.cursor.execute(self.item_info,item_text)
-		self.item_stock = list()
-		item_list = self.cursor.fetchall()
-		for i in set(item_list):
-			self.item_stock.append(i[0])
+	# def item_source(self,item_text):
+	# 	self.item_totalinfo = list()
+	# 	self.item_info = '''SELECT sid FROM Industry WHERE ServiceName=%s'''
+	# 	self.cursor.execute(self.item_info,item_text)
+	# 	self.item_stock = list()
+	# 	item_list = self.cursor.fetchall()
+	# 	for i in set(item_list):
+	# 		self.item_stock.append(i[0])
 
-		self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
-		self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
-		for i in self.cursor.fetchall():
-			try: 
-				self.item_stock.index(i[0])
-				self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
-				self.item_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
-			except:
-				pass
-		self.tableWidget_11.setRowCount(len(self.item_totalinfo))
-		count = 0
-		for info in self.item_totalinfo:
-			for i in range(0,int(self.tableWidget_11.columnCount())):
-				newItem = QTableWidgetItem(str(info[i]))
-				textFont = QFont("song", 12, QFont.Bold)  
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)
-				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_11.setItem(count,i,newItem)		
-			count += 1
+	# 	self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
+	# 	self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
+	# 	for i in self.cursor.fetchall():
+	# 		try: 
+	# 			self.item_stock.index(i[0])
+	# 			self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
+	# 			self.item_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
+	# 		except:
+	# 			pass
+	# 	self.tableWidget_11.setRowCount(len(self.item_totalinfo))
+	# 	count = 0
+	# 	for info in self.item_totalinfo:
+	# 		for i in range(0,int(self.tableWidget_11.columnCount())):
+	# 			newItem = QTableWidgetItem(str(info[i]))
+	# 			textFont = QFont("song", 12, QFont.Bold)  
+	# 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+	# 			newItem.setFont(textFont)
+	# 			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
+	# 			self.tableWidget_11.setItem(count,i,newItem)		
+	# 		count += 1
 		
 
 	def go_to_kline_pro_recommend(self,text):
@@ -1186,7 +1186,6 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				total_output.append(['T10',str(sql_table_name[input_name.index(self.toolButton_8.text())]),str(sql_field_name[input_name.index(self.toolButton_8.text())]),'DESC' if self.comboBox_8.currentText() == '高到低' else 'ASC',self.comboBox_9.currentText(),filter8.IsLastDay()])
 			if self.toolButton_36.text() != "請指定排名條件":
 				total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),filter8.IsLastDay()])
-			print(total_output)
 			self.select_info = filter8.Filter(total_output)
 		
 			count = 0
@@ -3184,7 +3183,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		for i in range(0,15):
 			sort_season = sorted(set(self.season),reverse=True)
 			season_index = sorted(set(self.season),reverse=True).index(season_change)
-			print(sort_season,season_index)
 			total = ['資產',sort_season[season_index]+'\n'+'金額',sort_season[season_index]+'\n'+'(%)',
 							sort_season[season_index+1]+'\n'+'金額',sort_season[season_index+1]+'\n'+'(%)',
 							sort_season[season_index+2]+'\n'+'金額',sort_season[season_index+2]+'\n'+'(%)',
@@ -3414,69 +3412,70 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		if stock_num != '':
 			try:
 				stock_num = str(self.stock_number_name.loc[stock_num].values).strip('[]')
-				self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s'''
+				self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 				if date1 == 0 and date2 == 0:
-					self.tableWidget_2.setRowCount(len(stock_list)+3)
+					self.tableWidget_2.setRowCount(len(stock_list))
 					for st_len in range(0,len(stock_list)):
-						for st_list in range(1,len(stock_list[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 				else:
-					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
+					self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
 					date22 = datetime.date(datetime.strptime(date2, "%Y/%m/%d"))
 					self.cursor.execute(self.stock_info,(stock_num,date11,date22))
 					stock_list_date = self.cursor.fetchall()	
-					self.tableWidget_2.setRowCount(len(stock_list_date)+3)
+					self.tableWidget_2.setRowCount(len(stock_list_date))
 					for st_len in range(0,len(stock_list_date)):
-						for st_list in range(1,len(stock_list_date[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list_date[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 
 
 			except:
-				self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s'''
+				self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
+				print(stock_list)
 				if date1 == 0 and date2 == 0:
-					self.tableWidget_2.setRowCount(len(stock_list)+3)
+					self.tableWidget_2.setRowCount(len(stock_list))
 					for st_len in range(0,len(stock_list)):
-						for st_list in range(1,len(stock_list[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 				else:
-					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
+					self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
 					date22 = datetime.date(datetime.strptime(date2, "%Y/%m/%d"))
 					self.cursor.execute(self.stock_info,(stock_num,date11,date22))
 					stock_list_date = self.cursor.fetchall()	
-					self.tableWidget_2.setRowCount(len(stock_list_date)+3)
+					self.tableWidget_2.setRowCount(len(stock_list_date))
 					for st_len in range(0,len(stock_list_date)):
-						for st_list in range(1,len(stock_list_date[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list_date[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 
 
 

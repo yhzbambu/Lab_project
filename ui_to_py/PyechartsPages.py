@@ -254,7 +254,7 @@ class Ui_Pyechart(object):
 		self.tableWidget_2 = QtWidgets.QTableWidget(self.tab_3)
 		self.tableWidget_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 		self.tableWidget_2.setRowCount(30)
-		self.tableWidget_2.setColumnCount(13)
+		self.tableWidget_2.setColumnCount(11)
 		self.tableWidget_2.setObjectName("tableWidget_2")
 		self.tableWidget_2.verticalHeader().setVisible(False)
 		self.tableWidget_2.verticalHeader().setMinimumSectionSize(30)
@@ -621,9 +621,8 @@ class Ui_Pyechart(object):
 		self.toolBar.addWidget(self.lineEdit_100)
 		self.toolBar.addAction(self.actionenter)
 
-		for i in range(0,13):
-			total = ['日期','外資買賣超'+'\n'+'不含自營','外資買賣超'+'\n'+'自營','投信買賣超','自營商買賣超'+'\n'+'自行買賣',
-			'自營商買賣超'+'\n'+'避險','總和','外資'+'\n'+'估計持股','投信'+'\n'+'估計持股','自營商'+'\n'+'估計持股','綜合'+'\n'+'估計持股',
+		for i in range(0,11):
+			total = ['日期','外資買賣超','投信買賣超','自營商買賣超','總和','外資'+'\n'+'估計持股','投信'+'\n'+'估計持股','自營商'+'\n'+'估計持股','綜合'+'\n'+'估計持股',
 			'持股比重(%)'+'\n'+'外資','持股比重(%)'+'\n'+'三大法人']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_2.setHorizontalHeaderItem(i,newItem)

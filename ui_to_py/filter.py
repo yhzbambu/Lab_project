@@ -19,9 +19,9 @@ import datetime
 class Ui_MainPage(object):
 	def setupUi(self, MainWindow):
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)

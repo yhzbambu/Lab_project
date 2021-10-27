@@ -119,9 +119,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		self.setupUi(self)
 
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -825,9 +825,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 
 	def create_AC(self,label,combobox,dateedit,hlayout,spacer,day,week,month,season,select_date_list,T_text,T_list,action_text): #判斷日、周、月來決定放入哪些元件
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -970,9 +970,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		total_output = list() #紀錄所有條件包裝送入
 		total_date = list() #將處理過的時間放入此陣列
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -1114,9 +1114,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total_output.append(['T8',str(sql_table_name[input_name.index(self.toolButton_11.text())]),str(sql_table_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_6.text())]),str(sql_field_name[input_name.index(self.toolButton_11.text())]),'Y8',filter8.IsPreviousDay(),filter8.IsLastDay(),'','NOT' if self.checkBox_2.isChecked() else ''])	
 				else:
 					db = pymysql.connect(
-						host='127.0.0.1',
-						user='root',
-						password='',
+						host='163.18.104.164',
+						user='bambu',
+						password='test123',
 						database="stock",
 						port=3306
 					)
@@ -1170,9 +1170,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total_output.append(['T9',str(sql_table_name[input_name.index(self.toolButton_10.text())]),str(sql_table_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_38.text())]),str(sql_field_name[input_name.index(self.toolButton_10.text())]),'Y9',filter8.IsPreviousDay(),filter8.IsLastDay(),'','NOT' if self.checkBox_16.isChecked() else ''])	
 				else:
 					db = pymysql.connect(
-						host='127.0.0.1',
-						user='root',
-						password='',
+						host='163.18.104.164',
+						user='bambu',
+						password='test123',
 						database="stock",
 						port=3306
 					)
@@ -1354,9 +1354,9 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 	def two_menu(self,menu,data_name):
 		self.classification = menu.addMenu('產業分類')
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)
@@ -2147,9 +2147,9 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		self.setupUi(self)
 
 		db = pymysql.connect(
-			host='127.0.0.1',
-			user='root',
-			password='',
+			host='163.18.104.164',
+			user='bambu',
+			password='test123',
 			database="stock",
 			port=3306
 		)

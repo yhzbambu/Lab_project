@@ -200,10 +200,10 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		###########################################################################################
 
 		#########################################產業鏈的部分########################################
-		# self.comboBox_15.activated.connect(lambda:self.change_source(self.comboBox_15.currentText()))
-		# self.listWidget_6.itemClicked.connect(lambda:self.item_source(self.listWidget_6.currentItem().text()))
-		# self.listWidget_7.itemClicked.connect(lambda:self.item_source(self.listWidget_7.currentItem().text()))
-		# self.listWidget_8.itemClicked.connect(lambda:self.item_source(self.listWidget_8.currentItem().text()))
+		self.comboBox_15.activated.connect(lambda:self.change_source(self.comboBox_15.currentText()))
+		self.listWidget_6.itemClicked.connect(lambda:self.item_source(self.listWidget_6.currentItem().text()))
+		self.listWidget_7.itemClicked.connect(lambda:self.item_source(self.listWidget_7.currentItem().text()))
+		self.listWidget_8.itemClicked.connect(lambda:self.item_source(self.listWidget_8.currentItem().text()))
 
 		###########################################################################################
 
@@ -305,81 +305,81 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				self.tableWidget_5.setItem(pd_count,pd_info,newItem)	
 			pd_count += 1
 
-	# def change_source(self,industry):
-	# 	self.upstream = list()
-	# 	self.middlestream = list()
-	# 	self.downstream = list()
-	# 	self.industry_stock = list()
-	# 	self.industry_totalinfo = list()
-	# 	self.industry_info = '''SELECT * FROM Industry WHERE IndustryName=%s'''
-	# 	self.cursor.execute(self.industry_info,industry)
-	# 	industry_list = self.cursor.fetchall()
-	# 	for i in industry_list:
-	# 		self.industry_stock.append(i[0])
-	# 		if i[5] == '上游' and self.upstream.count(i[3]) == 0:
-	# 			self.upstream.append(i[3])
-	# 		elif i[5] == '中游' and self.middlestream.count(i[3]) == 0:
-	# 			self.middlestream.append(i[3])
-	# 		elif i[5] == '下游' and self.downstream.count(i[3]) == 0:
-	# 			self.downstream.append(i[3])
-	# 	self.listWidget_6.clear()
-	# 	self.listWidget_7.clear()
-	# 	self.listWidget_8.clear()
-	# 	self.listWidget_6.addItems(self.upstream)
-	# 	self.listWidget_7.addItems(self.middlestream)
-	# 	self.listWidget_8.addItems(self.downstream)
+	def change_source(self,industry):
+		self.upstream = list()
+		self.middlestream = list()
+		self.downstream = list()
+		self.industry_stock = list()
+		self.industry_totalinfo = list()
+		self.industry_info = '''SELECT * FROM Industry WHERE IndustryName=%s'''
+		self.cursor.execute(self.industry_info,industry)
+		industry_list = self.cursor.fetchall()
+		for i in industry_list:
+			self.industry_stock.append(i[0])
+			if i[5] == '上游' and self.upstream.count(i[3]) == 0:
+				self.upstream.append(i[3])
+			elif i[5] == '中游' and self.middlestream.count(i[3]) == 0:
+				self.middlestream.append(i[3])
+			elif i[5] == '下游' and self.downstream.count(i[3]) == 0:
+				self.downstream.append(i[3])
+		self.listWidget_6.clear()
+		self.listWidget_7.clear()
+		self.listWidget_8.clear()
+		self.listWidget_6.addItems(self.upstream)
+		self.listWidget_7.addItems(self.middlestream)
+		self.listWidget_8.addItems(self.downstream)
 		
-	# 	self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
-	# 	self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
-	# 	for i in self.cursor.fetchall():
-	# 		try: 
-	# 			self.industry_stock.index(i[0])
-	# 			self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
-	# 			self.industry_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
-	# 		except:
-	# 			pass
+		self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
+		self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
+		for i in self.cursor.fetchall():
+			try: 
+				self.industry_stock.index(i[0])
+				self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
+				self.industry_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
+			except:
+				pass
 
-	# 	self.tableWidget_11.setRowCount(len(self.industry_totalinfo))
-	# 	count = 0
-	# 	for info in self.industry_totalinfo:
-	# 		for i in range(0,int(self.tableWidget_11.columnCount())):
-	# 			newItem = QTableWidgetItem(str(info[i]))
-	# 			textFont = QFont("song", 12, QFont.Bold)  
-	# 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-	# 			newItem.setFont(textFont)
-	# 			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
-	# 			self.tableWidget_11.setItem(count,i,newItem)		
-	# 		count += 1
+		self.tableWidget_11.setRowCount(len(self.industry_totalinfo))
+		count = 0
+		for info in self.industry_totalinfo:
+			for i in range(0,int(self.tableWidget_11.columnCount())):
+				newItem = QTableWidgetItem(str(info[i]))
+				textFont = QFont("song", 12, QFont.Bold)  
+				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+				newItem.setFont(textFont)
+				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
+				self.tableWidget_11.setItem(count,i,newItem)		
+			count += 1
 
-	# def item_source(self,item_text):
-	# 	self.item_totalinfo = list()
-	# 	self.item_info = '''SELECT sid FROM Industry WHERE ServiceName=%s'''
-	# 	self.cursor.execute(self.item_info,item_text)
-	# 	self.item_stock = list()
-	# 	item_list = self.cursor.fetchall()
-	# 	for i in set(item_list):
-	# 		self.item_stock.append(i[0])
+	def item_source(self,item_text):
+		self.item_totalinfo = list()
+		self.item_info = '''SELECT sid FROM Industry WHERE ServiceName=%s'''
+		self.cursor.execute(self.item_info,item_text)
+		self.item_stock = list()
+		item_list = self.cursor.fetchall()
+		for i in set(item_list):
+			self.item_stock.append(i[0])
 
-	# 	self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
-	# 	self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
-	# 	for i in self.cursor.fetchall():
-	# 		try: 
-	# 			self.item_stock.index(i[0])
-	# 			self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
-	# 			self.item_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
-	# 		except:
-	# 			pass
-	# 	self.tableWidget_11.setRowCount(len(self.item_totalinfo))
-	# 	count = 0
-	# 	for info in self.item_totalinfo:
-	# 		for i in range(0,int(self.tableWidget_11.columnCount())):
-	# 			newItem = QTableWidgetItem(str(info[i]))
-	# 			textFont = QFont("song", 12, QFont.Bold)  
-	# 			newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-	# 			newItem.setFont(textFont)
-	# 			newItem.setFlags(QtCore.Qt.ItemIsEnabled)
-	# 			self.tableWidget_11.setItem(count,i,newItem)		
-	# 		count += 1
+		self.stocknumber_total = '''SELECT sid,TradeDate,Transation_,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE TradeDate=%s'''
+		self.cursor.execute(self.stocknumber_total,filter8.IsLastDay())
+		for i in self.cursor.fetchall():
+			try: 
+				self.item_stock.index(i[0])
+				self.cursor.execute('''SELECT s_name FROM stock WHERE sid=%s''',i[0])
+				self.item_totalinfo.append([i[0],self.cursor.fetchone()[0],i[1],i[2],i[3],i[4],i[5],i[6],i[7]])
+			except:
+				pass
+		self.tableWidget_11.setRowCount(len(self.item_totalinfo))
+		count = 0
+		for info in self.item_totalinfo:
+			for i in range(0,int(self.tableWidget_11.columnCount())):
+				newItem = QTableWidgetItem(str(info[i]))
+				textFont = QFont("song", 12, QFont.Bold)  
+				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+				newItem.setFont(textFont)
+				newItem.setFlags(QtCore.Qt.ItemIsEnabled)
+				self.tableWidget_11.setItem(count,i,newItem)		
+			count += 1
 		
 
 	def go_to_kline_pro_recommend(self,text):

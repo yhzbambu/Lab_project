@@ -270,7 +270,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		################################達人密技###################################################
 		self.listWidget.itemClicked.connect(lambda:self.master_description_text())
 		self.tableWidget_4.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_4.currentItem().text()))
-		self.tableWidget_11.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_11.currentItem().text()))
+		# self.tableWidget_11.doubleClicked.connect(lambda:self.go_to_kline_pro_recommend(self.tableWidget_11.currentItem().text()))
 		with open ('stocklist.in','r',encoding='utf-8') as f:
 			self.stock_list = f.readlines()
 			self.prediction_stock = list()
@@ -600,7 +600,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)
 			self.get_master_info(7,master_number)
@@ -612,7 +612,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -624,7 +624,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -636,7 +636,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -648,7 +648,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)		
@@ -660,7 +660,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(6,master_number)		
@@ -672,7 +672,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(5,master_number)	
@@ -684,7 +684,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				font = QFont()
 				font.setPointSize(15)
 				self.tableWidget_6.setHorizontalHeaderItem(i,newItem)
-				stylesheet = "::section{Background-color:'#2894FF';color:white;}"
+				stylesheet = "::section{Background-color:'#2894FF';color:white; padding:3px;}"
 				self.tableWidget_6.horizontalHeader().setStyleSheet(stylesheet)
 				self.tableWidget_6.horizontalHeader().setFont(font)		
 			self.get_master_info(7,master_number)	
@@ -1015,7 +1015,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','開盤價','最高價','最低價','收盤價','漲跌價差','成交筆數']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '技術指標-RSI':
 				total_output.append(['T0','RSI',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
@@ -1024,7 +1024,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','RSI6(日)','RSI9(日)','RSI6(週)','RSI9(週)','RSI6(月)','RSI9(月)']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '技術指標-KD':
 				total_output.append(['T0','KD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
@@ -1033,7 +1033,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','K(日)','D(日)','K(週)','D(週)','K(月)','D(月)']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '技術指標-MACD':
 				total_output.append(['T0','MACD',filter8.IsLastDay(),filter8.IsLastWeek(),filter8.IsLastMonth()])
@@ -1042,7 +1042,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','MACD(日)','DIF(日)','MACD(週)','DIF(週)','MACD(月)','DIF(月)']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			elif self.comboBox_3.currentText() == '法人買賣超-三大法人':
 				total_output.append(['T0','institutional_investors',filter8.IsLastDay()])
@@ -1051,7 +1051,7 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 					total = ['股票代碼','股票名稱','日期','收盤價','漲跌價差','法人買賣超' + '\n' + '外資不含自營','法人買賣超' + '\n' + '外資+自營','法人買賣超' + '\n' + '投信','法人買賣超' + '\n' + '自營商' + '\n' + '自行買賣','法人買賣超' + '\n' + '自營商_避險','總和']
 					newItem = QTableWidgetItem(total[i])
 					self.tableWidget.setHorizontalHeaderItem(i,newItem)
-					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white;}"
+					stylesheet = "::section{Background-color:'#2894FF'; font:15px; color:white; padding:3px;}"
 					self.tableWidget.horizontalHeader().setStyleSheet(stylesheet)
 			if self.comboBox_4.currentText() == '上市':
 				total_output.append(['T16','market','mid','','1'])
@@ -1186,7 +1186,6 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				total_output.append(['T10',str(sql_table_name[input_name.index(self.toolButton_8.text())]),str(sql_field_name[input_name.index(self.toolButton_8.text())]),'DESC' if self.comboBox_8.currentText() == '高到低' else 'ASC',self.comboBox_9.currentText(),filter8.IsLastDay()])
 			if self.toolButton_36.text() != "請指定排名條件":
 				total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),filter8.IsLastDay()])
-			print(total_output)
 			self.select_info = filter8.Filter(total_output)
 		
 			count = 0
@@ -3184,7 +3183,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		for i in range(0,15):
 			sort_season = sorted(set(self.season),reverse=True)
 			season_index = sorted(set(self.season),reverse=True).index(season_change)
-			print(sort_season,season_index)
 			total = ['資產',sort_season[season_index]+'\n'+'金額',sort_season[season_index]+'\n'+'(%)',
 							sort_season[season_index+1]+'\n'+'金額',sort_season[season_index+1]+'\n'+'(%)',
 							sort_season[season_index+2]+'\n'+'金額',sort_season[season_index+2]+'\n'+'(%)',
@@ -3195,7 +3193,7 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 							sort_season[season_index+7]+'\n'+'金額',sort_season[season_index+7]+'\n'+'(%)']
 			newItem = QTableWidgetItem(total[i])
 			self.tableWidget_3.setHorizontalHeaderItem(i,newItem)
-			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white;}"
+			stylesheet = "::section{Background-color:'#2894FF'; font:20px; color:white; padding:3px;}"
 			self.tableWidget_3.horizontalHeader().setStyleSheet(stylesheet)		
 
 		try:
@@ -3414,69 +3412,69 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		if stock_num != '':
 			try:
 				stock_num = str(self.stock_number_name.loc[stock_num].values).strip('[]')
-				self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s'''
+				self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 				if date1 == 0 and date2 == 0:
-					self.tableWidget_2.setRowCount(len(stock_list)+3)
+					self.tableWidget_2.setRowCount(len(stock_list))
 					for st_len in range(0,len(stock_list)):
-						for st_list in range(1,len(stock_list[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 				else:
-					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
+					self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
 					date22 = datetime.date(datetime.strptime(date2, "%Y/%m/%d"))
 					self.cursor.execute(self.stock_info,(stock_num,date11,date22))
 					stock_list_date = self.cursor.fetchall()	
-					self.tableWidget_2.setRowCount(len(stock_list_date)+3)
+					self.tableWidget_2.setRowCount(len(stock_list_date))
 					for st_len in range(0,len(stock_list_date)):
-						for st_list in range(1,len(stock_list_date[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list_date[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 
 
 			except:
-				self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s'''
+				self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s'''
 				self.cursor.execute(self.stock_info,stock_num)
 				stock_list = self.cursor.fetchall()
 				if date1 == 0 and date2 == 0:
-					self.tableWidget_2.setRowCount(len(stock_list)+3)
+					self.tableWidget_2.setRowCount(len(stock_list))
 					for st_len in range(0,len(stock_list)):
-						for st_list in range(1,len(stock_list[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list[len(stock_list)-st_len-1][st_list]))
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 				else:
-					self.stock_info = '''SELECT * FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
+					self.stock_info = '''SELECT TradeDate,sumForeignNoDealer,sumING,sumDealer,Sum,foreignHolding,ingHolding,dealerHolding,HoldingSum,foreignHoldingRate,sumHoldingRate FROM institutional_investors WHERE sid=%s AND TradeDate BETWEEN %s AND %s;'''
 					date11 = datetime.date(datetime.strptime(date1, "%Y/%m/%d"))
 					date22 = datetime.date(datetime.strptime(date2, "%Y/%m/%d"))
 					self.cursor.execute(self.stock_info,(stock_num,date11,date22))
 					stock_list_date = self.cursor.fetchall()	
-					self.tableWidget_2.setRowCount(len(stock_list_date)+3)
+					self.tableWidget_2.setRowCount(len(stock_list_date))
 					for st_len in range(0,len(stock_list_date)):
-						for st_list in range(1,len(stock_list_date[st_len])):
-							input_table = [0,2,1,3,4,5,6,7,8,9,10,11,12]
+						for st_list in range(0,len(stock_list_date[st_len])):
+							input_table = [0,1,2,3,4,5,6,7,8,9,10]
 							newItem = QTableWidgetItem(str(stock_list_date[len(stock_list_date)-st_len-1][st_list]))
 							textFont = QFont("song", 12, QFont.Bold)  
 							newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
 							newItem.setFlags(QtCore.Qt.ItemIsEnabled)
 							newItem.setFont(textFont)					
-							self.tableWidget_2.setItem(st_len,input_table[st_list-1],newItem)
+							self.tableWidget_2.setItem(st_len,input_table[st_list],newItem)
 
 
 

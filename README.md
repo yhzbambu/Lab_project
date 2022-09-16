@@ -1,6 +1,6 @@
 # Lab_project
 
-請先下載anaconda。
+請先下載anaconda。  
 如果沒有，直接用pip安裝套件也ok
 1. 開啟anaconda prompt
 ![image](https://github.com/yhzbambu/Lab_project/blob/windows/1.PNG)

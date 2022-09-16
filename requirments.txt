@@ -9,3 +9,6 @@ pyecharts
 
 PyQt5
 指令 : pip install PyQt5
+
+sklearn
+指令 : pip install -U scikit-learn scipy matplotlib

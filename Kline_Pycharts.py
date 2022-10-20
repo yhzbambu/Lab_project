@@ -5,7 +5,7 @@ import sys
 
 if hasattr(sys, 'frozen'):
     os.environ['PATH'] = sys._MEIPASS + ";" + os.environ['PATH']
-	
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -271,11 +271,11 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			for st_lt in self.stock_list:
 				self.prediction_stock.append(st_lt.replace('\n',''))
 
-		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
-		self.total_x_list = ['2020','12','30']
-		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
- self.checkBox_28,self.checkBox_29,self.checkBox_30]
-		self.prediction_stock = main.main(self.total_x_list)
+#		self.pushButton_2.clicked.connect(lambda:self.smart_stock())
+#		self.total_x_list = ['2020','12','30']
+#		self.check_box_list = [self.checkBox_3,self.checkBox_4,self.checkBox_5,self.checkBox_6,self.checkBox_7,self.checkBox_8,self.checkBox_9,self.checkBox_10,self.checkBox_17,self.checkBox_18,self.checkBox_19,self.checkBox_20,self.checkBox_21,self.checkBox_22,self.checkBox_23,self.checkBox_24,self.checkBox_25,self.checkBox_26,self.checkBox_27,
+# self.checkBox_28,self.checkBox_29,self.checkBox_30]
+#		self.prediction_stock = main.main(self.total_x_list)
 
 		self.tableWidget_5.setRowCount(len(self.prediction_stock))
 		pd_count = 0
@@ -284,7 +284,6 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 			self.cursor.execute(self.prediction_info,pd_list)
 			prediction_list = self.cursor.fetchone()
 			for pd_info in range(0,len(prediction_list)):
-
 				newItem = QTableWidgetItem(str(prediction_list[pd_info]))
 				textFont = QFont("song", 12, QFont.Bold)
 				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
@@ -651,31 +650,31 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 		else:
 			for clo in self.cursor.fetchall():
 				pr_list.append(clo[0])
-	def smart_stock(self):
-		x_list = list()
+#	def smart_stock(self):
+#		x_list = list()
 		#for check_box in self.check_box_list:
 		#	if check_box.isChecked() == True:
 	 	#		x_list.append(self.total_x_list[self.check_box_list.index(check_box)])
-		x_list.append('2020')
-		x_list.append('12')
-		x_list.append('31')
-		check_prediction_stock = main.main(x_list)
+#		x_list.append('2020')
+#		x_list.append('12')
+#		x_list.append('31')
+#		check_prediction_stock = main.main(x_list)
 
-		self.tableWidget_5.setRowCount(len(check_prediction_stock))
-		check_pd_count = 0
-		for check_list in check_prediction_stock:
-			check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
-			self.cursor.execute(check_prediction_info,check_list)
-			check_prediction_list = self.cursor.fetchone()
-			for check_pd_info in range(0,len(check_prediction_list)):
+#		self.tableWidget_5.setRowCount(len(check_prediction_stock))
+#		check_pd_count = 0
+#		for check_list in check_prediction_stock:
+#			check_prediction_info = '''SELECT sid,TradeDate,TradeValue,TradeVolume,OpeningPrice,HighestPrice,LowestPrice,ClosingPrice,Change_ FROM DayStockInformation WHERE sid=%s'''
+#			self.cursor.execute(check_prediction_info,check_list)
+#			check_prediction_list = self.cursor.fetchone()
+#			for check_pd_info in range(0,len(check_prediction_list)):
 
-				newItem = QTableWidgetItem(str(check_prediction_list[check_pd_info]))
-				textFont = QFont("song", 12, QFont.Bold)
-				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
-				newItem.setFont(textFont)
-				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
-				self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)
-			check_pd_count += 1
+#				newItem = QTableWidgetItem(str(check_prediction_list[check_pd_info]))
+#				textFont = QFont("song", 12, QFont.Bold)
+#				newItem.setTextAlignment(Qt.AlignHCenter |  Qt.AlignVCenter)
+#				newItem.setFont(textFont)
+#				newItem.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+#				self.tableWidget_5.setItem(check_pd_count,check_pd_info,newItem)
+#			check_pd_count += 1
 
 	def Description_text(self):
 		self.textEdit_2.clear()
@@ -1096,7 +1095,6 @@ class SelectMainWindow(QtWidgets.QMainWindow, Ui_MainPage):
 				total_output.append(['T10',str(sql_table_name[input_name.index(self.toolButton_8.text())]),str(sql_field_name[input_name.index(self.toolButton_8.text())]),'DESC' if self.comboBox_8.currentText() == '高到低' else 'ASC',self.comboBox_9.currentText(),filter8.IsLastDay()])
 			if self.toolButton_36.text() != "請指定排名條件":
 				total_output.append(['T11',str(sql_table_name[input_name.index(self.toolButton_36.text())]),str(sql_field_name[input_name.index(self.toolButton_36.text())]),'DESC' if self.comboBox_6.currentText() == '高到低' else 'ASC',self.comboBox_7.currentText(),filter8.IsLastDay()])
-			print(total_output)
 			self.select_info = filter8.Filter(total_output)
 
 			count = 0
@@ -3077,7 +3075,6 @@ class PyechartsMainWindow(QtWidgets.QMainWindow, Ui_Pyechart):
 		for i in range(0,15):
 			sort_season = sorted(set(self.season),reverse=True)
 			season_index = sorted(set(self.season),reverse=True).index(season_change)
-			print(sort_season,season_index)
 			total = ['資產',sort_season[season_index]+'\n'+'金額',sort_season[season_index]+'\n'+'(%)',
 							sort_season[season_index+1]+'\n'+'金額',sort_season[season_index+1]+'\n'+'(%)',
 							sort_season[season_index+2]+'\n'+'金額',sort_season[season_index+2]+'\n'+'(%)',
